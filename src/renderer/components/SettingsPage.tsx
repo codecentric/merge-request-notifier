@@ -14,6 +14,9 @@ const useStyles = makeStyles(theme => ({
     button: {
         marginTop: theme.spacing(2),
     },
+    goBackLink: {
+        textDecoration: 'none',
+    },
     headline: {
         marginTop: theme.spacing(2),
     },
@@ -109,7 +112,7 @@ export const SettingsPage = () => {
                     Save
                 </Button>
                 {config && (
-                    <Link to='/'>
+                    <Link to='/' className={classes.goBackLink}>
                         <Button fullWidth className={classes.button}>
                             go back
                         </Button>
