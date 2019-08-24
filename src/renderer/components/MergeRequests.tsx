@@ -8,6 +8,8 @@ import Avatar from '@material-ui/core/Avatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown'
+import CommentIcon from '@material-ui/icons/Comment'
+import DoneAllIcon from '@material-ui/icons/DoneAll'
 import Typography from '@material-ui/core/Typography'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Divider from '@material-ui/core/Divider'
@@ -28,6 +30,10 @@ const useStyles = makeStyles(theme => ({
     listItemText: {
         marginRight: theme.spacing(2),
     },
+    listItemIcon: {
+        minWidth: 0,
+        marginLeft: theme.spacing(1),
+    },
     list: {
         padding: 0,
     },
@@ -37,21 +43,36 @@ const useStyles = makeStyles(theme => ({
     downVoteIcon: {
         marginTop: 5,
     },
+    commentIcon: {
+        marginTop: 5,
+    },
+    allDoneIcon: {
+        fontSize: 96,
+        marginTop: theme.spacing(8),
+        width: '100%',
+    },
 }))
 
 const renderMergeRequest = (classes: any) => (mergeRequest: MergeRequest, index: number) => {
     const time = moment(mergeRequest.updated_at).format('DD.MM. HH:mm')
     const downVotes = !!mergeRequest.downvotes && (
-        <ListItemIcon>
+        <ListItemIcon className={classes.listItemIcon}>
             <>
                 <ThumbDownIcon className={classes.downVoteIcon} /> <strong className={classes.votes}>{mergeRequest.downvotes}</strong>
             </>
         </ListItemIcon>
     )
     const upVotes = !!mergeRequest.upvotes && (
-        <ListItemIcon>
+        <ListItemIcon className={classes.listItemIcon}>
             <>
                 <ThumbUpIcon className={classes.upVoteIcon} /> <strong className={classes.votes}>{mergeRequest.upvotes}</strong>
+            </>
+        </ListItemIcon>
+    )
+    const userNotes = !!mergeRequest.user_notes_count && (
+        <ListItemIcon className={classes.listItemIcon}>
+            <>
+                <CommentIcon className={classes.commentIcon} /> <strong className={classes.votes}>{mergeRequest.user_notes_count}</strong>
             </>
         </ListItemIcon>
     )
@@ -71,6 +92,7 @@ const renderMergeRequest = (classes: any) => (mergeRequest: MergeRequest, index:
                     <Avatar alt={mergeRequest.author.name} src={mergeRequest.author.avatar_url} />
                 </ListItemAvatar>
                 <ListItemText id={`mr-${mergeRequest.id}`} primary={mergeRequest.title} secondary={secondaryText} className={classes.listItemText} />
+                {userNotes}
                 {upVotes}
                 {downVotes}
             </ListItem>
@@ -85,16 +107,34 @@ export const MergeRequests = () => {
     const openMergeRequests = mergeRequests.filter(mergeRequest => !mergeRequest.work_in_progress)
     ipcRenderer.send('update-open-merge-requests', openMergeRequests.length)
 
+    const noMergeRequests = openMergeRequests.length === 0 && wipMergeRequests.length === 0
+
     return (
         <>
-            <Typography variant='h6' color='inherit' className={classes.headline}>
-                Open
-            </Typography>
-            <List className={classes.list}>{openMergeRequests.map(renderMergeRequest(classes))}</List>
-            <Typography variant='h6' color='inherit' className={classes.headline}>
-                Work In Progress
-            </Typography>
-            <List className={classes.list}>{wipMergeRequests.map(renderMergeRequest(classes))}</List>
+            {openMergeRequests.length > 0 && (
+                <>
+                    <Typography variant='h6' color='inherit' className={classes.headline}>
+                        Open
+                    </Typography>
+                    <List className={classes.list}>{openMergeRequests.map(renderMergeRequest(classes))}</List>
+                </>
+            )}
+            {wipMergeRequests.length > 0 && (
+                <>
+                    <Typography variant='h6' color='inherit' className={classes.headline}>
+                        Work In Progress
+                    </Typography>
+                    <List className={classes.list}>{wipMergeRequests.map(renderMergeRequest(classes))}</List>
+                </>
+            )}
+            {noMergeRequests && (
+                <>
+                    <Typography variant='h6' color='inherit' className={classes.headline}>
+                        There are no open merge requests
+                    </Typography>
+                    <DoneAllIcon className={classes.allDoneIcon} />
+                </>
+            )}
         </>
     )
 }
