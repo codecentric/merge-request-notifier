@@ -1,0 +1,81 @@
+{
+    "extends": ["tslint:latest"],
+    "rules": {
+        "no-implicit-dependencies": false,
+        "no-submodule-imports": false,
+        "quotemark": [
+            true,
+            "single",
+            "avoid-escape"
+        ],
+        "object-literal-sort-keys": false,
+        "arrow-parens": false,
+        "one-variable-per-declaration": [
+            true,
+            "ignore-for-loop"
+        ],
+        "semicolon": false,
+        "trailing-comma": false,
+        "align": false,
+        "interface-name": [
+            true,
+            "never-prefix"
+        ],
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-module",
+            "check-rest-spread",
+            "check-type",
+            "check-typecast",
+            "check-type-operator",
+            "check-preblock"
+        ],
+        "object-literal-key-quotes": [
+            true,
+            "as-needed"
+        ],
+        "member-ordering": [
+            true,
+            {
+                "order": "fields-first"
+            }
+        ],
+        "ordered-imports": false,
+        "prefer-const": true,
+        "no-magic-numbers": false,
+        "only-arrow-functions": [
+            true,
+            "allow-declarations",
+            "allow-named-functions"
+        ],
+        "curly": true,
+        "no-console": [
+            false
+        ],
+        "no-empty": true,
+        "no-empty-interface": false,
+        "no-invalid-this": [
+            true,
+            "check-function-in-method"
+        ],
+        "no-shadowed-variable": true,
+        "no-unused-expression": false,
+        "no-object-literal-type-assertion": false,
+        "radix": true,
+        "switch-default": true,
+        "cyclomatic-complexity": [
+            true,
+            10
+        ],
+        "max-line-length": [
+            true,
+            160
+        ],
+        "jsx-alignment": false,
+        "jsx-no-multiline-js": false,
+        "jsx-self-close": false
+    }
+}
