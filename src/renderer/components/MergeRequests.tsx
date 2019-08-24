@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as moment from 'moment'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, shell } from 'electron'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
@@ -27,9 +27,6 @@ const useStyles = makeStyles(theme => ({
         marginTop: 4,
         fontSize: 18,
     },
-    listItemText: {
-        marginRight: theme.spacing(2),
-    },
     listItemIcon: {
         minWidth: 0,
         marginLeft: theme.spacing(1),
@@ -52,6 +49,10 @@ const useStyles = makeStyles(theme => ({
         width: '100%',
     },
 }))
+
+const openMergeRequest = (url: string) => () => {
+    shell.openExternal(url)
+}
 
 const renderMergeRequest = (classes: any) => (mergeRequest: MergeRequest, index: number) => {
     const time = moment(mergeRequest.updated_at).format('DD.MM. HH:mm')
@@ -87,7 +88,7 @@ const renderMergeRequest = (classes: any) => (mergeRequest: MergeRequest, index:
     return (
         <React.Fragment key={mergeRequest.id}>
             {index !== 0 && <Divider variant='inset' component='li' />}
-            <ListItem button>
+            <ListItem button onClick={openMergeRequest(mergeRequest.web_url)}>
                 <ListItemAvatar>
                     <Avatar alt={mergeRequest.author.name} src={mergeRequest.author.avatar_url} />
                 </ListItemAvatar>
