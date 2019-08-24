@@ -34,7 +34,7 @@ const Application = () => {
                                 Merge Requests Notifier
                             </Typography>
                             <Link to='/config'>
-                                <IconButton color='inherit'>
+                                <IconButton>
                                     <Settings />
                                 </IconButton>
                             </Link>
