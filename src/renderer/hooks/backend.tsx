@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import * as React from 'react'
 import * as request from 'superagent'
 
 import { useConfig } from './config'
@@ -43,9 +43,19 @@ export interface MergeRequest {
     web_url: string
 }
 
-export const useBackend = () => {
+const Context = React.createContext<MergeRequest[] | null>(null)
+
+export function useBackend() {
+    const context = React.useContext(Context)
+    if (!context) {
+        throw new Error('Please use the BackendProvider')
+    }
+    return context
+}
+
+export const BackendProvider = ({ ...props }) => {
     const { config } = useConfig()
-    const [mergeRequests, setMergeRequests] = useState<MergeRequest[]>([])
+    const [mergeRequests, setMergeRequests] = React.useState<MergeRequest[]>([])
 
     const updateData = async () => {
         try {
@@ -62,7 +72,7 @@ export const useBackend = () => {
         }
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
         updateData()
         const interval = setInterval(updateData, 30000)
 
@@ -71,5 +81,5 @@ export const useBackend = () => {
         }
     }, [])
 
-    return mergeRequests
+    return <Context.Provider value={mergeRequests} {...props} />
 }

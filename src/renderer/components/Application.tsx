@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Settings from '@material-ui/icons/Settings'
 
 import { ConfigProvider } from '../hooks/config'
+import { BackendProvider } from '../hooks/backend'
 import { Content } from './Content'
 
 const useStyles = makeStyles({
@@ -27,21 +28,23 @@ const Application = () => {
     return (
         <div className={classes.root}>
             <ConfigProvider>
-                <BrowserRouter>
-                    <AppBar position='static' color='default'>
-                        <Toolbar>
-                            <Typography variant='h5' color='inherit' className={classes.title}>
-                                Merge Requests Notifier
-                            </Typography>
-                            <Link to='/config'>
-                                <IconButton>
-                                    <Settings />
-                                </IconButton>
-                            </Link>
-                        </Toolbar>
-                    </AppBar>
-                    <Content />
-                </BrowserRouter>
+                <BackendProvider>
+                    <BrowserRouter>
+                        <AppBar position='static' color='default'>
+                            <Toolbar>
+                                <Typography variant='h5' color='inherit' className={classes.title}>
+                                    Merge Requests Notifier
+                                </Typography>
+                                <Link to='/config'>
+                                    <IconButton>
+                                        <Settings />
+                                    </IconButton>
+                                </Link>
+                            </Toolbar>
+                        </AppBar>
+                        <Content />
+                    </BrowserRouter>
+                </BackendProvider>
             </ConfigProvider>
         </div>
     )

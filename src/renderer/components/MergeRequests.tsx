@@ -15,7 +15,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Divider from '@material-ui/core/Divider'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
-import { MergeRequest, useBackend } from '../hooks/useBackend'
+import { MergeRequest, useBackend } from '../hooks/backend'
 
 const useStyles = makeStyles(theme => ({
     headline: {
@@ -106,9 +106,9 @@ export const MergeRequests = () => {
     const mergeRequests = useBackend()
     const wipMergeRequests = mergeRequests.filter(mergeRequest => mergeRequest.work_in_progress)
     const openMergeRequests = mergeRequests.filter(mergeRequest => !mergeRequest.work_in_progress)
-    ipcRenderer.send('update-open-merge-requests', openMergeRequests.length)
-
     const noMergeRequests = openMergeRequests.length === 0 && wipMergeRequests.length === 0
+
+    ipcRenderer.send('update-open-merge-requests', openMergeRequests.length)
 
     return (
         <>
