@@ -1,6 +1,6 @@
 {
   "name": "gitlab-merge-requests-notifier",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
@@ -52,11 +52,8 @@
     }
   },
   "build": {
-    "productName": "ProductName",
-    "appId": "org.your.productname",
-    "mac": {
-      "category": "your.app.category.type"
-    },
+    "productName": "GitLab Merge Requests Notifier",
+    "appId": "de.codecentric.ruettenm.gitlabMergeRequestsNotifier",
     "directories": {
       "output": "release"
     },
@@ -64,13 +61,7 @@
       "dist/",
       "node_modules/",
       "package.json"
-    ],
-    "linux": {
-      "target": "deb"
-    },
-    "win": {
-      "target": "nsis"
-    }
+    ]
   },
   "repository": {
     "type": "git",
