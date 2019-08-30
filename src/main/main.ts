@@ -128,3 +128,7 @@ ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => 
         }
     }
 })
+
+ipcMain.on('close-application', () => {
+    app.quit()
+})

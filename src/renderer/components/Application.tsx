@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron'
 import { hot } from 'react-hot-loader/root'
 import * as React from 'react'
 import { BrowserRouter, Link } from 'react-router-dom'
@@ -7,7 +8,8 @@ import Typography from '@material-ui/core/Typography'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
-import Settings from '@material-ui/icons/Settings'
+import SettingsIcon from '@material-ui/icons/Settings'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 import { ConfigProvider } from '../hooks/config'
 import { BackendProvider } from '../hooks/backend'
@@ -21,6 +23,10 @@ const useStyles = makeStyles({
         flexGrow: 1,
     },
 })
+
+const closeApp = () => {
+    ipcRenderer.send('close-application')
+}
 
 const Application = () => {
     const classes = useStyles()
@@ -36,10 +42,13 @@ const Application = () => {
                                     Merge Requests Notifier
                                 </Typography>
                                 <Link to='/config'>
-                                    <IconButton>
-                                        <Settings />
+                                    <IconButton title='Settings'>
+                                        <SettingsIcon />
                                     </IconButton>
                                 </Link>
+                                <IconButton title='Close Application' onClick={closeApp}>
+                                    <ExitToAppIcon />
+                                </IconButton>
                             </Toolbar>
                         </AppBar>
                         <Content />
