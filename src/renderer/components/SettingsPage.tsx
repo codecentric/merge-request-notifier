@@ -8,7 +8,9 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button/Button'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
+import { useBackend } from '../hooks/backend'
 import { useConfig } from '../hooks/config'
+import { FormHelperText } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -22,6 +24,8 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
+type FormErrorData = FormData & { invalidSettings: boolean }
+
 interface FormData {
     url: string
     group: string
@@ -31,39 +35,63 @@ interface FormData {
 export const SettingsPage = () => {
     const classes = useStyles()
     const { history } = useReactRouter()
+    const { reset, testConfig } = useBackend()
     const { config, updateConfig } = useConfig()
-    const [urlErrorMessage, setUrlErrorMessage] = React.useState('')
-    const [tokenErrorMessage, setTokenErrorMessage] = React.useState('')
-    const [groupErrorMessage, setGroupErrorMessage] = React.useState('')
+
+    const [submitting, setSubmitting] = React.useState(false)
+    const [errors, setErrors] = React.useState<FormErrorData>({
+        url: '',
+        token: '',
+        group: '',
+        invalidSettings: false,
+    })
     const [values, setValues] = React.useState<FormData>({
         url: config ? config.url : '',
         token: config ? config.token : '',
         group: config ? config.group : '',
     })
 
+    const setError = (name: keyof FormErrorData, errorMessage: string | boolean) => {
+        setErrors({ ...errors, [name]: errorMessage })
+    }
+
     const handleChange = (name: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [name]: event.target.value })
     }
 
-    const save = () => {
+    const save = async () => {
+        setSubmitting(true)
+        setErrors({ url: '', token: '', group: '', invalidSettings: false })
+
         if (!values.url) {
-            setUrlErrorMessage('Please enter your GitLab URL.')
+            setError('url', 'Please enter your GitLab URL.')
         }
         if (!values.token) {
-            setTokenErrorMessage('Please enter your Personal Access Token.')
+            setError('token', 'Please enter your Personal Access Token.')
         }
         if (!values.group) {
-            setGroupErrorMessage('Please enter your Group Name')
+            setError('group', 'Please enter your Group Name')
         }
 
         if (values.url && values.token) {
-            updateConfig({
+            const newConfig = {
                 url: values.url,
                 token: values.token,
                 group: values.group,
-            })
+            }
 
-            history.push('/')
+            try {
+                await testConfig(newConfig)
+
+                updateConfig(newConfig)
+
+                reset()
+                history.push('/')
+            } catch (_) {
+                setError('invalidSettings', true)
+            } finally {
+                setSubmitting(false)
+            }
         }
     }
 
@@ -73,14 +101,16 @@ export const SettingsPage = () => {
                 Settings
             </Typography>
             <form autoComplete='off'>
+                {errors.invalidSettings && <FormHelperText error>Could not load your merge requests. Please verify your settings.</FormHelperText>}
                 <TextField
                     id='url'
                     label='GitLab URL'
                     placeholder='e.g. https://git.codecentric.de'
                     value={values.url}
-                    error={!!urlErrorMessage}
-                    helperText={urlErrorMessage}
+                    error={!!errors.url}
+                    helperText={errors.url}
                     onChange={handleChange('url')}
+                    disabled={submitting}
                     required
                     fullWidth
                     margin='normal'
@@ -89,9 +119,10 @@ export const SettingsPage = () => {
                     id='group'
                     label='GitLab Group Name'
                     value={values.group}
-                    error={!!groupErrorMessage}
-                    helperText={groupErrorMessage || 'You find it in the url to your projects: <groupName>/<projectName>'}
+                    error={!!errors.group}
+                    helperText={errors.group || 'You find it in the url to your projects: <groupName>/<projectName>'}
                     onChange={handleChange('group')}
+                    disabled={submitting}
                     required
                     fullWidth
                     margin='normal'
@@ -102,16 +133,17 @@ export const SettingsPage = () => {
                     placeholder='e.g. abcdEFGHijklm'
                     value={values.token}
                     onChange={handleChange('token')}
-                    error={!!tokenErrorMessage}
-                    helperText={tokenErrorMessage || 'You find it in GitLab under Profile > Settings > Access Tokens'}
+                    disabled={submitting}
+                    error={!!errors.token}
+                    helperText={errors.token || 'You find it in GitLab under Profile > Settings > Access Tokens'}
                     required
                     fullWidth
                     margin='normal'
                 />
-                <Button variant='contained' color='primary' aria-label='add' fullWidth onClick={save} className={classes.button}>
+                <Button variant='contained' color='primary' aria-label='add' fullWidth onClick={save} className={classes.button} disabled={submitting}>
                     Save
                 </Button>
-                {config && (
+                {config && !submitting && (
                     <Link to='/' className={classes.goBackLink}>
                         <Button fullWidth className={classes.button}>
                             go back

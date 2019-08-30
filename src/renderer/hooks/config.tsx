@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-interface Config {
+export interface Config {
     url: string
     group: string
     token: string

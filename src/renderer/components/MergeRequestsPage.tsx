@@ -10,9 +10,11 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown'
 import CommentIcon from '@material-ui/icons/Comment'
 import DoneAllIcon from '@material-ui/icons/DoneAll'
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import Typography from '@material-ui/core/Typography'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Divider from '@material-ui/core/Divider'
+import Paper from '@material-ui/core/Paper'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
 import { MergeRequest, useBackend } from '../hooks/backend'
@@ -43,10 +45,17 @@ const useStyles = makeStyles(theme => ({
     commentIcon: {
         marginTop: 5,
     },
-    allDoneIcon: {
+    errorStatusBoxIcon: {
         fontSize: 96,
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(4),
         width: '100%',
+    },
+    errorStatusBoxHeadline: {
+        textAlign: 'center',
+    },
+    errorStatusBox: {
+        margin: theme.spacing(4),
+        padding: theme.spacing(2),
     },
 }))
 
@@ -101,9 +110,19 @@ const renderMergeRequest = (classes: any) => (mergeRequest: MergeRequest, index:
     )
 }
 
-export const MergeRequests = () => {
+export const MergeRequestsPage = () => {
     const classes = useStyles()
-    const mergeRequests = useBackend()
+    const { mergeRequests } = useBackend()
+    if (!mergeRequests) {
+        return (
+            <Paper className={classes.errorStatusBox}>
+                <Typography variant='h6' color='inherit' className={classes.errorStatusBoxHeadline}>
+                    Could not load your merge requests
+                </Typography>
+                <ErrorOutlineIcon className={classes.errorStatusBoxIcon} color='error' />
+            </Paper>
+        )
+    }
     const wipMergeRequests = mergeRequests.filter(mergeRequest => mergeRequest.work_in_progress)
     const openMergeRequests = mergeRequests.filter(mergeRequest => !mergeRequest.work_in_progress)
     const noMergeRequests = openMergeRequests.length === 0 && wipMergeRequests.length === 0
@@ -129,12 +148,12 @@ export const MergeRequests = () => {
                 </>
             )}
             {noMergeRequests && (
-                <>
-                    <Typography variant='h6' color='inherit' className={classes.headline}>
+                <Paper className={classes.errorStatusBox}>
+                    <Typography variant='h6' color='inherit' className={classes.errorStatusBoxHeadline}>
                         There are no open merge requests
                     </Typography>
-                    <DoneAllIcon className={classes.allDoneIcon} />
-                </>
+                    <DoneAllIcon className={classes.errorStatusBoxIcon} color='action' />
+                </Paper>
             )}
         </>
     )

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as request from 'superagent'
 
-import { useConfig } from './config'
+import { Config, useConfig } from './config'
 
 export interface GitLabUser {
     id: number
@@ -43,36 +43,58 @@ export interface MergeRequest {
     web_url: string
 }
 
-const Context = React.createContext<MergeRequest[] | null>(null)
+export interface BackendContext {
+    mergeRequests: MergeRequest[] | undefined
+    testConfig: (config: Config) => Promise<void>
+    reset: () => void
+}
+
+const Context = React.createContext<BackendContext | null>(null)
 
 export function useBackend() {
     const context = React.useContext(Context)
-    if (!context) {
+    if (context === null) {
         throw new Error('Please use the BackendProvider')
     }
     return context
 }
 
+const doRequest = async (config: Config): Promise<any> => {
+    const apiUrl = `${config.url}/api/v4/groups/${config.group}/merge_requests`
+
+    return request
+        .get(apiUrl)
+        .set('Private-Token', config.token)
+        .query({ state: 'opened', order_by: 'updated_at', sort: 'asc' })
+        .timeout(4000)
+        .then(response => response.body)
+}
+
 export const BackendProvider = ({ ...props }) => {
     const { config } = useConfig()
-    const [mergeRequests, setMergeRequests] = React.useState<MergeRequest[]>([])
+    const [mergeRequests, setMergeRequests] = React.useState<MergeRequest[] | undefined>(undefined)
+    const [loadErrors, setLoadErrors] = React.useState<number>(0)
+    console.log('BackendProvider', config)
 
-    const updateData = async () => {
+    const updateData = async (newConfig?: Config) => {
         try {
-            if (config) {
-                const apiUrl = `${config.url}/api/v4/groups/${config.group}/merge_requests`
-                const response = await request
-                    .get(apiUrl)
-                    .set('Private-Token', config.token)
-                    .query({ state: 'opened', order_by: 'updated_at', sort: 'asc' })
-                setMergeRequests(response.body)
+            const configToUse = newConfig || config
+            if (configToUse) {
+                const data = await doRequest(configToUse)
+                setMergeRequests(data)
+                setLoadErrors(0)
             }
         } catch (error) {
             console.error(error)
+            setLoadErrors(loadErrors + 1)
+            if (loadErrors > 2) {
+                setMergeRequests(undefined)
+            }
         }
     }
 
     React.useEffect(() => {
+        console.log('useEffect')
         updateData()
         const interval = setInterval(updateData, 30000)
 
@@ -81,5 +103,17 @@ export const BackendProvider = ({ ...props }) => {
         }
     }, [])
 
-    return <Context.Provider value={mergeRequests} {...props} />
+    const testConfig = async (newConfig: Config) => {
+        console.log('testConfig', newConfig)
+
+        return doRequest(newConfig)
+    }
+
+    const reset = () => {
+        console.log('reset backend')
+        setLoadErrors(0)
+        setMergeRequests(undefined)
+    }
+
+    return <Context.Provider value={{ mergeRequests, reset, testConfig }} {...props} />
 }
