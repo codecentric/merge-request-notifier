@@ -70,7 +70,7 @@ const showWindow = () => {
         setTimeout(() => {
             win!.setPosition(position.x, position.y, false)
             win!.show()
-        }, 250)
+        }, 200)
     }
 }
 
