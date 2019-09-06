@@ -15,14 +15,20 @@ import { ConfigProvider } from '../hooks/config'
 import { BackendProvider } from '../hooks/backend'
 import { Content } from './Content'
 
-const useStyles = makeStyles({
+const logo = require('../images/logo.png') // tslint:disable-line:no-var-requires
+
+const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
     },
     title: {
         flexGrow: 1,
     },
-})
+    logo: {
+        height: theme.spacing(3),
+        marginRight: theme.spacing(1),
+    },
+}))
 
 const closeApp = () => {
     ipcRenderer.send('close-application')
@@ -38,6 +44,7 @@ const Application = () => {
                     <BrowserRouter>
                         <AppBar position='static' color='default'>
                             <Toolbar>
+                                <img src={logo} className={classes.logo} />
                                 <Typography variant='h5' color='inherit' className={classes.title}>
                                     Merge Request Notifier
                                 </Typography>
