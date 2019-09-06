@@ -39,7 +39,7 @@ const Application = () => {
                         <AppBar position='static' color='default'>
                             <Toolbar>
                                 <Typography variant='h5' color='inherit' className={classes.title}>
-                                    Merge Requests Notifier
+                                    Merge Request Notifier
                                 </Typography>
                                 <Link to='/config'>
                                     <IconButton title='Settings'>

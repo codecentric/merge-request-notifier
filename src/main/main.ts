@@ -16,7 +16,7 @@ const installExtensions = async () => {
 const createTray = () => {
     tray = new Tray(path.join(__dirname, 'assets', 'icon.png'))
 
-    tray.setToolTip('Merge Requests Notifier')
+    tray.setToolTip('Merge Request Notifier')
     tray.on('click', toggleWindow)
 }
 

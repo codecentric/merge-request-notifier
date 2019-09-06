@@ -1,5 +1,5 @@
 {
-  "name": "gitlab-merge-requests-notifier",
+  "name": "merge-request-notifier",
   "version": "0.2.0",
   "description": "",
   "main": "./dist/main.js",
@@ -52,8 +52,8 @@
     }
   },
   "build": {
-    "productName": "GitLab Merge Requests Notifier",
-    "appId": "de.codecentric.ruettenm.gitlabMergeRequestsNotifier",
+    "productName": "Merge Request Notifier",
+    "appId": "de.codecentric.ruettenm.mergeRequestNotifier",
     "directories": {
       "output": "release"
     },
@@ -65,13 +65,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:ruettenm/gitlab-merge-request-notifier.git"
+    "url": "git@github.com:codecentric/merge-request-notifier.git"
   },
   "author": {
     "name": "Matthias Rütten",
     "email": "matthias.ruetten@codecentric.de"
   },
-  "homepage": "https://github.com/ruettenm/gitlab-merge-request-notifier",
+  "homepage": "https://github.com/codecentric/merge-request-notifier",
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
