@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, ipcMain } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
 
@@ -21,7 +21,7 @@ const createTray = () => {
 }
 
 const toggleWindow = () => {
-    win && win.isVisible() ? win.hide() : showWindow()
+    win && win.isVisible() ? hideWindow() : showWindow()
 }
 
 const getWindowPosition = () => {
@@ -46,8 +46,16 @@ const setup = async () => {
 
         createTray()
         createWindow()
+        createMenu()
     } catch (error) {
         console.error('could not start the app', error)
+    }
+}
+
+const hideWindow = () => {
+    if (win && win.isVisible()) {
+        win.hide()
+        app.dock.hide()
     }
 }
 
@@ -55,9 +63,69 @@ const showWindow = () => {
     const position = getWindowPosition()
 
     if (position && win) {
-        win.setPosition(position.x, position.y, false)
-        win.show()
+        app.dock.show()
+
+        // We have to wait a bit because the dock.show() is triggering a "window.hide" event
+        // otherwise the app would be closed immediately
+        setTimeout(() => {
+            win!.setPosition(position.x, position.y, false)
+            win!.show()
+        }, 250)
     }
+}
+
+const createMenu = () => {
+    const devMenuTemplate: MenuItemConstructorOptions[] =
+        process.env.NODE_ENV === 'production'
+            ? []
+            : [
+                  { type: 'separator' },
+                  {
+                      label: 'Toggle DevTools ',
+                      click: () => {
+                          if (win) {
+                              if (win.webContents.isDevToolsOpened()) {
+                                  win.webContents.closeDevTools()
+                                  win.setSize(550, 600)
+                              } else {
+                                  win.webContents.openDevTools()
+                                  win.setSize(950, 600)
+                              }
+                          }
+                      },
+                  },
+              ]
+
+    const menuTemplate: MenuItemConstructorOptions[] = [
+        {
+            label: 'Application',
+            submenu: [
+                {
+                    label: 'Quit',
+                    accelerator: 'Command+Q',
+                    click: () => {
+                        app.quit()
+                    },
+                },
+                ...devMenuTemplate,
+            ],
+        },
+        {
+            label: 'Edit',
+            submenu: [
+                { label: 'Undo', accelerator: 'CmdOrCtrl+Z', role: 'undo' },
+                { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', role: 'redo' },
+                { type: 'separator' },
+                { label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut' },
+                { label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy' },
+                { label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste' },
+                { label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectAll' },
+            ],
+        },
+    ]
+
+    const menu = Menu.buildFromTemplate(menuTemplate)
+    Menu.setApplicationMenu(menu)
 }
 
 const createWindow = () => {
@@ -87,19 +155,12 @@ const createWindow = () => {
         )
     }
 
-    // if (process.env.NODE_ENV !== 'production') {
-    //     // Open DevTools, see https://github.com/electron/electron/issues/12438 for why we wait for dom-ready
-    //     win.webContents.once('dom-ready', () => {
-    //         win!.webContents.openDevTools()
-    //     })
-    // }
-
     win.on('closed', () => {
         win = null
     })
 
     win.on('blur', () => {
-        win && win.hide()
+        hideWindow()
     })
 }
 
