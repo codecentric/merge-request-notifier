@@ -1,4 +1,4 @@
-# GitLab Merge Request Notifier
+# Merge Request Notifier
 
 ## Development
 
