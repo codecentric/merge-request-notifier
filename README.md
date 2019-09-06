@@ -15,3 +15,9 @@ This will start the application with hot-reload so you can instantly start devel
 ```bash
 yarn start
 ```
+
+### Create new Release
+
+```bash
+yarn dist
+```
