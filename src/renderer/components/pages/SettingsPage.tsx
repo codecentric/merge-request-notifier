@@ -8,8 +8,8 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button/Button'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
-import { useBackend } from '../hooks/backend'
-import { useConfig } from '../hooks/config'
+import { useBackend } from '../../hooks/backend'
+import { useConfig } from '../../hooks/config'
 import { FormHelperText } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({

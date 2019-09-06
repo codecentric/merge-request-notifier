@@ -3,8 +3,8 @@ import { Box } from '@material-ui/core'
 import { Switch, Route } from 'react-router-dom'
 
 import { useConfig } from '../hooks/config'
-import { MergeRequestsPage } from './MergeRequestsPage'
-import { SettingsPage } from './SettingsPage'
+import { MergeRequestsPage } from './pages/MergeRequestsPage'
+import { SettingsPage } from './pages/SettingsPage'
 
 export const Content = () => {
     const { config } = useConfig()
