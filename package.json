@@ -1,6 +1,6 @@
 {
   "name": "merge-request-notifier",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "",
   "main": "./dist/main.js",
   "scripts": {
@@ -61,7 +61,11 @@
       "dist/",
       "node_modules/",
       "package.json"
-    ]
+    ],
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
+    "publish": ["github"]
   },
   "repository": {
     "type": "git",
