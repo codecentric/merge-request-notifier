@@ -55,7 +55,9 @@ const setup = async () => {
 const hideWindow = () => {
     if (win && win.isVisible()) {
         win.hide()
-        app.dock.hide()
+        if (app.dock) {
+            app.dock.hide()
+        }
     }
 }
 
@@ -63,7 +65,9 @@ const showWindow = () => {
     const position = getWindowPosition()
 
     if (position && win) {
-        app.dock.show()
+        if (app.dock) {
+            app.dock.show()
+        }
 
         // We have to wait a bit because the dock.show() is triggering a "window.hide" event
         // otherwise the app would be closed immediately
@@ -164,7 +168,9 @@ const createWindow = () => {
     })
 }
 
-app.dock.hide()
+if (app.dock) {
+    app.dock.hide()
+}
 
 app.on('ready', setup)
 
