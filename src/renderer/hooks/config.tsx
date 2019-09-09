@@ -8,6 +8,7 @@ export interface Config {
 
 interface ConfigContext {
     config: Config | null
+    removeConfig: () => void
     updateConfig: (newConfig: Config) => void
 }
 
@@ -25,10 +26,14 @@ export const ConfigProvider = ({ ...props }) => {
     const localStorageValue = window.localStorage.getItem('config')
     const [config, setConfig] = React.useState<Config | null>(localStorageValue ? JSON.parse(localStorageValue) : null)
 
+    const removeConfig = () => {
+        setConfig(null)
+        window.localStorage.removeItem('config')
+    }
     const updateConfig = (newConfig: Config) => {
         setConfig(newConfig)
         window.localStorage.setItem('config', JSON.stringify(newConfig))
     }
 
-    return <Context.Provider value={{ config, updateConfig }} {...props} />
+    return <Context.Provider value={{ config, updateConfig, removeConfig }} {...props} />
 }

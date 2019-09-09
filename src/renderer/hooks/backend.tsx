@@ -46,7 +46,6 @@ export interface MergeRequest {
 export interface BackendContext {
     mergeRequests: MergeRequest[] | undefined
     testConfig: (config: Config) => Promise<void>
-    reset: () => void
 }
 
 const Context = React.createContext<BackendContext | null>(null)
@@ -94,26 +93,17 @@ export const BackendProvider = ({ ...props }) => {
     }
 
     React.useEffect(() => {
-        console.log('useEffect')
         updateData()
         const interval = setInterval(updateData, 30000)
 
         return () => {
             clearInterval(interval)
         }
-    }, [])
+    }, [config])
 
     const testConfig = async (newConfig: Config) => {
-        console.log('testConfig', newConfig)
-
         return doRequest(newConfig)
     }
 
-    const reset = () => {
-        console.log('reset backend')
-        setLoadErrors(0)
-        setMergeRequests(undefined)
-    }
-
-    return <Context.Provider value={{ mergeRequests, reset, testConfig }} {...props} />
+    return <Context.Provider value={{ mergeRequests, testConfig }} {...props} />
 }

@@ -11,6 +11,7 @@ import { FormHelperText } from '@material-ui/core'
 
 import { useBackend } from '../../hooks/backend'
 import { useConfig } from '../../hooks/config'
+import sleep from '../../util/sleep'
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -32,12 +33,14 @@ interface FormData {
     token: string
 }
 
+// tslint:disable-next-line:cyclomatic-complexity
 export const SettingsPage = () => {
     const classes = useStyles()
     const { history } = useReactRouter()
-    const { reset, testConfig } = useBackend()
-    const { config, updateConfig } = useConfig()
+    const { testConfig } = useBackend()
+    const { config, updateConfig, removeConfig } = useConfig()
 
+    const [confirmDelete, setConfirmDelete] = React.useState(false)
     const [submitting, setSubmitting] = React.useState(false)
     const [errors, setErrors] = React.useState<FormErrorData>({
         url: '',
@@ -57,6 +60,16 @@ export const SettingsPage = () => {
 
     const handleChange = (name: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [name]: event.target.value })
+    }
+
+    const confirmRemove = async () => {
+        setConfirmDelete(true)
+    }
+
+    const remove = async () => {
+        removeConfig()
+        setErrors({ url: '', token: '', group: '', invalidSettings: false })
+        setValues({ url: '', token: '', group: '' })
     }
 
     const save = async () => {
@@ -82,10 +95,9 @@ export const SettingsPage = () => {
 
             try {
                 await testConfig(newConfig)
-
                 updateConfig(newConfig)
 
-                reset()
+                await sleep(1000)
                 history.push('/')
             } catch (_) {
                 setError('invalidSettings', true)
@@ -93,6 +105,18 @@ export const SettingsPage = () => {
                 setSubmitting(false)
             }
         }
+    }
+
+    const renderRemoveButton = () => {
+        return confirmDelete ? (
+            <Button variant='contained' color='secondary' fullWidth className={classes.button} onClick={remove}>
+                Are you sure?
+            </Button>
+        ) : (
+            <Button fullWidth className={classes.button} onClick={confirmRemove}>
+                remove config
+            </Button>
+        )
     }
 
     return (
@@ -143,6 +167,7 @@ export const SettingsPage = () => {
                 <Button variant='contained' color='primary' aria-label='add' fullWidth onClick={save} className={classes.button} disabled={submitting}>
                     Save
                 </Button>
+                {config && !submitting && renderRemoveButton()}
                 {config && !submitting && (
                     <Link to='/' className={classes.goBackLink}>
                         <Button fullWidth className={classes.button}>
