@@ -18,12 +18,7 @@ yarn start
 
 ### New Releases
 
-#### Create a new Release
+#### Create a new Release and Publish it
 ```bash
 yarn dist
-```
-
-#### Publish it to GitHub
-```bash
-electron-builder --publish always
 ```
