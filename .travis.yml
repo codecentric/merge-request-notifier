@@ -27,6 +27,9 @@ jobs:
     - stage: Lint
       script:
         - yarn lint
+    - stage: Prettier
+      script:
+        - yarn prettier:check
     - stage: Release and Publish
       os: osx
       osx_image: xcode10.1
