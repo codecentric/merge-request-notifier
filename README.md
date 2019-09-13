@@ -1,5 +1,7 @@
 # Merge Request Notifier
 
+[![Build Status](https://travis-ci.org/codecentric/merge-request-notifier.svg?branch=master)](https://travis-ci.org/codecentric/merge-request-notifier)
+
 ## Development
 
 ### Install all dependencies 
