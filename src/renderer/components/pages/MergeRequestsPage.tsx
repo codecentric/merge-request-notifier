@@ -1,10 +1,10 @@
 import * as React from 'react'
 import * as moment from 'moment'
 import { ipcRenderer, shell } from 'electron'
+import { Heading, Box, Text } from 'rebass'
 
 import DoneAllIcon from '@material-ui/icons/DoneAll'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
-import { Heading, Box, Text } from 'rebass'
 
 import { MergeRequestGroup } from '../list/MergeRequestGroup'
 import { MergeRequestItem } from '../list/MergeRequestItem'
@@ -31,6 +31,7 @@ const renderMergeRequest = (mergeRequest: MergeRequest) => {
                     downVotes: mergeRequest.downvotes,
                     upVotes: mergeRequest.upvotes,
                     commentCount: mergeRequest.user_notes_count,
+                    pipelineStatus: mergeRequest.pipeline_status,
                 }}
                 onClick={openMergeRequest(mergeRequest.web_url)}
             />

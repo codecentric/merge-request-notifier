@@ -1,11 +1,11 @@
 import * as React from 'react'
+import { Box, Image, Flex, Link, Text } from 'rebass'
+
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown'
 import CommentIcon from '@material-ui/icons/Comment'
 
-import { Box, Image, Flex, Link, Text } from 'rebass'
-
-type PipelineStatus = 'pending' | 'failure' | 'success'
+import { PipelineStatus } from '../../hooks/types'
 
 interface MergeRequestItemStats {
     upVotes: number

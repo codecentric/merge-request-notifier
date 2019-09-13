@@ -1,7 +1,7 @@
 import * as request from 'superagent'
 
 import { Config } from './config'
-import { GroupedMergeRequest, MergeRequest, Project } from './types'
+import { GroupedMergeRequest, MergeRequest, PipelineStatus, Project } from './types'
 
 const projectCache: { [id: number]: Project } = {}
 
@@ -36,6 +36,23 @@ const applyOptionalWIPStatus = (projectId: number, project: Project) => ({
     name_with_namespace: projectId > 0 ? project.name_with_namespace : `WIP / ${project.name_with_namespace}`,
 })
 
+const loadPipelineStatus = async (config: Config, projectId: number, mergeRequestIid: number): Promise<PipelineStatus | undefined> => {
+    const apiUrl = `${config.url}/api/v4/projects/${projectId}/merge_requests/${mergeRequestIid}/pipelines`
+
+    const pipelines = await request
+        .get(apiUrl)
+        .set('Private-Token', config.token)
+        .query({ per_page: 1, page: 1 })
+        .timeout(4000)
+        .then(res => res.body)
+
+    if (pipelines.length === 0) {
+        return undefined
+    }
+
+    return pipelines[0].status
+}
+
 const loadProject = async (config: Config, projectId: number): Promise<Project> => {
     const realProjectId = Math.abs(projectId)
     const apiUrl = `${config.url}/api/v4/projects/${realProjectId}`
@@ -55,13 +72,22 @@ const loadProject = async (config: Config, projectId: number): Promise<Project> 
     return applyOptionalWIPStatus(projectId, project)
 }
 
-const loadMergeRequests = (config: Config): Promise<MergeRequest[]> => {
+const loadMergeRequests = async (config: Config): Promise<MergeRequest[]> => {
     const apiUrl = `${config.url}/api/v4/groups/${config.group}/merge_requests`
 
-    return request
+    const mergeRequests = await request
         .get(apiUrl)
         .set('Private-Token', config.token)
         .query({ state: 'opened' })
         .timeout(4000)
-        .then(response => response.body)
+        .then(response => response.body as MergeRequest[])
+
+    return Promise.all(
+        mergeRequests.map(async mergeRequest => {
+            return {
+                ...mergeRequest,
+                pipeline_status: await loadPipelineStatus(config, mergeRequest.project_id, mergeRequest.iid),
+            }
+        }),
+    )
 }

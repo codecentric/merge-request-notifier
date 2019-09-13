@@ -10,8 +10,11 @@ export interface User {
     avatar_url?: string
 }
 
+export type PipelineStatus = 'running' | 'pending' | 'success' | 'failed'
+
 export interface MergeRequest {
     id: number
+    iid: number
     created_at: string
     updated_at: string
     project_id: number
@@ -27,6 +30,7 @@ export interface MergeRequest {
     work_in_progress: boolean
     user_notes_count: number
     web_url: string
+    pipeline_status?: PipelineStatus
 }
 
 export interface Project {

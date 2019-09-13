@@ -49,7 +49,13 @@ export const theme = {
             border: '1px solid',
             borderColor: 'blue',
         },
-        'pipeline-failure': {
+        'pipeline-running': {
+            backgroundColor: 'blue',
+            color: 'white',
+            border: '1px solid',
+            borderColor: 'blue',
+        },
+        'pipeline-failed': {
             backgroundColor: 'red',
             color: 'white',
             border: '1px solid',
