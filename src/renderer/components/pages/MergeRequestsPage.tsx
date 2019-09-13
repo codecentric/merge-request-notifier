@@ -68,7 +68,7 @@ export const MergeRequestsPage = () => {
     ) : (
         <>
             {mergeRequests.map(entry => (
-                <MergeRequestGroup label={entry.project.name_with_namespace}>{entry.mergeRequests.map(renderMergeRequest)}</MergeRequestGroup>
+                <MergeRequestGroup label={entry.project.name}>{entry.mergeRequests.map(renderMergeRequest)}</MergeRequestGroup>
             ))}
         </>
     )
