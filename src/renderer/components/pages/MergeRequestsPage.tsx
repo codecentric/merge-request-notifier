@@ -9,8 +9,8 @@ import { MergeRequestGroup } from '../list/MergeRequestGroup'
 import { MergeRequestItem } from '../list/MergeRequestItem'
 
 import { MergeRequest, useBackend } from '../../hooks/backend'
-import { CenteredContent } from '../layout/CenteredContent'
-import { Heading } from 'rebass'
+
+import { Heading, Box, Text } from 'rebass'
 
 const openMergeRequest = (url: string) => () => {
     shell.openExternal(url)
@@ -42,10 +42,12 @@ export const MergeRequestsPage = () => {
     const { mergeRequests } = useBackend()
     if (!mergeRequests) {
         return (
-            <CenteredContent>
-                <Heading fontSize={3}>Could not load your merge requests</Heading>
-                <ErrorOutlineIcon color='error' />
-            </CenteredContent>
+            <Box p={3}>
+                <Heading my={2} fontSize={3}>
+                    <ErrorOutlineIcon color='error' /> Something went wrong
+                </Heading>
+                <Text>Could not load your merge requests</Text>
+            </Box>
         )
     }
     const wipMergeRequests = mergeRequests.filter(mergeRequest => mergeRequest.work_in_progress)
@@ -59,10 +61,11 @@ export const MergeRequestsPage = () => {
             {openMergeRequests.length > 0 && <MergeRequestGroup label='Open'>{openMergeRequests.map(renderMergeRequest())}</MergeRequestGroup>}
             {wipMergeRequests.length > 0 && <MergeRequestGroup label='WIP'>{wipMergeRequests.map(renderMergeRequest())}</MergeRequestGroup>}
             {noMergeRequests && (
-                <CenteredContent>
-                    <Heading fontSize={3}>There are no open merge requests</Heading>
-                    <DoneAllIcon color='action' />
-                </CenteredContent>
+                <Box p={3}>
+                    <Text my={2} fontSize={3}>
+                        <DoneAllIcon color='action' /> There are no open merge requests
+                    </Text>
+                </Box>
             )}
         </>
     )
