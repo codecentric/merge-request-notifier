@@ -2,6 +2,7 @@ export const theme = {
     breakpoints: ['40em', '52em', '64em'],
     fontSizes: [12, 14, 16, 24],
     colors: {
+        siteBackground: '#f5f5f5',
         blue: '#192CFD',
         black: '#212121',
         primary: '#192CFD',
