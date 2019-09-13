@@ -5,6 +5,9 @@ import * as url from 'url'
 let tray: Tray | null
 let win: BrowserWindow | null
 
+const WINDOW_WIDTH = 380
+const WINDOW_HEIGHT = 460
+
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer')
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
@@ -90,10 +93,10 @@ const createMenu = () => {
                           if (win) {
                               if (win.webContents.isDevToolsOpened()) {
                                   win.webContents.closeDevTools()
-                                  win.setSize(550, 600)
+                                  win.setSize(WINDOW_WIDTH, WINDOW_HEIGHT)
                               } else {
                                   win.webContents.openDevTools()
-                                  win.setSize(950, 600)
+                                  win.setSize(WINDOW_WIDTH * 3, WINDOW_HEIGHT * 2)
                               }
                           }
                       },
@@ -134,8 +137,8 @@ const createMenu = () => {
 
 const createWindow = () => {
     win = new BrowserWindow({
-        width: 550,
-        height: 650,
+        width: WINDOW_WIDTH,
+        height: WINDOW_HEIGHT,
         show: false,
         frame: false,
         fullscreenable: false,

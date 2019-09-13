@@ -1,68 +1,33 @@
-import { ipcRenderer } from 'electron'
 import { hot } from 'react-hot-loader/root'
 import * as React from 'react'
 import { BrowserRouter, Link } from 'react-router-dom'
-
-import { AppBar } from '@material-ui/core'
-import Typography from '@material-ui/core/Typography'
-import makeStyles from '@material-ui/core/styles/makeStyles'
-import Toolbar from '@material-ui/core/Toolbar'
-import IconButton from '@material-ui/core/IconButton'
-import SettingsIcon from '@material-ui/icons/Settings'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-
+import { ThemeProvider } from 'emotion-theming'
+import { Header } from './layout/Header'
+import { Footer } from './layout/Footer'
+import { theme } from './theme'
 import { ConfigProvider } from '../hooks/config'
 import { BackendProvider } from '../hooks/backend'
 import { Content } from './Content'
-
-const logo = require('../images/logo.png') // tslint:disable-line:no-var-requires
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1,
-    },
-    title: {
-        flexGrow: 1,
-    },
-    logo: {
-        height: theme.spacing(3),
-        marginRight: theme.spacing(1),
-    },
-}))
-
-const closeApp = () => {
-    ipcRenderer.send('close-application')
-}
+import { Wrapper } from './layout/Wrapper'
+import { Main } from './layout/Main'
 
 const Application = () => {
-    const classes = useStyles()
-
     return (
-        <div className={classes.root}>
-            <ConfigProvider>
-                <BackendProvider>
+        <ConfigProvider>
+            <BackendProvider>
+                <ThemeProvider theme={theme}>
                     <BrowserRouter>
-                        <AppBar position='static' color='default'>
-                            <Toolbar>
-                                <img src={logo} className={classes.logo} />
-                                <Typography variant='h5' color='inherit' className={classes.title}>
-                                    Merge Request Notifier
-                                </Typography>
-                                <Link to='/config'>
-                                    <IconButton title='Settings'>
-                                        <SettingsIcon />
-                                    </IconButton>
-                                </Link>
-                                <IconButton title='Close Application' onClick={closeApp}>
-                                    <ExitToAppIcon />
-                                </IconButton>
-                            </Toolbar>
-                        </AppBar>
-                        <Content />
+                        <Wrapper>
+                            <Header />
+                            <Main>
+                                <Content />
+                            </Main>
+                            <Footer />
+                        </Wrapper>
                     </BrowserRouter>
-                </BackendProvider>
-            </ConfigProvider>
-        </div>
+                </ThemeProvider>
+            </BackendProvider>
+        </ConfigProvider>
     )
 }
 

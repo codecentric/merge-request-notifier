@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { Box } from '@material-ui/core'
 import { Switch, Route } from 'react-router-dom'
+import { Box } from 'rebass'
 
 import { useConfig } from '../hooks/config'
 import { MergeRequestsPage } from './pages/MergeRequestsPage'

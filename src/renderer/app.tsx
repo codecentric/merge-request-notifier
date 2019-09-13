@@ -4,7 +4,7 @@ import { AppContainer } from 'react-hot-loader'
 
 import Application from './components/Application'
 
-import 'typeface-roboto'
+import 'typeface-ibm-plex-mono'
 import './app.scss'
 
 const mainElement = document.createElement('div')
