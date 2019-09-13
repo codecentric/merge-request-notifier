@@ -1,9 +1,23 @@
 import * as request from 'superagent'
 
 import { Config } from './config'
-import { GroupedMergeRequest, MergeRequest, PipelineStatus, Project } from './types'
+import { Group, GroupedMergeRequest, MergeRequest, PipelineStatus, Project } from './types'
 
 const projectCache: { [id: number]: Project } = {}
+
+export const loadGroups = async (config: Config): Promise<Group[]> => {
+    return Promise.all(
+        config.groups.map(async group => {
+            const apiUrl = `${config.url}/api/v4/groups/${group}`
+
+            return request
+                .get(apiUrl)
+                .set('Private-Token', config.token)
+                .timeout(4000)
+                .then(response => response.body)
+        }),
+    )
+}
 
 export const loadData = async (config: Config): Promise<GroupedMergeRequest[]> => {
     const mergeRequests = await loadMergeRequests(config)
@@ -30,11 +44,31 @@ export const loadData = async (config: Config): Promise<GroupedMergeRequest[]> =
     })
 }
 
-const applyOptionalWIPStatus = (projectId: number, project: Project) => ({
-    id: projectId,
-    name: projectId > 0 ? project.name : `WIP / ${project.name}`,
-    name_with_namespace: projectId > 0 ? project.name_with_namespace : `WIP / ${project.name_with_namespace}`,
-})
+const loadMergeRequests = async (config: Config): Promise<MergeRequest[]> => {
+    return ([] as MergeRequest[]).concat(
+        ...(await Promise.all(
+            config.groups.map(async group => {
+                const apiUrl = `${config.url}/api/v4/groups/${group}/merge_requests`
+
+                const mergeRequests = await request
+                    .get(apiUrl)
+                    .set('Private-Token', config.token)
+                    .query({ state: 'opened' })
+                    .timeout(4000)
+                    .then(response => response.body as MergeRequest[])
+
+                return Promise.all(
+                    mergeRequests.map(async mergeRequest => {
+                        return {
+                            ...mergeRequest,
+                            pipeline_status: await loadPipelineStatus(config, mergeRequest.project_id, mergeRequest.iid),
+                        }
+                    }),
+                )
+            }),
+        )),
+    )
+}
 
 const loadPipelineStatus = async (config: Config, projectId: number, mergeRequestIid: number): Promise<PipelineStatus | undefined> => {
     const apiUrl = `${config.url}/api/v4/projects/${projectId}/merge_requests/${mergeRequestIid}/pipelines`
@@ -72,22 +106,8 @@ const loadProject = async (config: Config, projectId: number): Promise<Project> 
     return applyOptionalWIPStatus(projectId, project)
 }
 
-const loadMergeRequests = async (config: Config): Promise<MergeRequest[]> => {
-    const apiUrl = `${config.url}/api/v4/groups/${config.group}/merge_requests`
-
-    const mergeRequests = await request
-        .get(apiUrl)
-        .set('Private-Token', config.token)
-        .query({ state: 'opened' })
-        .timeout(4000)
-        .then(response => response.body as MergeRequest[])
-
-    return Promise.all(
-        mergeRequests.map(async mergeRequest => {
-            return {
-                ...mergeRequest,
-                pipeline_status: await loadPipelineStatus(config, mergeRequest.project_id, mergeRequest.iid),
-            }
-        }),
-    )
-}
+const applyOptionalWIPStatus = (projectId: number, project: Project) => ({
+    id: projectId,
+    name: projectId > 0 ? project.name : `WIP / ${project.name}`,
+    name_with_namespace: projectId > 0 ? project.name_with_namespace : `WIP / ${project.name_with_namespace}`,
+})

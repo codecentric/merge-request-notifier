@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Config, useConfig } from './config'
-import { loadData } from './loadData'
+import { loadData, loadGroups } from './loadData'
 import { GroupedMergeRequest } from './types'
 
 export interface BackendContext {
@@ -52,7 +52,7 @@ export const BackendProvider = ({ ...props }) => {
     }, [config])
 
     const testConfig = async (newConfig: Config): Promise<boolean> => {
-        return loadData(newConfig)
+        return loadGroups(newConfig)
             .then(() => true)
             .catch(() => false)
     }

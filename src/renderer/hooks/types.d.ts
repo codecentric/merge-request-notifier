@@ -12,6 +12,14 @@ export interface User {
 
 export type PipelineStatus = 'running' | 'pending' | 'success' | 'failed'
 
+export interface Group {
+    id: number
+    name: string
+    path: string
+    description: string
+    visibility: 'private' | 'internal' | 'public'
+}
+
 export interface MergeRequest {
     id: number
     iid: number

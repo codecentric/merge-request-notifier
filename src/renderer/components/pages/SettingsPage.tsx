@@ -12,7 +12,7 @@ type FormErrorData = FormData & { invalidSettings: boolean }
 
 interface FormData {
     url: string
-    group: string
+    groups: string
     token: string
 }
 
@@ -27,13 +27,13 @@ export const SettingsPage = () => {
     const [errors, setErrors] = React.useState<FormErrorData>({
         url: '',
         token: '',
-        group: '',
+        groups: '',
         invalidSettings: false,
     })
     const [values, setValues] = React.useState<FormData>({
         url: config ? config.url : '',
         token: config ? config.token : '',
-        group: config ? config.group : '',
+        groups: config ? (config.groups || []).join(', ') : '',
     })
 
     const setError = (name: keyof FormErrorData, errorMessage: string | boolean) => {
@@ -50,13 +50,13 @@ export const SettingsPage = () => {
 
     const remove = async () => {
         removeConfig()
-        setErrors({ url: '', token: '', group: '', invalidSettings: false })
-        setValues({ url: '', token: '', group: '' })
+        setErrors({ url: '', token: '', groups: '', invalidSettings: false })
+        setValues({ url: '', token: '', groups: '' })
     }
 
     const save = async () => {
         setSubmitting(true)
-        setErrors({ url: '', token: '', group: '', invalidSettings: false })
+        setErrors({ url: '', token: '', groups: '', invalidSettings: false })
 
         if (!values.url) {
             setError('url', 'Please enter your GitLab URL.')
@@ -64,15 +64,15 @@ export const SettingsPage = () => {
         if (!values.token) {
             setError('token', 'Please enter your Personal Access Token.')
         }
-        if (!values.group) {
-            setError('group', 'Please enter your Group Name')
+        if (!values.groups) {
+            setError('groups', 'Please enter at least one Group Name')
         }
 
-        if (values.url && values.token && values.group) {
+        if (values.url && values.token && values.groups) {
             const newConfig = {
                 url: values.url,
                 token: values.token,
-                group: values.group,
+                groups: values.groups.split(',').map(group => group.trim()),
             }
 
             const testResult = await testConfig(newConfig)
@@ -112,7 +112,7 @@ export const SettingsPage = () => {
                         id='url'
                         name='url'
                         type='url'
-                        placeholder='https://gitlab.org'
+                        placeholder='https://gitlab.com'
                         value={values.url}
                         onChange={handleChange('url')}
                         disabled={submitting}
@@ -122,33 +122,28 @@ export const SettingsPage = () => {
                 </Box>
 
                 <Box my={2}>
-                    <Label htmlFor='group'>GitLab Group Name</Label>
+                    <Label htmlFor='group'>GitLab Group Names</Label>
                     <Input
                         id='group'
                         name='group'
                         type='text'
-                        placeholder='my-company'
-                        value={values.group}
-                        onChange={handleChange('group')}
+                        placeholder='my-first-group, another-group'
+                        value={values.groups}
+                        onChange={handleChange('groups')}
                         disabled={submitting}
                         required
                     />
-                    {!!errors.group && <Text color='red'>{errors.group || 'You find it in the url to your projects: <groupName>/<projectName>'}</Text>}
+                    <Text color={errors.groups ? 'red' : ''}>
+                        {errors.groups || 'You find it in the url to your projects: <groupName>/<projectName>. Separate multiple groups with a comma.'}
+                    </Text>
                 </Box>
 
                 <Box my={2}>
                     <Label htmlFor='token'>Personal Access Token</Label>
-                    <Input
-                        id='token'
-                        name='token'
-                        type='text'
-                        placeholder='my-company'
-                        value={values.token}
-                        onChange={handleChange('token')}
-                        disabled={submitting}
-                        required
-                    />
-                    {!!errors.token && <Text color='red'>{errors.token || 'You find it in the url to your projects: <groupName>/<projectName>'}</Text>}
+                    <Input id='token' name='token' type='text' value={values.token} onChange={handleChange('token')} disabled={submitting} required />
+                    <Text color={errors.token ? 'red' : ''}>
+                        {errors.token || 'You find it in GitLab under Profile > Settings > Access Tokens (it requires API scope)'}
+                    </Text>
                 </Box>
 
                 <Button mt={4} sx={{ display: 'block', width: '100%' }} variant='primary' aria-label='add' onClick={save} disabled={submitting}>
