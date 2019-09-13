@@ -1,51 +1,12 @@
 import * as React from 'react'
-import * as request from 'superagent'
 
 import { Config, useConfig } from './config'
-
-export interface GitLabUser {
-    id: number
-    name: string
-    username: string
-    state: 'active' | 'inactive' | 'blocked'
-    avatar_url?: string
-    web_url: string
-}
-
-export interface MergeRequest {
-    id: number
-    iid: number
-    project_id: number
-    title: string
-    description: string
-    state: 'opened' | 'closed' | 'locked' | 'merged'
-    merged_by?: GitLabUser
-    merged_at?: string
-    closed_by?: GitLabUser
-    closed_at?: string
-    created_at: string
-    updated_at: string
-    target_branch: string
-    source_branch: string
-    upvotes: number
-    downvotes: number
-    author: GitLabUser
-    assignee?: GitLabUser
-    assignees: GitLabUser[]
-    source_project_id: number
-    target_project_id: number
-    labels: string[]
-    work_in_progress: boolean
-    merge_when_pipeline_succeeds: boolean
-    merge_status: 'can_be_merged'
-    user_notes_count: number
-    should_remove_source_branch: boolean
-    web_url: string
-}
+import { loadData } from './loadData'
+import { GroupedMergeRequest } from './types'
 
 export interface BackendContext {
-    mergeRequests: MergeRequest[] | undefined
-    testConfig: (config: Config) => Promise<void>
+    mergeRequests: GroupedMergeRequest[] | undefined
+    testConfig: (config: Config) => Promise<boolean>
 }
 
 const Context = React.createContext<BackendContext | null>(null)
@@ -58,20 +19,9 @@ export function useBackend() {
     return context
 }
 
-const doRequest = async (config: Config): Promise<any> => {
-    const apiUrl = `${config.url}/api/v4/groups/${config.group}/merge_requests`
-
-    return request
-        .get(apiUrl)
-        .set('Private-Token', config.token)
-        .query({ state: 'opened', order_by: 'updated_at', sort: 'asc' })
-        .timeout(4000)
-        .then(response => response.body)
-}
-
 export const BackendProvider = ({ ...props }) => {
     const { config } = useConfig()
-    const [mergeRequests, setMergeRequests] = React.useState<MergeRequest[] | undefined>(undefined)
+    const [mergeRequests, setMergeRequests] = React.useState<GroupedMergeRequest[] | undefined>(undefined)
     const [loadErrors, setLoadErrors] = React.useState<number>(0)
     console.log('BackendProvider', config)
 
@@ -79,7 +29,7 @@ export const BackendProvider = ({ ...props }) => {
         try {
             const configToUse = newConfig || config
             if (configToUse) {
-                const data = await doRequest(configToUse)
+                const data = await loadData(configToUse)
                 setMergeRequests(data)
                 setLoadErrors(0)
             }
@@ -101,8 +51,10 @@ export const BackendProvider = ({ ...props }) => {
         }
     }, [config])
 
-    const testConfig = async (newConfig: Config) => {
-        return doRequest(newConfig)
+    const testConfig = async (newConfig: Config): Promise<boolean> => {
+        return loadData(newConfig)
+            .then(() => true)
+            .catch(() => false)
     }
 
     return <Context.Provider value={{ mergeRequests, testConfig }} {...props} />

@@ -17,7 +17,8 @@ import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import makeStyles from '@material-ui/core/styles/makeStyles'
 
-import { MergeRequest, useBackend } from '../../hooks/backend'
+import { useBackend } from '../../hooks/backend'
+import { MergeRequest } from '../../hooks/types'
 
 const useStyles = makeStyles(theme => ({
     headline: {
@@ -123,38 +124,31 @@ export const MergeRequestsPage = () => {
             </Paper>
         )
     }
-    const wipMergeRequests = mergeRequests.filter(mergeRequest => mergeRequest.work_in_progress)
-    const openMergeRequests = mergeRequests.filter(mergeRequest => !mergeRequest.work_in_progress)
-    const noMergeRequests = openMergeRequests.length === 0 && wipMergeRequests.length === 0
+    const noMergeRequests = mergeRequests.length === 0
+    const numberOfOpenMergeRequest = mergeRequests.reduce(
+        (total, entry) => total + entry.mergeRequests.filter(mergeRequest => !mergeRequest.work_in_progress).length,
+        0,
+    )
 
-    ipcRenderer.send('update-open-merge-requests', openMergeRequests.length)
+    ipcRenderer.send('update-open-merge-requests', numberOfOpenMergeRequest)
 
-    return (
+    return noMergeRequests ? (
+        <Paper className={classes.errorStatusBox}>
+            <Typography variant='h6' color='inherit' className={classes.errorStatusBoxHeadline}>
+                There are no open merge requests
+            </Typography>
+            <DoneAllIcon className={classes.errorStatusBoxIcon} color='action' />
+        </Paper>
+    ) : (
         <>
-            {openMergeRequests.length > 0 && (
+            {mergeRequests.map(entry => (
                 <>
                     <Typography variant='h6' color='inherit' className={classes.headline}>
-                        Open
+                        {entry.project.name_with_namespace}
                     </Typography>
-                    <List className={classes.list}>{openMergeRequests.map(renderMergeRequest(classes))}</List>
+                    <List className={classes.list}>{entry.mergeRequests.map(renderMergeRequest(classes))}</List>
                 </>
-            )}
-            {wipMergeRequests.length > 0 && (
-                <>
-                    <Typography variant='h6' color='inherit' className={classes.headline}>
-                        Work In Progress
-                    </Typography>
-                    <List className={classes.list}>{wipMergeRequests.map(renderMergeRequest(classes))}</List>
-                </>
-            )}
-            {noMergeRequests && (
-                <Paper className={classes.errorStatusBox}>
-                    <Typography variant='h6' color='inherit' className={classes.errorStatusBoxHeadline}>
-                        There are no open merge requests
-                    </Typography>
-                    <DoneAllIcon className={classes.errorStatusBoxIcon} color='action' />
-                </Paper>
-            )}
+            ))}
         </>
     )
 }
