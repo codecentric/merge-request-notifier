@@ -30,7 +30,7 @@ const filterStats = ({ upVotes, downVotes, commentCount }: MergeRequestItemStats
         ({ count }) => count > 0,
     )
 
-export const MergeRequestItem: React.FunctionComponent<MergeRequestItemProps> = ({ children, onClick, avatar, title, subTitle, stats }) => {
+export const MergeRequestItem: React.FunctionComponent<MergeRequestItemProps> = ({ onClick, avatar, title, subTitle, stats }) => {
     const statsToRender = filterStats(stats)
 
     return (

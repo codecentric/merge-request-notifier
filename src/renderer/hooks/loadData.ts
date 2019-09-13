@@ -3,6 +3,8 @@ import * as request from 'superagent'
 import { Config } from './config'
 import { GroupedMergeRequest, MergeRequest, Project } from './types'
 
+const projectCache: { [id: number]: Project } = {}
+
 export const loadData = async (config: Config): Promise<GroupedMergeRequest[]> => {
     const mergeRequests = await loadMergeRequests(config)
 
@@ -28,20 +30,29 @@ export const loadData = async (config: Config): Promise<GroupedMergeRequest[]> =
     })
 }
 
+const applyOptionalWIPStatus = (projectId: number, project: Project) => ({
+    id: projectId,
+    name: projectId > 0 ? project.name : `WIP / ${project.name}`,
+    name_with_namespace: projectId > 0 ? project.name_with_namespace : `WIP / ${project.name_with_namespace}`,
+})
+
 const loadProject = async (config: Config, projectId: number): Promise<Project> => {
-    const apiUrl = `${config.url}/api/v4/projects/${Math.abs(projectId)}`
+    const realProjectId = Math.abs(projectId)
+    const apiUrl = `${config.url}/api/v4/projects/${realProjectId}`
+
+    if (projectCache[realProjectId]) {
+        return applyOptionalWIPStatus(projectId, projectCache[realProjectId])
+    }
 
     const project = await request
         .get(apiUrl)
         .set('Private-Token', config.token)
         .timeout(4000)
-        .then(response => response.body)
+        .then(res => res.body)
 
-    return {
-        id: projectId,
-        name: projectId > 0 ? project.name : `WIP / ${project.name}`,
-        name_with_namespace: projectId > 0 ? project.name_with_namespace : `WIP / ${project.name_with_namespace}`,
-    }
+    projectCache[realProjectId] = project
+
+    return applyOptionalWIPStatus(projectId, project)
 }
 
 const loadMergeRequests = (config: Config): Promise<MergeRequest[]> => {

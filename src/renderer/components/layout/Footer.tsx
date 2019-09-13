@@ -1,11 +1,10 @@
 import * as React from 'react'
 import { ipcRenderer } from 'electron'
+import { Flex, Box, Link } from 'rebass'
+import { Link as RouterLink } from 'react-router-dom'
 
 import SettingsIcon from '@material-ui/icons/Settings'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-
-import { Flex, Box, Link } from 'rebass'
-import { Link as RouterLink } from 'react-router-dom'
 
 const closeApp = () => {
     ipcRenderer.send('close-application')
@@ -25,22 +24,3 @@ export const Footer = () => (
         </Link>
     </Flex>
 )
-
-// export const Header = () => (
-//     <AppBar position='static' color='default'>
-//         <Toolbar>
-//             <img src={logo} className={classes.logo} />
-//             <Typography variant='h5' color='inherit' className={classes.title}>
-//                 Merge Request Notifier
-//             </Typography>
-//             <Link to='/config'>
-//                 <IconButton title='Settings'>
-//                     <SettingsIcon />
-//                 </IconButton>
-//             </Link>
-//             <IconButton title='Close Application' onClick={closeApp}>
-//                 <ExitToAppIcon />
-//             </IconButton>
-//         </Toolbar>
-//     </AppBar>
-// )

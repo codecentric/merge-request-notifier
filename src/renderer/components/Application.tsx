@@ -1,7 +1,8 @@
 import { hot } from 'react-hot-loader/root'
 import * as React from 'react'
-import { BrowserRouter, Link } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from 'emotion-theming'
+
 import { Header } from './layout/Header'
 import { Footer } from './layout/Footer'
 import { theme } from './theme'
