@@ -68,25 +68,25 @@ export const SettingsPage = () => {
             setError('group', 'Please enter your Group Name')
         }
 
-        if (values.url && values.token) {
+        if (values.url && values.token && values.group) {
             const newConfig = {
                 url: values.url,
                 token: values.token,
                 group: values.group,
             }
 
-            try {
-                await testConfig(newConfig)
+            const testResult = await testConfig(newConfig)
+            if (testResult) {
                 updateConfig(newConfig)
 
                 await sleep(1000)
                 history.push('/')
-            } catch (_) {
+            } else {
                 setError('invalidSettings', true)
-            } finally {
-                setSubmitting(false)
             }
         }
+
+        setSubmitting(false)
     }
 
     const renderRemoveButton = () => {

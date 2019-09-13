@@ -96,7 +96,7 @@ const createMenu = () => {
                                   win.setSize(WINDOW_WIDTH, WINDOW_HEIGHT)
                               } else {
                                   win.webContents.openDevTools()
-                                  win.setSize(WINDOW_WIDTH * 2, WINDOW_HEIGHT)
+                                  win.setSize(WINDOW_WIDTH * 3, WINDOW_HEIGHT * 2)
                               }
                           }
                       },
