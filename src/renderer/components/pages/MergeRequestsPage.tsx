@@ -18,7 +18,7 @@ const openMergeRequest = (url: string) => () => {
 
 const renderMergeRequest = () => (mergeRequest: MergeRequest, index: number) => {
     const time = moment(mergeRequest.updated_at).format('DD.MM. HH:mm')
-    const assignee = mergeRequest.assignee ? `Assignee: ${mergeRequest.assignee.name}` : ''
+    const assignee = mergeRequest.assignee ? ` — ${mergeRequest.assignee.name}` : ''
     const secondaryText = `${time} ${assignee}`
 
     return (
