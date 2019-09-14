@@ -16,7 +16,7 @@
     "pretest:e2e": "npm run build",
     "test:e2e": "jest '(\\/test\\/e2e/).*'",
     "pack": "npm run build && electron-builder --dir",
-    "dist": "npm run build && electron-builder",
+    "dist": "npm run build && electron-builder --publish never",
     "postinstall": "electron-builder install-app-deps",
     "prettier:check": "prettier --check 'src/**/*.ts*'",
     "prettier:write": "prettier --write 'src/**/*.ts*'"
