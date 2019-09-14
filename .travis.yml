@@ -29,7 +29,7 @@ jobs:
     - stage: Prettier
       script:
         - yarn prettier:check
-    - stage: Release and Publish
+    - stage: Build App
       if: branch = master
       os: osx
       osx_image: xcode10.1
@@ -37,3 +37,16 @@ jobs:
         - yarn dist
       before_cache:
         - rm -rf $HOME/.cache/electron-builder/wine
+
+before_deploy:
+  - export TRAVIS_TAG="preview"
+
+deploy:
+  provider: releases
+  api_key: $GH_TOKEN
+  skip_cleanup: true
+  draft: true
+  overwrite: true
+  file_glob: true
+  file:
+    - release/*.dmg
