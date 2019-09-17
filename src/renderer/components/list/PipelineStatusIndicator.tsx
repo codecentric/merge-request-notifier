@@ -17,6 +17,7 @@ const svgAnimation = css`
 const Svg = styled.svg<{ animate?: boolean }>`
     width: 16px;
     height: 10px;
+    vertical-align: middle;
 
     ${({ animate }) => animate && svgAnimation}
 `
