@@ -10,33 +10,33 @@ export interface PipelineStatusIndicatorProps {
 
 // See pendingPulse keyframes in app.scss
 // emotion keyframes doesnt work in electron context
-const pulsateCSS = css`
-    animation: pendingPulse 2s infinite;
+const svgAnimation = css`
+    animation: pendingPipeline 2s linear infinite;
 `
 
-const Svg = styled.svg<{ pulsate?: boolean }>`
+const Svg = styled.svg<{ animate?: boolean }>`
     width: 16px;
-    height: 8px;
+    height: 10px;
 
-    ${({ pulsate }) => pulsate && pulsateCSS}
+    ${({ animate }) => animate && svgAnimation}
 `
 
-const colorFromStatusMap: { [K in PipelineStatus]: string } = {
-    running: 'blue',
-    pending: 'orange',
-    success: 'green',
-    failed: 'red',
+const colorFromStatusMap: { [K in PipelineStatus]: any } = {
+    running: { stroke: 'blue', strokeWidth: 2, strokeLinecap: 'round', strokeDasharray: '19, 20', strokeDashoffset: 0, fill: 'transparent' },
+    pending: { fill: 'orange' },
+    success: { fill: 'green' },
+    failed: { fill: 'red' },
 }
 
 export const PipelineStatusIndicator: React.FunctionComponent<PipelineStatusIndicatorProps> = ({ status }) => (
-    <Svg pulsate={status === 'running'} viewBox='0 0 8px 16px' aria-title={`Pipeline status: "${status}"`}>
+    <Svg animate={status === 'running'} viewBox='0 0 8px 16px' aria-title={`Pipeline status: "${status}"`}>
         <Box
             as='circle'
             sx={{
-                fill: colorFromStatusMap[status],
                 cx: '8px',
-                cy: '4px',
+                cy: '5px',
                 r: '4px',
+                ...colorFromStatusMap[status],
             }}
         />
     </Svg>

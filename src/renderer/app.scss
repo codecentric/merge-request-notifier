@@ -11,8 +11,8 @@ button {
     cursor: pointer;
 }
 
-@keyframes pendingPulse {
-    50% {
-        opacity: 0.5;
+@keyframes pendingPipeline {
+    100% {
+        transform: rotate(360deg);
     }
 }
