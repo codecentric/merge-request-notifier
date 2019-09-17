@@ -1,12 +1,8 @@
 import * as React from 'react'
 import { Box, Image, Flex, Link, Text } from 'rebass'
 
-import ThumbUpIcon from '@material-ui/icons/ThumbUp'
-import ThumbDownIcon from '@material-ui/icons/ThumbDown'
-import CommentIcon from '@material-ui/icons/Comment'
-
 import { PipelineStatus } from '../../hooks/types'
-import { PipelineStatusIndicator } from './PipelineStatusIndicator'
+import { Stats } from './Stats'
 
 interface MergeRequestItemStats {
     upVotes: number
@@ -23,30 +19,7 @@ interface MergeRequestItemProps {
     stats: MergeRequestItemStats
 }
 
-interface RenderStats {
-    count: number
-    Icon: (props: any) => React.ReactElement
-}
-
-const filterStats = ({ upVotes, downVotes, commentCount }: MergeRequestItemStats): RenderStats[] =>
-    [{ count: upVotes, Icon: ThumbUpIcon }, { count: downVotes, Icon: ThumbDownIcon }, { count: commentCount, Icon: CommentIcon }].filter(
-        ({ count }) => count > 0,
-    )
-
 export const MergeRequestItem: React.FunctionComponent<MergeRequestItemProps> = ({ onClick, avatar, title, subTitle, stats }) => {
-    const statsToRender = filterStats(stats).map(({ count, Icon }) => (
-        <>
-            <Icon style={{ fontSize: '0.6rem', verticalAlign: 'middle' }} fontSize='small' />
-            <Box as='span' pl={1}>
-                {count}
-            </Box>
-        </>
-    ))
-
-    if (stats.pipelineStatus) {
-        statsToRender.push(<PipelineStatusIndicator status={stats.pipelineStatus} />)
-    }
-
     return (
         <Link
             as='button'
@@ -75,18 +48,7 @@ export const MergeRequestItem: React.FunctionComponent<MergeRequestItemProps> = 
                     </Text>
                 </Box>
 
-                {!!statsToRender.length && (
-                    <Box p={1} flex='0 0 auto' sx={{ borderRadius: 4, background: 'transparent', color: 'black', border: '1px solid', borderColor: 'gray' }}>
-                        <Flex flex='0 0 auto' flexWrap='nowrap'>
-                            {statsToRender.map((content, index) => (
-                                <Text fontSize={0} key={index}>
-                                    {index > 0 && '|'}
-                                    {content}
-                                </Text>
-                            ))}
-                        </Flex>
-                    </Box>
-                )}
+                <Stats {...stats} />
             </Flex>
         </Link>
     )
