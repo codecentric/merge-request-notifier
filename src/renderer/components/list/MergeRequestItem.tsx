@@ -6,6 +6,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown'
 import CommentIcon from '@material-ui/icons/Comment'
 
 import { PipelineStatus } from '../../hooks/types'
+import { PipelineStatusIndicator } from './PipelineStatusIndicator'
 
 interface MergeRequestItemStats {
     upVotes: number
@@ -15,23 +16,36 @@ interface MergeRequestItemStats {
 }
 
 interface MergeRequestItemProps {
-    avatar: { alt: string; src?: string }
+    avatar: { alt: string; title: string; src?: string }
     title: string
     subTitle: string
     onClick: (evt: React.MouseEvent) => void
     stats: MergeRequestItemStats
 }
 
-const shouldRenderStats = ({ upVotes, downVotes, commentCount, pipelineStatus }: MergeRequestItemStats) =>
-    upVotes > 0 || downVotes > 0 || commentCount > 0 || pipelineStatus !== undefined
+interface RenderStats {
+    count: number
+    Icon: (props: any) => React.ReactElement
+}
 
-const filterStats = ({ upVotes, downVotes, commentCount }: MergeRequestItemStats) =>
+const filterStats = ({ upVotes, downVotes, commentCount }: MergeRequestItemStats): RenderStats[] =>
     [{ count: upVotes, Icon: ThumbUpIcon }, { count: downVotes, Icon: ThumbDownIcon }, { count: commentCount, Icon: CommentIcon }].filter(
         ({ count }) => count > 0,
     )
 
 export const MergeRequestItem: React.FunctionComponent<MergeRequestItemProps> = ({ onClick, avatar, title, subTitle, stats }) => {
-    const statsToRender = filterStats(stats)
+    const statsToRender = filterStats(stats).map(({ count, Icon }) => (
+        <>
+            <Icon style={{ fontSize: '0.6rem' }} fontSize='small' />
+            <Box as='span' pl={1}>
+                {count}
+            </Box>
+        </>
+    ))
+
+    if (stats.pipelineStatus) {
+        statsToRender.push(<PipelineStatusIndicator status={stats.pipelineStatus} />)
+    }
 
     return (
         <Link
@@ -61,22 +75,13 @@ export const MergeRequestItem: React.FunctionComponent<MergeRequestItemProps> = 
                     </Text>
                 </Box>
 
-                {shouldRenderStats(stats) && (
-                    <Box
-                        py={1}
-                        px={2}
-                        flex='0 0 auto'
-                        sx={{ borderRadius: 4 }}
-                        variant={stats.pipelineStatus ? `pipeline-${stats.pipelineStatus}` : 'no-pipeline'}
-                    >
+                {!!statsToRender.length && (
+                    <Box p={1} flex='0 0 auto' sx={{ borderRadius: 4, background: 'transparent', color: 'black', border: '1px solid', borderColor: 'gray' }}>
                         <Flex flex='0 0 auto' flexWrap='nowrap'>
-                            {statsToRender.map(({ count, Icon }, index) => (
+                            {statsToRender.map((content, index) => (
                                 <Text fontSize={0} key={index}>
                                     {index > 0 && '|'}
-                                    <Icon style={{ fontSize: '0.6rem' }} fontSize='small' />
-                                    <Box as='span' pl={1}>
-                                        {count}
-                                    </Box>
+                                    {content}
                                 </Text>
                             ))}
                         </Flex>

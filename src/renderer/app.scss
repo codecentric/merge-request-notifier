@@ -10,3 +10,9 @@ button {
     all: unset;
     cursor: pointer;
 }
+
+@keyframes pendingPulse {
+    50% {
+        opacity: 0.5;
+    }
+}
