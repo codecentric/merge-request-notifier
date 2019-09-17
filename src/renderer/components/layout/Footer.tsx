@@ -11,7 +11,7 @@ const closeApp = () => {
 }
 
 export const Footer = () => (
-    <Flex flexWrap='wrap' justifyContent='flex-end' bg='white' sx={{ overflow: 'hidden', borderTop: '1px solid', borderColor: 'shadow' }}>
+    <Flex flexWrap='wrap' justifyContent='flex-end' variant='barGradient' sx={{ overflow: 'hidden', borderTop: '1px solid', borderColor: 'shadow' }}>
         <RouterLink to='/config' title='Settings'>
             <Box p={2} color='gray' sx={{ ':hover': { color: 'black' } }}>
                 <SettingsIcon fontSize='small' />

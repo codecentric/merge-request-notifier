@@ -1,6 +1,6 @@
 export const theme = {
     breakpoints: ['40em', '52em', '64em'],
-    fontSizes: [12, 14, 16, 24],
+    fontSizes: [10, 12, 16, 24],
     colors: {
         siteBackground: '#f5f5f5',
         blue: '#192CFD',
@@ -37,6 +37,10 @@ export const theme = {
             borderRadius: '50%',
             width: '2.25rem',
             height: '2.25rem',
+        },
+        barGradient: {
+            backgroundColor: 'white',
+            backgroundImage: 'linear-gradient(white, #d2d2da4f)',
         },
     },
     text: {

@@ -8,7 +8,7 @@ interface MergeRequestGroupProps {
 export const MergeRequestGroup: React.FunctionComponent<MergeRequestGroupProps> = ({ label, children }) => (
     <Box>
         <Box py={1} px={2} sx={{ position: 'sticky', top: 0, borderBottom: '1px solid', borderColor: 'shadow' }} bg='siteBackground'>
-            <Text fontWeight='bold' color='blackTinted' letterSpacing={1} sx={{ textTransform: 'uppercase' }} fontSize={1}>
+            <Text fontWeight='bold' color='blackTinted' letterSpacing={1} sx={{ textTransform: 'uppercase' }} fontSize={0}>
                 {label}
             </Text>
         </Box>
