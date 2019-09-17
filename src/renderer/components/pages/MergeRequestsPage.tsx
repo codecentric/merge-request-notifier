@@ -26,7 +26,7 @@ const renderMergeRequest = (mergeRequest: MergeRequest) => {
             <MergeRequestItem
                 title={mergeRequest.title}
                 subTitle={secondaryText}
-                avatar={{ src: mergeRequest.author.avatar_url, alt: mergeRequest.author.name }}
+                avatar={{ src: mergeRequest.author.avatar_url, alt: mergeRequest.author.name, title: mergeRequest.author.name }}
                 stats={{
                     downVotes: mergeRequest.downvotes,
                     upVotes: mergeRequest.upvotes,
