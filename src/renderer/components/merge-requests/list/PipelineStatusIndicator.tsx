@@ -2,7 +2,7 @@ import * as React from 'react'
 import styled from '@emotion/styled'
 import { /*keyframes, */ css } from '@emotion/core'
 import { Box } from 'rebass'
-import { PipelineStatus } from '../../hooks/types'
+import { PipelineStatus } from '../../../hooks/types'
 
 export interface PipelineStatusIndicatorProps {
     status: PipelineStatus
@@ -30,7 +30,8 @@ const colorFromStatusMap: { [K in PipelineStatus]: any } = {
 }
 
 export const PipelineStatusIndicator: React.FunctionComponent<PipelineStatusIndicatorProps> = ({ status }) => (
-    <Svg animate={status === 'running'} viewBox='0 0 8px 16px' aria-title={`Pipeline status: "${status}"`}>
+    <Svg animate={status === 'running'}>
+        <title>{`Pipeline status: "${status}"`}</title>
         <Box
             as='circle'
             sx={{

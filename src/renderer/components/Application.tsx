@@ -12,7 +12,7 @@ import { Content } from './Content'
 import { Wrapper } from './layout/Wrapper'
 import { Main } from './layout/Main'
 
-const Application = () => {
+const Application: React.FunctionComponent = () => {
     return (
         <ConfigProvider>
             <BackendProvider>

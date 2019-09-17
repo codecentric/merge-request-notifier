@@ -3,10 +3,10 @@ import { Switch, Route } from 'react-router-dom'
 import { Box } from 'rebass'
 
 import { useConfig } from '../hooks/config'
-import { MergeRequestsPage } from './pages/MergeRequestsPage'
-import { SettingsPage } from './pages/SettingsPage'
+import { MergeRequestsPage } from './merge-requests/MergeRequestsPage'
+import { SettingsPage } from './settings/SettingsPage'
 
-export const Content = () => {
+export const Content: React.FunctionComponent = () => {
     const { config } = useConfig()
 
     return (
