@@ -36,7 +36,7 @@ const filterStats = ({ upVotes, downVotes, commentCount }: MergeRequestItemStats
 export const MergeRequestItem: React.FunctionComponent<MergeRequestItemProps> = ({ onClick, avatar, title, subTitle, stats }) => {
     const statsToRender = filterStats(stats).map(({ count, Icon }) => (
         <>
-            <Icon style={{ fontSize: '0.6rem' }} fontSize='small' />
+            <Icon style={{ fontSize: '0.6rem', verticalAlign: 'middle' }} fontSize='small' />
             <Box as='span' pl={1}>
                 {count}
             </Box>
