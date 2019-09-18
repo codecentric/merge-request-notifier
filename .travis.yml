@@ -29,6 +29,9 @@ jobs:
     - stage: Prettier
       script:
         - yarn prettier:check
+    - stage: Compile
+      script:
+        - tsc
     - stage: Build App
       if: branch = master
       os: osx

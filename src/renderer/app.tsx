@@ -10,7 +10,7 @@ import './app.scss'
 const mainElement = document.createElement('div')
 document.body.appendChild(mainElement)
 
-const render = (Component: () => JSX.Element) => {
+const render = (Component: React.FunctionComponent) => {
     ReactDOM.render(
         <AppContainer>
             <Component />

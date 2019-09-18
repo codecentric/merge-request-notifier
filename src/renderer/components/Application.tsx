@@ -12,24 +12,22 @@ import { Content } from './Content'
 import { Wrapper } from './layout/Wrapper'
 import { Main } from './layout/Main'
 
-const Application: React.FunctionComponent = () => {
-    return (
-        <ConfigProvider>
-            <BackendProvider>
-                <ThemeProvider theme={theme}>
-                    <BrowserRouter>
-                        <Wrapper>
-                            <Header />
-                            <Main>
-                                <Content />
-                            </Main>
-                            <Footer />
-                        </Wrapper>
-                    </BrowserRouter>
-                </ThemeProvider>
-            </BackendProvider>
-        </ConfigProvider>
-    )
-}
+const Application: React.FunctionComponent = () => (
+    <ConfigProvider>
+        <BackendProvider>
+            <ThemeProvider theme={theme}>
+                <BrowserRouter>
+                    <Wrapper>
+                        <Header />
+                        <Main>
+                            <Content />
+                        </Main>
+                        <Footer />
+                    </Wrapper>
+                </BrowserRouter>
+            </ThemeProvider>
+        </BackendProvider>
+    </ConfigProvider>
+)
 
 export default hot(Application)
