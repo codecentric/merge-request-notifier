@@ -17,7 +17,7 @@ interface FormData {
 }
 
 // tslint:disable-next-line:cyclomatic-complexity
-export const SettingsPage = () => {
+export const SettingsPage: React.FunctionComponent = () => {
     const { history } = useReactRouter()
     const { testConfig } = useBackend()
     const { config, updateConfig, removeConfig } = useConfig()
