@@ -30,13 +30,15 @@ jobs:
       script:
         - yarn prettier:check
     - stage: Build
+      if: branch != master
       script:
         - yarn build
-    - stage: Package
+    - stage: Build & Package
       if: branch = master
       os: osx
       osx_image: xcode10.1
       script:
+        - yarn build
         - yarn package
       before_cache:
         - rm -rf $HOME/.cache/electron-builder/wine
