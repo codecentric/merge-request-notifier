@@ -3,6 +3,9 @@
   "version": "0.6.0",
   "description": "",
   "main": "./dist/main.js",
+  "engines": {
+    "yarn": "1.17.3"
+  },
   "scripts": {
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
     "build-renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.prod.config.js",
