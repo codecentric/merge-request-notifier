@@ -6,4 +6,6 @@ cask 'merge-request-notifier' do
   appcast 'https://github.com/codecentric/merge-request-notifier/releases.atom'
   name 'Merge Request Notifier'
   homepage 'https://github.com/codecentric/merge-request-notifier'
+
+  app 'Merge Request Notifier.app'
 end
