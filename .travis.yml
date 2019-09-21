@@ -55,3 +55,4 @@ deploy:
   file_glob: true
   file:
     - release/*.dmg
+    - release/*-mac.zip
