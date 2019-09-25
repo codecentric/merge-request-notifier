@@ -5,7 +5,16 @@ import { Group, GroupedMergeRequest, MergeRequest, PipelineStatus, Project } fro
 
 const projectCache: { [id: number]: Project } = {}
 
+const TEST_MODE = window.location.search === '?test'
+if (TEST_MODE) {
+    console.info('Application is running in the "TEST MODE"')
+}
+
 export const loadGroups = async (config: Config): Promise<Group[]> => {
+    if (TEST_MODE) {
+        return Promise.resolve([])
+    }
+
     return Promise.all(
         config.groups.map(async group => {
             const apiUrl = `${config.url}/api/v4/groups/${group}`
@@ -20,6 +29,10 @@ export const loadGroups = async (config: Config): Promise<Group[]> => {
 }
 
 export const loadData = async (config: Config): Promise<GroupedMergeRequest[]> => {
+    if (TEST_MODE) {
+        return Promise.resolve(require('./testData').default)
+    }
+
     const mergeRequests = await loadMergeRequests(config)
 
     const result = [] as GroupedMergeRequest[]
