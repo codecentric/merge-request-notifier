@@ -146,6 +146,7 @@ const createWindow = () => {
         transparent: false,
         webPreferences: {
             backgroundThrottling: false,
+            nodeIntegration: true,
         },
     })
 
