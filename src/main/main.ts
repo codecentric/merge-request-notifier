@@ -8,6 +8,8 @@ let win: BrowserWindow | null
 const WINDOW_WIDTH = 380
 const WINDOW_HEIGHT = 460
 
+let TEST_MODE = false
+
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer')
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
@@ -88,7 +90,7 @@ const createMenu = () => {
             : [
                   { type: 'separator' },
                   {
-                      label: 'Toggle DevTools ',
+                      label: 'Toggle DevTools',
                       click: () => {
                           if (win) {
                               if (win.webContents.isDevToolsOpened()) {
@@ -98,6 +100,20 @@ const createMenu = () => {
                                   win.webContents.openDevTools()
                                   win.setSize(WINDOW_WIDTH * 3, WINDOW_HEIGHT * 2)
                               }
+                          }
+                      },
+                  },
+                  {
+                      label: 'Toggle Test Mode',
+                      click: () => {
+                          if (win) {
+                              if (TEST_MODE) {
+                                  win.loadURL('http://localhost:2003')
+                              } else {
+                                  win.loadURL('http://localhost:2003?test')
+                              }
+
+                              TEST_MODE = !TEST_MODE
                           }
                       },
                   },
