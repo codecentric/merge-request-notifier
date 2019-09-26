@@ -5,7 +5,9 @@ import { Group, GroupedMergeRequest, MergeRequest, PipelineStatus, Project } fro
 
 const projectCache: { [id: number]: Project } = {}
 
-const TEST_MODE = window.location.search === '?test'
+const url = new URL(document.location.href)
+const TEST_MODE = url.searchParams.has('test')
+
 if (TEST_MODE) {
     console.info('Application is running in the "TEST MODE"')
 }
