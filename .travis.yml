@@ -44,6 +44,8 @@ jobs:
         - rm -rf $HOME/.cache/electron-builder/wine
 
 before_deploy:
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then chmod +x ./scripts/add-osx-cert.sh; fi
+  - if [ "$TRAVIS_OS_NAME" = osx ]; then ./scripts/add-osx-cert.sh; fi
   - export TRAVIS_TAG="preview"
 
 deploy:
