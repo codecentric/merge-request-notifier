@@ -5,6 +5,7 @@ import { loadData, loadGroups } from './loadData'
 import { GroupedMergeRequest } from './types'
 
 export interface BackendContext {
+    isLoading: boolean
     mergeRequests: GroupedMergeRequest[] | undefined
     testConfig: (config: Config) => Promise<boolean>
 }
@@ -23,12 +24,14 @@ export const BackendProvider = ({ ...props }) => {
     const { config } = useConfig()
     const [mergeRequests, setMergeRequests] = React.useState<GroupedMergeRequest[] | undefined>(undefined)
     const [loadErrors, setLoadErrors] = React.useState<number>(0)
+    const [isLoading, setIsLoading] = React.useState<boolean>(false)
     console.log('BackendProvider', config)
 
     const updateData = async (newConfig?: Config) => {
         try {
             const configToUse = newConfig || config
             if (configToUse) {
+                setIsLoading(true)
                 const data = await loadData(configToUse)
                 setMergeRequests(data)
                 setLoadErrors(0)
@@ -39,6 +42,8 @@ export const BackendProvider = ({ ...props }) => {
             if (loadErrors > 2) {
                 setMergeRequests(undefined)
             }
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -52,10 +57,15 @@ export const BackendProvider = ({ ...props }) => {
     }, [config])
 
     const testConfig = async (newConfig: Config): Promise<boolean> => {
+        setIsLoading(true)
         return loadGroups(newConfig)
             .then(() => true)
             .catch(() => false)
+            .then(validConfig => {
+                setIsLoading(false)
+                return validConfig
+            })
     }
 
-    return <Context.Provider value={{ mergeRequests, testConfig }} {...props} />
+    return <Context.Provider value={{ mergeRequests, testConfig, isLoading }} {...props} />
 }
