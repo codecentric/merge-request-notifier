@@ -12,12 +12,6 @@ button {
     cursor: pointer;
 }
 
-@keyframes pendingPipeline {
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
 ::-webkit-scrollbar {
     display: none;
 }
