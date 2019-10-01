@@ -8,13 +8,15 @@ const projectCache: { [id: number]: Project } = {}
 const url = new URL(document.location.href)
 const TEST_MODE = url.searchParams.has('test')
 
+const resolveAfterMs = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 if (TEST_MODE) {
     console.info('Application is running in the "TEST MODE"')
 }
 
 export const loadGroups = async (config: Config): Promise<Group[]> => {
     if (TEST_MODE) {
-        return Promise.resolve([])
+        return resolveAfterMs(500).then(() => [])
     }
 
     return Promise.all(
@@ -32,7 +34,7 @@ export const loadGroups = async (config: Config): Promise<Group[]> => {
 
 export const loadData = async (config: Config): Promise<GroupedMergeRequest[]> => {
     if (TEST_MODE) {
-        return Promise.resolve(require('./testData').default)
+        return resolveAfterMs(500).then(() => require('./testData').default)
     }
 
     const mergeRequests = await loadMergeRequests(config)
