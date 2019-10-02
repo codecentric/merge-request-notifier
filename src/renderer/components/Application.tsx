@@ -11,10 +11,12 @@ import { BackendProvider } from '../hooks/backend'
 import { Content } from './Content'
 import { Wrapper } from './layout/Wrapper'
 import { Main } from './layout/Main'
+import { NotificationsEmiter } from './NotificationsEmiter'
 
 const Application: React.FunctionComponent = () => (
     <ConfigProvider>
         <BackendProvider>
+            <NotificationsEmiter />
             <ThemeProvider theme={theme}>
                 <BrowserRouter>
                     <Wrapper>

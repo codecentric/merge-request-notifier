@@ -1,4 +1,7 @@
-import { GroupedMergeRequest, MergeRequest, User } from './types'
+import { GroupedMergeRequest, MergeRequest, MergeRequestWithProject, User } from './types'
+import { Data } from './loadData'
+
+let count = 0
 
 const users: User[] = [
     {
@@ -49,40 +52,63 @@ function randomArrayEntry<T>(array: T[]): T {
     return array[index]
 }
 
-const testData: GroupedMergeRequest[] = [
-    {
-        project: {
-            id: 1,
-            name: 'Merge Request Notifier',
-            name_with_namespace: 'codecentric / Merge Request Notifier',
+const testData = (): Data => {
+    count++
+    mrId = 0
+
+    const groupedMergeRequests = [
+        {
+            project: {
+                id: 1,
+                name: 'Merge Request Notifier',
+                name_with_namespace: 'codecentric / Merge Request Notifier',
+            },
+            mergeRequests: [
+                createMr('My amazing Merge Request', 1),
+                createMr('An other fancy new feature', 1),
+                createMr('Refactor ui components', 1),
+                createMr('Fix Bug: The app is crashing after login', 1),
+            ],
         },
-        mergeRequests: [
-            createMr('My amazing Merge Request', 1),
-            createMr('An other fancy new feature', 1),
-            createMr('Refactor ui components', 1),
-            createMr('Fix Bug: The app is crashing after login', 1),
-        ],
-    },
-    {
-        project: {
-            id: 2,
-            name: 'Component Library',
-            name_with_namespace: 'UX & I / Component Library',
+        {
+            project: {
+                id: 2,
+                name: 'Component Library',
+                name_with_namespace: 'UX & I / Component Library',
+            },
+            mergeRequests: [
+                createMr('New Button styles', 2),
+                createMr('Implement Date Picker', 2),
+                createMr('Fix Bug: Internet Explorer is not showning the SVGs icons properly', 2),
+            ],
         },
-        mergeRequests: [
-            createMr('New Button styles', 2),
-            createMr('Implement Date Picker', 2),
-            createMr('Fix Bug: Internet Explorer is not showning the SVGs icons properly', 2),
-        ],
-    },
-    {
-        project: {
-            id: 3,
-            name: 'Some other cool project',
-            name_with_namespace: 'codecentric / Some other cool project',
-        },
-        mergeRequests: [createMr('Support Emojis 🚀', 3)],
-    },
-]
+    ]
+
+    if (count % 2 === 0) {
+        groupedMergeRequests.push({
+            project: {
+                id: 3,
+                name: 'Some other cool project',
+                name_with_namespace: 'codecentric / Some other cool project',
+            },
+            mergeRequests: [createMr('Support Emojis 🚀', 3)],
+        })
+    }
+
+    const mergeRequestWithProjects: MergeRequestWithProject[] = []
+    groupedMergeRequests.forEach(groupedMergeRequest => {
+        groupedMergeRequest.mergeRequests.forEach(mergeRequest => {
+            mergeRequestWithProjects.push({
+                ...mergeRequest,
+                project: groupedMergeRequest.project,
+            })
+        })
+    })
+
+    return {
+        groupedMergeRequests,
+        mergeRequestWithProjects,
+    }
+}
 
 export default testData

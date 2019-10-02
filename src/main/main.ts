@@ -1,6 +1,8 @@
-import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, Notification } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
+
+import { NotificationOptions } from '../share/Notification'
 
 let tray: Tray | null
 let win: BrowserWindow | null
@@ -203,6 +205,15 @@ app.on('window-all-closed', () => {
 app.on('activate', async () => {
     if (win === null) {
         await createWindow()
+    }
+})
+
+ipcMain.on('show-notification', (_: any, options: NotificationOptions) => {
+    if (Notification.isSupported()) {
+        const { title, subtitle, body } = options
+
+        const notification = new Notification({ title, subtitle, body })
+        notification.show()
     }
 })
 
