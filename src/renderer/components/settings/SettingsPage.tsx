@@ -1,12 +1,12 @@
 import * as React from 'react'
 import useReactRouter from 'use-react-router'
-import { Link } from 'react-router-dom'
-import { Box, Heading, Button, Text } from 'rebass'
-import { Label, Input } from '@rebass/forms'
+
+import { Box, Heading, Button, Text, Flex } from 'rebass'
 
 import { useBackend } from '../../hooks/backend'
 import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
+import { FormInput } from './FormInput'
 
 type FormErrorData = FormData & { invalidSettings: boolean }
 
@@ -89,26 +89,18 @@ export const SettingsPage: React.FunctionComponent = () => {
         setSubmitting(false)
     }
 
-    const renderRemoveButton = () => {
-        return confirmDelete ? (
-            <Button mx='auto' my={3} sx={{ display: 'block' }} variant='secondary' onClick={remove}>
-                Are you sure?
-            </Button>
-        ) : (
-            <Button mx='auto' my={3} sx={{ display: 'block' }} variant='outline' onClick={confirmRemove}>
-                remove config
-            </Button>
-        )
-    }
-
     return (
-        <Box p={2}>
-            <Heading fontSize={2}>Settings</Heading>
-            <form autoComplete='off'>
-                {errors.invalidSettings && <Text color='red'>Could not load your merge requests. Please verify your settings.</Text>}
-                <Box my={2}>
-                    <Label htmlFor='url'>GitLab URL</Label>
-                    <Input
+        <>
+            <Box p={2}>
+                <form autoComplete='off'>
+                    {errors.invalidSettings && (
+                        <Text p={1} color='white' bg='red'>
+                            Could not load your merge requests. Please verify your settings.
+                        </Text>
+                    )}
+                    <FormInput
+                        error={errors.url}
+                        label='GitLab URL'
                         id='url'
                         name='url'
                         type='url'
@@ -118,12 +110,22 @@ export const SettingsPage: React.FunctionComponent = () => {
                         disabled={submitting}
                         required
                     />
-                    {!!errors.url && <Text color='red'>{errors.url}</Text>}
-                </Box>
 
-                <Box my={2}>
-                    <Label htmlFor='group'>GitLab Group Names</Label>
-                    <Input
+                    <FormInput
+                        label='Personal Access Token'
+                        id='token'
+                        name='token'
+                        type='text'
+                        value={values.token}
+                        onChange={handleChange('token')}
+                        disabled={submitting}
+                        required
+                        error={errors.token ? 'red' : ''}
+                        info='Create one in your GitLab profile settings. It requires API scope.'
+                    />
+
+                    <FormInput
+                        label='GitLab Group Names'
                         id='group'
                         name='group'
                         type='text'
@@ -131,29 +133,49 @@ export const SettingsPage: React.FunctionComponent = () => {
                         value={values.groups}
                         onChange={handleChange('groups')}
                         disabled={submitting}
+                        error={errors.groups}
+                        info='Find it your projects URL: <groupName>/<projectName>. Separate multiple groups with a comma.'
                         required
                     />
-                    <Text color={errors.groups ? 'red' : ''}>
-                        {errors.groups || 'You find it in the url to your projects: <groupName>/<projectName>. Separate multiple groups with a comma.'}
-                    </Text>
-                </Box>
 
-                <Box my={2}>
-                    <Label htmlFor='token'>Personal Access Token</Label>
-                    <Input id='token' name='token' type='text' value={values.token} onChange={handleChange('token')} disabled={submitting} required />
-                    <Text color={errors.token ? 'red' : ''}>
-                        {errors.token || 'You find it in GitLab under Profile > Settings > Access Tokens (it requires API scope)'}
-                    </Text>
+                    <Flex>
+                        {!!config && (
+                            <Button
+                                mt={2}
+                                mr={1}
+                                sx={{ display: 'block', width: '100%' }}
+                                variant='secondary'
+                                aria-label='add'
+                                disabled={submitting}
+                                onClick={() => {
+                                    history.push('/')
+                                }}
+                            >
+                                Cancel
+                            </Button>
+                        )}
+                        <Button mt={2} ml={1} sx={{ display: 'block', width: '100%' }} variant='primary' aria-label='add' onClick={save} disabled={submitting}>
+                            Save
+                        </Button>
+                    </Flex>
+                </form>
+            </Box>
+            {!!config && !submitting && (
+                <Box bg='lightred' px={2} pb={2} mt={3} sx={{ borderTop: '1px dashed', borderColor: 'red' }}>
+                    <Heading my={3} fontSize={2} color='red'>
+                        Danger zone
+                    </Heading>
+                    {confirmDelete ? (
+                        <Button my={3} sx={{ display: 'block' }} variant='danger' onClick={remove}>
+                            Are you sure?
+                        </Button>
+                    ) : (
+                        <Button my={3} sx={{ display: 'block' }} variant='danger' onClick={confirmRemove}>
+                            Remove Configuration
+                        </Button>
+                    )}
                 </Box>
-
-                <Button mt={4} sx={{ display: 'block', width: '100%' }} variant='primary' aria-label='add' onClick={save} disabled={submitting}>
-                    Save
-                </Button>
-                {config && !submitting && renderRemoveButton()}
-                <Box my={3}>
-                    <Text textAlign='center'>{config && !submitting && <Link to='/'>go back</Link>}</Text>
-                </Box>
-            </form>
-        </Box>
+            )}
+        </>
     )
 }
