@@ -2,6 +2,7 @@ import * as request from 'superagent'
 
 import { Config } from './config'
 import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, PipelineStatus, Project } from './types'
+import sleep from '../util/sleep'
 
 const projectCache: { [id: number]: Project } = {}
 
@@ -14,7 +15,7 @@ if (TEST_MODE) {
 
 export const loadGroups = async (config: Config): Promise<Group[]> => {
     if (TEST_MODE) {
-        return Promise.resolve([])
+        return sleep(500).then(() => [])
     }
 
     return Promise.all(
@@ -37,7 +38,7 @@ export interface Data {
 
 export const loadData = async (config: Config): Promise<Data> => {
     if (TEST_MODE) {
-        return Promise.resolve(require('./testData').default())
+        return sleep(500).then(() => require('./testData').default())
     }
 
     const mergeRequests = await loadMergeRequests(config)

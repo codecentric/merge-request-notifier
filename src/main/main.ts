@@ -186,7 +186,9 @@ const createWindow = () => {
     })
 
     win.on('blur', () => {
-        hideWindow()
+        if (!TEST_MODE) {
+            hideWindow()
+        }
     })
 }
 

@@ -5,6 +5,7 @@ import { loadData, loadGroups } from './loadData'
 import { GroupedMergeRequest, MergeRequestWithProject } from './types'
 
 export interface BackendContext {
+    isLoading: boolean
     groupedMergeRequests: GroupedMergeRequest[] | undefined
     mergeRequestWithProjects: MergeRequestWithProject[] | undefined
     testConfig: (config: Config) => Promise<boolean>
@@ -25,12 +26,14 @@ export const BackendProvider = ({ ...props }) => {
     const [groupedMergeRequests, setGroupedMergeRequests] = React.useState<GroupedMergeRequest[] | undefined>(undefined)
     const [mergeRequestWithProjects, setMergeRequestWithProjects] = React.useState<MergeRequestWithProject[] | undefined>(undefined)
     const [loadErrors, setLoadErrors] = React.useState<number>(0)
+    const [isLoading, setIsLoading] = React.useState<boolean>(false)
     console.log('BackendProvider', config)
 
     const updateData = async (newConfig?: Config) => {
         try {
             const configToUse = newConfig || config
             if (configToUse) {
+                setIsLoading(true)
                 const data = await loadData(configToUse)
                 setGroupedMergeRequests(data.groupedMergeRequests)
                 setMergeRequestWithProjects(data.mergeRequestWithProjects)
@@ -43,6 +46,8 @@ export const BackendProvider = ({ ...props }) => {
                 setGroupedMergeRequests(undefined)
                 setMergeRequestWithProjects(undefined)
             }
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -56,10 +61,15 @@ export const BackendProvider = ({ ...props }) => {
     }, [config])
 
     const testConfig = async (newConfig: Config): Promise<boolean> => {
+        setIsLoading(true)
         return loadGroups(newConfig)
             .then(() => true)
             .catch(() => false)
+            .then(validConfig => {
+                setIsLoading(false)
+                return validConfig
+            })
     }
 
-    return <Context.Provider value={{ groupedMergeRequests, mergeRequestWithProjects, testConfig }} {...props} />
+    return <Context.Provider value={{ isLoading, groupedMergeRequests, mergeRequestWithProjects, testConfig }} {...props} />
 }

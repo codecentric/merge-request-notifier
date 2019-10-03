@@ -1,17 +1,19 @@
 export const theme = {
     breakpoints: ['40em', '52em', '64em'],
-    fontSizes: [10, 12, 16, 24],
+    fontSizes: [10, 12, 14, 16, 24],
     colors: {
         siteBackground: '#f5f5f5',
         blue: '#192CFD',
         black: '#212121',
         blackTinted: '#6d6d66',
         primary: '#192CFD',
+        primaryDarkened: '#091CED',
         gray: '#a7a7aa',
         lightgray: '#f6f6ff',
         shadow: '#d2d2da',
         green: '#1fad56',
         red: '#FC3D53',
+        lightred: '#ffeaea',
     },
     space: [0, 4, 8, 16, 32, 64, 128, 256],
     fonts: {
@@ -50,18 +52,35 @@ export const theme = {
     },
     buttons: {
         primary: {
-            background: 'primary',
+            backgroundColor: 'primary',
             color: 'white',
+            fontWeight: 'bold',
+            fontSize: 1,
+            ':hover': {
+                backgroundColor: 'primaryDarkened',
+            },
+            ':focus': {
+                textDecoration: 'underline',
+            },
         },
         secondary: {
-            background: 'lightgray',
+            backgroundColor: 'lightgray',
+            border: '1px solid',
+            borderColor: 'gray',
             color: 'black',
+            fontSize: 1,
+            ':hover': {
+                backgroundColor: 'white',
+            },
+            ':focus': {
+                textDecoration: 'underline',
+            },
         },
-        outline: {
-            border: '2px solid',
-            borderColor: 'primary',
-            background: 'white',
-            color: 'black',
+        danger: {
+            backgroundColor: 'red',
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: 1,
         },
     },
 }
