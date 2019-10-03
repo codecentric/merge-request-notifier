@@ -81,6 +81,7 @@ export const LoadingIndicator: React.FunctionComponent<LoadingIndicatorProps> = 
             <title>{title}</title>
             {dots.map((nothing, index) => (
                 <Box
+                    key={`box-${index}`}
                     as={Circle}
                     sx={{
                         fill: 'black',
