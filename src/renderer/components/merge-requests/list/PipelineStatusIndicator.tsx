@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
-import { /*keyframes, */ css } from '@emotion/core'
+import { keyframes, css } from '@emotion/core'
 import { Box } from 'rebass'
 import { PipelineStatus } from '../../../hooks/types'
 
@@ -8,10 +8,14 @@ export interface PipelineStatusIndicatorProps {
     status: PipelineStatus
 }
 
-// See pendingPulse keyframes in app.scss
-// emotion keyframes doesnt work in electron context
+const runningKeyframes = keyframes`
+    100% {
+        transform: rotate(360deg);
+    }
+`
+
 const svgAnimation = css`
-    animation: pendingPipeline 2s linear infinite;
+    animation: ${runningKeyframes} 2s linear infinite;
 `
 
 const Svg = styled.svg<{ animate?: boolean }>`
