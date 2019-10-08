@@ -3,8 +3,6 @@
 [![Build Status](https://travis-ci.org/codecentric/merge-request-notifier.svg?branch=master)](https://travis-ci.org/codecentric/merge-request-notifier) 
 [![Greenkeeper](https://badges.greenkeeper.io/codecentric/merge-request-notifier.svg)](https://greenkeeper.io/)
 
-## Screenshots
-## App
 This app shows your merge quests grouped by projects and WIP status. It is accessible from the system tray.
 
 <img src="./images/app.png" width=500 alt="App Screenshot">
