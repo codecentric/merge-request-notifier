@@ -2,11 +2,12 @@ import * as React from 'react'
 
 import { Config, useConfig } from './config'
 import { loadData, loadGroups } from './loadData'
-import { GroupedMergeRequest } from './types'
+import { GroupedMergeRequest, MergeRequestWithProject } from './types'
 
 export interface BackendContext {
     isLoading: boolean
-    mergeRequests: GroupedMergeRequest[] | undefined
+    groupedMergeRequests: GroupedMergeRequest[] | undefined
+    mergeRequestWithProjects: MergeRequestWithProject[] | undefined
     testConfig: (config: Config) => Promise<boolean>
 }
 
@@ -22,7 +23,8 @@ export function useBackend() {
 
 export const BackendProvider = ({ ...props }) => {
     const { config } = useConfig()
-    const [mergeRequests, setMergeRequests] = React.useState<GroupedMergeRequest[] | undefined>(undefined)
+    const [groupedMergeRequests, setGroupedMergeRequests] = React.useState<GroupedMergeRequest[] | undefined>(undefined)
+    const [mergeRequestWithProjects, setMergeRequestWithProjects] = React.useState<MergeRequestWithProject[] | undefined>(undefined)
     const [loadErrors, setLoadErrors] = React.useState<number>(0)
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     console.log('BackendProvider', config)
@@ -33,14 +35,16 @@ export const BackendProvider = ({ ...props }) => {
             if (configToUse) {
                 setIsLoading(true)
                 const data = await loadData(configToUse)
-                setMergeRequests(data)
+                setGroupedMergeRequests(data.groupedMergeRequests)
+                setMergeRequestWithProjects(data.mergeRequestWithProjects)
                 setLoadErrors(0)
             }
         } catch (error) {
             console.error(error)
             setLoadErrors(loadErrors + 1)
             if (loadErrors > 2) {
-                setMergeRequests(undefined)
+                setGroupedMergeRequests(undefined)
+                setMergeRequestWithProjects(undefined)
             }
         } finally {
             setIsLoading(false)
@@ -49,7 +53,7 @@ export const BackendProvider = ({ ...props }) => {
 
     React.useEffect(() => {
         updateData()
-        const interval = setInterval(updateData, 30000)
+        const interval = setInterval(updateData, 10000)
 
         return () => {
             clearInterval(interval)
@@ -67,5 +71,5 @@ export const BackendProvider = ({ ...props }) => {
             })
     }
 
-    return <Context.Provider value={{ mergeRequests, testConfig, isLoading }} {...props} />
+    return <Context.Provider value={{ isLoading, groupedMergeRequests, mergeRequestWithProjects, testConfig }} {...props} />
 }

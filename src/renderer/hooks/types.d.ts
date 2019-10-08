@@ -3,6 +3,10 @@ export interface GroupedMergeRequest {
     mergeRequests: MergeRequest[]
 }
 
+export interface MergeRequestWithProject extends MergeRequest {
+    project: Project
+}
+
 export interface User {
     id: number
     name: string

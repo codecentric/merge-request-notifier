@@ -1,6 +1,8 @@
-import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, Notification } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
+
+import { NotificationOptions } from '../share/Notification'
 
 let tray: Tray | null
 let win: BrowserWindow | null
