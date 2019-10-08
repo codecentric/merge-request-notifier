@@ -12,12 +12,13 @@ export const NotificationsEmiter = () => {
         const newMergeRequests = getNewMergeRequests(mergeRequestWithProjects, previousMergeRequests)
         if (newMergeRequests.length > 0) {
             const moreThenOneNewMergeRequest = newMergeRequests.length > 1
-            const title = moreThenOneNewMergeRequest ? 'New Merge Requests' : 'New Merge Request'
-            const subtitle = newMergeRequests[0].title
-            const body = 'test body'
 
-            console.log('send notification', title, subtitle)
-            ipcRenderer.send('show-notification', { title, subtitle, body })
+            newMergeRequests.forEach(newMergeRequest => {
+                const body = newMergeRequest.title
+                const icon = newMergeRequest.author.avatar_url
+
+                new Notification('New Merge Request', { body, icon })
+            })
         }
 
         setPreviousMergeRequests(mergeRequestWithProjects)

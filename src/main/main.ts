@@ -210,15 +210,6 @@ app.on('activate', async () => {
     }
 })
 
-ipcMain.on('show-notification', (_: any, options: NotificationOptions) => {
-    if (Notification.isSupported()) {
-        const { title, subtitle, body } = options
-
-        const notification = new Notification({ title, subtitle, body })
-        notification.show()
-    }
-})
-
 ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => {
     if (tray) {
         if (openMergeRequests === 0) {
