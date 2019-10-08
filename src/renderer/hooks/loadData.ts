@@ -1,7 +1,7 @@
 import * as request from 'superagent'
 
 import { Config } from './config'
-import { Group, GroupedMergeRequest, MergeRequest, PipelineStatus, Project } from './types'
+import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, PipelineStatus, Project } from './types'
 import sleep from '../util/sleep'
 
 const projectCache: { [id: number]: Project } = {}
@@ -31,33 +31,51 @@ export const loadGroups = async (config: Config): Promise<Group[]> => {
     )
 }
 
-export const loadData = async (config: Config): Promise<GroupedMergeRequest[]> => {
+export interface Data {
+    groupedMergeRequests: GroupedMergeRequest[]
+    mergeRequestWithProjects: MergeRequestWithProject[]
+}
+
+export const loadData = async (config: Config): Promise<Data> => {
     if (TEST_MODE) {
-        return sleep(500).then(() => require('./testData').default)
+        return sleep(500).then(() => require('./testData').default())
     }
 
     const mergeRequests = await loadMergeRequests(config)
 
-    const result = [] as GroupedMergeRequest[]
+    const groupedMergeRequests = [] as GroupedMergeRequest[]
+    const mergeRequestWithProjects = [] as MergeRequestWithProject[]
     for (const mergeRequest of mergeRequests) {
         const projectId = mergeRequest.work_in_progress ? -1 * mergeRequest.project_id : mergeRequest.project_id
-        let entry = result.find(group => group.project.id === projectId)
+        let entry = groupedMergeRequests.find(group => group.project.id === projectId)
         if (!entry) {
             const project = await loadProject(config, projectId)
 
             entry = { project, mergeRequests: [] }
-            result.push(entry)
+            groupedMergeRequests.push(entry)
+            mergeRequestWithProjects.push({
+                ...mergeRequest,
+                project,
+            })
+        } else {
+            mergeRequestWithProjects.push({
+                ...mergeRequest,
+                project: entry.project,
+            })
         }
 
         entry.mergeRequests.push(mergeRequest)
     }
 
-    return result.sort((a, b) => {
-        const nameA = a.project.id > 0 ? a.project.name_with_namespace : `Z${a.project.name_with_namespace}`
-        const nameB = b.project.id > 0 ? b.project.name_with_namespace : `Z${b.project.name_with_namespace}`
+    return {
+        mergeRequestWithProjects,
+        groupedMergeRequests: groupedMergeRequests.sort((a, b) => {
+            const nameA = a.project.id > 0 ? a.project.name_with_namespace : `Z${a.project.name_with_namespace}`
+            const nameB = b.project.id > 0 ? b.project.name_with_namespace : `Z${b.project.name_with_namespace}`
 
-        return nameA.localeCompare(nameB)
-    })
+            return nameA.localeCompare(nameB)
+        }),
+    }
 }
 
 const loadMergeRequests = async (config: Config): Promise<MergeRequest[]> => {

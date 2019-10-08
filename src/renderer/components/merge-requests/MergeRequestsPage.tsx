@@ -36,15 +36,15 @@ const renderMergeRequest = (mergeRequest: MergeRequest) => {
 }
 
 export const MergeRequestsPage: React.FunctionComponent = () => {
-    const { mergeRequests } = useBackend()
-    if (!mergeRequests) {
+    const { groupedMergeRequests } = useBackend()
+    if (!groupedMergeRequests) {
         return <Alerts.CouldNotLoadMergeRequests />
     }
-    if (mergeRequests.length === 0) {
+    if (groupedMergeRequests.length === 0) {
         return <Alerts.NoMergeRequests />
     }
 
-    const numberOfOpenMergeRequest = mergeRequests.reduce(
+    const numberOfOpenMergeRequest = groupedMergeRequests.reduce(
         (total, entry) => total + entry.mergeRequests.filter(mergeRequest => !mergeRequest.work_in_progress).length,
         0,
     )
@@ -53,7 +53,7 @@ export const MergeRequestsPage: React.FunctionComponent = () => {
 
     return (
         <>
-            {mergeRequests.map(entry => (
+            {groupedMergeRequests.map(entry => (
                 <MergeRequestGroup key={entry.project.id} label={entry.project.name}>
                     {entry.mergeRequests.map(renderMergeRequest)}
                 </MergeRequestGroup>
