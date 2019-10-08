@@ -6,17 +6,17 @@
 ## Screenshots
 ## App
 This app shows your merge quests grouped by projects and WIP status. It is accessible from the system tray.
-![App Screenshot](images/app.png?raw=true "App Screenshot")
+<img src="./images/app.png" width=500 alt="App Screenshot">
 
 ## Notification
 You will receive a desktop notification when a new merge request is created.
 
-![Notification Screenshot](images/notification.png?raw=true "Notification Screenshot")
+<img src="./images/notification.png" width=300 alt="Notification Screenshot">
 
 ## Settings
 In the settings you have to provide one of your personal access token to get access to your merge requests. 
 You are able to configure multiple groups. 
-![Config Screenshot](images/settings.png?raw=true "Config Screenshot")
+<img src="./images/settings.png" width=500 alt="Settings Screenshot">
 
 ## Installation
 ### From release page
