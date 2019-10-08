@@ -3,6 +3,21 @@
 [![Build Status](https://travis-ci.org/codecentric/merge-request-notifier.svg?branch=master)](https://travis-ci.org/codecentric/merge-request-notifier) 
 [![Greenkeeper](https://badges.greenkeeper.io/codecentric/merge-request-notifier.svg)](https://greenkeeper.io/)
 
+## Screenshots
+## App
+This app shows your merge quests grouped by projects and WIP status. It is accessible from the system tray.
+![App Screenshot](images/app.png?raw=true "App Screenshot")
+
+## Notification
+You will receive a desktop notification when a new merge request is created.
+
+![Notification Screenshot](images/notification.png?raw=true "Notification Screenshot")
+
+## Settings
+In the settings you have to provide one of your personal access token to get access to your merge requests. 
+You are able to configure multiple groups. 
+![Config Screenshot](images/settings.png?raw=true "Config Screenshot")
+
 ## Installation
 ### From release page
 Installers for each platforms are ready at [releases page](https://github.com/codecentric/merge-request-notifier/releases).
@@ -24,7 +39,6 @@ brew cask install merge-request-notifier
 It's easiest way to install and manage this app on macOS.
 
 ## Development
-
 ### Install all dependencies 
 
 ```bash
@@ -32,7 +46,6 @@ yarn install
 ```
 
 ### Usage
-
 This will start the application with hot-reload so you can instantly start developing your application.
 
 ```bash
@@ -40,7 +53,6 @@ yarn start
 ```
 
 ### New Releases
-
 #### Create a new Release and Publish it
 ```bash
 yarn dist
