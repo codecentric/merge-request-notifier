@@ -10,7 +10,7 @@ This app shows your merge quests grouped by projects and WIP status. It is acces
 ## Notification
 You will receive a desktop notification when a new merge request is created.
 
-<img src="./images/notification.png" width=300 alt="Notification Screenshot">
+<img src="./images/notification.png" width=500 alt="Notification Screenshot">
 
 ## Settings
 In the settings you have to provide one of your personal access token to get access to your merge requests. 
