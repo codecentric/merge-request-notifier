@@ -5,7 +5,7 @@ import { Label, Input } from '@rebass/forms'
 interface FormInputProps {
     id: string
     label: string
-    info?: string
+    info?: string | JSX.Element
     error?: string
     [htmlAttribute: string]: any
 }

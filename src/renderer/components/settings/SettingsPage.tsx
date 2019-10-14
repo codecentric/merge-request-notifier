@@ -7,6 +7,7 @@ import { useBackend } from '../../hooks/backend'
 import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
 import { FormInput } from './FormInput'
+import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
 
 type FormErrorData = FormData & { invalidSettings: boolean }
 
@@ -100,7 +101,7 @@ export const SettingsPage: React.FunctionComponent = () => {
                     )}
                     <FormInput
                         error={errors.url}
-                        label='GitLab URL'
+                        label='GitLab Hostname'
                         id='url'
                         name='url'
                         type='url'
@@ -121,7 +122,7 @@ export const SettingsPage: React.FunctionComponent = () => {
                         disabled={submitting}
                         required
                         error={errors.token ? 'red' : ''}
-                        info='Create one in your GitLab profile settings. It requires API scope.'
+                        info={<PersonalAccessTokenInfo hostname={values.url} />}
                     />
 
                     <FormInput
@@ -134,7 +135,17 @@ export const SettingsPage: React.FunctionComponent = () => {
                         onChange={handleChange('groups')}
                         disabled={submitting}
                         error={errors.groups}
-                        info='Find it your projects URL: <groupName>/<projectName>. Separate multiple groups with a comma.'
+                        info={
+                            <span>
+                                Find it your projects URL:
+                                <br />
+                                <em>
+                                    https://your-host.com/<strong>&lt;groupName&gt;</strong>/&lt;projectName&gt;
+                                </em>
+                                <br />
+                                Separate multiple groups with a comma.
+                            </span>
+                        }
                         required
                     />
 
