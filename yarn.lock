@@ -788,6 +788,18 @@
     ajv "^6.1.0"
     ajv-keywords "^3.1.0"
 
+"@electron/get@^1.0.1":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@electron/get/-/get-1.5.0.tgz#6217d9d18fb71fbd8cd2445a31aa0edc723d19dd"
+  integrity sha512-tafxBz6n08G6SX961F/h8XFtpB/DdwRvJJoDeOH9x78jDSCMQ2G/rRWqSwLFp9oeMFBJf0Pf5Kkw6TKt5w9TWg==
+  dependencies:
+    debug "^4.1.1"
+    env-paths "^2.2.0"
+    fs-extra "^8.1.0"
+    got "^9.6.0"
+    sanitize-filename "^1.6.2"
+    sumchecker "^3.0.0"
+
 "@emotion/cache@^10.0.17":
   version "10.0.17"
   resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-10.0.17.tgz#3491a035f62f276620d586677bfc3d4fad0b8472"
@@ -1411,10 +1423,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.2.tgz#c4e63af5e8823ce9cc3f0b34f7b998c2171f0c44"
   integrity sha512-dyYO+f6ihZEtNPDcWNR1fkoTDf3zAK3lAABDze3mz6POyIercH0lEUawUFXlG8xaQZmm1yEBON/4TsYv/laDYg==
 
-"@types/node@^10.12.18":
-  version "10.14.19"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.14.19.tgz#f52742c7834a815dedf66edfc8a51547e2a67342"
-  integrity sha512-j6Sqt38ssdMKutXBUuAcmWF8QtHW1Fwz/mz4Y+Wd9mzpBiVFirjpNQf363hG5itkG+yGaD+oiLyb50HxJ36l9Q==
+"@types/node@^12.0.12":
+  version "12.11.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.11.2.tgz#75ba3beda30d690b89a5089ca1c6e8e386150b76"
+  integrity sha512-dsfE4BHJkLQW+reOS6b17xhZ/6FB1rB8eRRvO08nn5o+voxf3i74tuyFWNH6djdfgX7Sm5s6LD8t6mJug4dpDw==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -4117,7 +4129,7 @@ electron-devtools-installer@^2.2.4:
     rimraf "^2.5.2"
     semver "^5.3.0"
 
-electron-download@^4.1.0, electron-download@^4.1.1:
+electron-download@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/electron-download/-/electron-download-4.1.1.tgz#02e69556705cc456e520f9e035556ed5a015ebe8"
   integrity sha512-FjEWG9Jb/ppK/2zToP+U5dds114fM1ZOJqMAR4aXXL5CvyPE9fiqBK/9YcwC9poIFQTEJk/EM/zyRwziziRZrg==
@@ -4158,13 +4170,13 @@ electron-to-chromium@^1.3.191:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.230.tgz#2d0618cb6f724391d5fd0926dde84d6c67cbcda9"
   integrity sha512-r0RljY5DZi9RX4v8mjHxJkDWnQe+nsrkGlHtrDF2uvZcvAkw+iglvlQi1794gZhwRtJoDOomMJlDHL2LfXSCZA==
 
-electron@^6.0.10:
-  version "6.0.10"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-6.0.10.tgz#3468547640c98ed46060711ca70f43d0b2e40818"
-  integrity sha512-eTFm6uTn7NKZE1OtSZSOxNuOrCXXeUR0U3vdF3R00byB7mrNe5AOaXEDDMwtzRGGY1jMuUX9Z7RvgXaCXRYSmw==
+electron@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-7.0.0.tgz#47a5b15ca213f32c20d85f82a1be615a74cdf55f"
+  integrity sha512-vrF1loRW1p0vQCbduqO0EZpo8ePJOuxUT6tSoUSU3lsbGK3VnlJop+0PpCIPzbe2K4G4Gk7WexH08V9se7mJcA==
   dependencies:
-    "@types/node" "^10.12.18"
-    electron-download "^4.1.0"
+    "@electron/get" "^1.0.1"
+    "@types/node" "^12.0.12"
     extract-zip "^1.0.3"
 
 elegant-spinner@^1.0.1:
@@ -4246,6 +4258,11 @@ env-paths@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-1.0.0.tgz#4168133b42bb05c38a35b1ae4397c8298ab369e0"
   integrity sha1-QWgTO0K7BcOKNbGuQ5fIKYqzaeA=
+
+env-paths@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-2.2.0.tgz#cdca557dc009152917d6166e2febe1f039685e43"
+  integrity sha512-6u0VYSCo/OW6IoD5WCLLy9JUGARbamfSavcNXry/eu8aHVFei6CD3Sw+VGX5alea1i9pgPHW0mbu6Xj0uBh7gA==
 
 errno@^0.1.3, errno@~0.1.7:
   version "0.1.7"
@@ -10374,6 +10391,13 @@ sumchecker@^2.0.2:
   integrity sha1-D0LBDl0F2l1C7qPlbDOZo31sWz4=
   dependencies:
     debug "^2.2.0"
+
+sumchecker@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/sumchecker/-/sumchecker-3.0.0.tgz#da5457b4605184575c76540e5e99cc777cb8ce4c"
+  integrity sha512-yreseuC/z4iaodVoq07XULEOO9p4jnQazO7mbrnDSvWAU/y2cbyIKs+gWJptfcGu9R+1l27K8Rkj0bfvqnBpgQ==
+  dependencies:
+    debug "^4.1.0"
 
 superagent@^5.1.0:
   version "5.1.0"
