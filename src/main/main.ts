@@ -1,8 +1,6 @@
-import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, Notification } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences } from 'electron'
 import * as path from 'path'
 import * as url from 'url'
-
-import { NotificationOptions } from '../share/Notification'
 
 let tray: Tray | null
 let win: BrowserWindow | null
@@ -20,8 +18,14 @@ const installExtensions = async () => {
     return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(console.log)
 }
 
+const getTrayImage = () => {
+    const icon = systemPreferences.isDarkMode() ? 'icon-dark-mode.png' : 'icon.png'
+
+    return path.join(__dirname, 'assets', icon)
+}
+
 const createTray = () => {
-    tray = new Tray(path.join(__dirname, 'assets', 'icon.png'))
+    tray = new Tray(getTrayImage())
 
     tray.setToolTip('Merge Request Notifier')
     tray.on('click', toggleWindow)
@@ -222,4 +226,10 @@ ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => 
 
 ipcMain.on('close-application', () => {
     app.quit()
+})
+
+systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
+    if (tray) {
+        tray.setImage(getTrayImage())
+    }
 })
