@@ -121,7 +121,7 @@ export const SettingsPage: React.FunctionComponent = () => {
                         onChange={handleChange('token')}
                         disabled={submitting}
                         required
-                        error={errors.token ? 'red' : ''}
+                        error={errors.token}
                         info={<PersonalAccessTokenInfo hostname={values.url} />}
                     />
 
