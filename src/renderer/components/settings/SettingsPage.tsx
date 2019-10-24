@@ -95,7 +95,7 @@ export const SettingsPage: React.FunctionComponent = () => {
             <Box p={2}>
                 <form autoComplete='off'>
                     {errors.invalidSettings && (
-                        <Text p={1} color='white' bg='red'>
+                        <Text p={1} color='white' bg='red' mb={3}>
                             Could not load your merge requests. Please verify your settings.
                         </Text>
                     )}
