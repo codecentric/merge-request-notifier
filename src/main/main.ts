@@ -1,4 +1,5 @@
 import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import * as path from 'path'
 import * as url from 'url'
 
@@ -53,6 +54,8 @@ const setup = async () => {
     try {
         if (process.env.NODE_ENV !== 'production') {
             await installExtensions()
+        } else {
+            autoUpdater.checkForUpdatesAndNotify()
         }
 
         createTray()
