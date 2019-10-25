@@ -1,6 +1,6 @@
 {
   "name": "merge-request-notifier",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "",
   "main": "./dist/main.js",
   "engines": {
