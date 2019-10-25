@@ -139,7 +139,6 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.8.8",
-    "react-router": "^5.0.1",
     "react-router-dom": "^5.1.2",
     "react-test-renderer": "^16.8.6",
     "rebass": "^4.0.5",

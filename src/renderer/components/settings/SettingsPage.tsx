@@ -1,5 +1,5 @@
 import * as React from 'react'
-import useReactRouter from 'use-react-router'
+import { useHistory } from 'react-router-dom'
 
 import { Box, Heading, Button, Text, Flex } from 'rebass'
 
@@ -19,7 +19,7 @@ interface FormData {
 
 // tslint:disable-next-line:cyclomatic-complexity
 export const SettingsPage: React.FunctionComponent = () => {
-    const { history } = useReactRouter()
+    const history = useHistory()
     const { testConfig } = useBackend()
     const { config, updateConfig, removeConfig } = useConfig()
 
