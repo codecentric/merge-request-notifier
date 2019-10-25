@@ -42,17 +42,3 @@ jobs:
         - yarn package
       before_cache:
         - rm -rf $HOME/.cache/electron-builder/wine
-
-before_deploy:
-  - export TRAVIS_TAG="preview"
-
-deploy:
-  provider: releases
-  api_key: $GH_TOKEN
-  skip_cleanup: true
-  draft: true
-  overwrite: true
-  file_glob: true
-  file:
-    - release/*.dmg
-    - release/*-mac.zip
