@@ -1,7 +1,10 @@
 import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme } from 'electron'
 import { autoUpdater } from 'electron-updater'
+import * as log from 'electron-log'
 import * as path from 'path'
 import * as url from 'url'
+
+import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 
 let tray: Tray | null
 let win: BrowserWindow | null
@@ -51,18 +54,24 @@ const getWindowPosition = () => {
 }
 
 const setup = async () => {
+    reportUnhandledRejections()
+    log.debug('Starting the app')
+
     try {
         if (process.env.NODE_ENV !== 'production') {
             await installExtensions()
-        } else {
-            autoUpdater.checkForUpdatesAndNotify()
         }
+
+        const updateInfo = await autoUpdater.checkForUpdatesAndNotify()
+        log.info(`Latest result for the update check: ${JSON.stringify(updateInfo)}`)
 
         createTray()
         createWindow()
         createMenu()
+
+        log.debug('App started')
     } catch (error) {
-        console.error('could not start the app', error)
+        log.error(`Could not start the app: ${JSON.stringify(error)}`)
     }
 }
 
