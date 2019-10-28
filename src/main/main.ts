@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import * as path from 'path'
 import * as url from 'url'
@@ -20,7 +20,7 @@ const installExtensions = async () => {
 }
 
 const getTrayImage = () => {
-    const icon = systemPreferences.isDarkMode() ? 'icon-dark-mode.png' : 'icon.png'
+    const icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode.png' : 'icon.png'
 
     return path.join(__dirname, 'assets', icon)
 }
