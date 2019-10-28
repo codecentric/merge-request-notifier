@@ -1,7 +1,10 @@
-import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme } from 'electron'
 import { autoUpdater } from 'electron-updater'
+import * as log from 'electron-log'
 import * as path from 'path'
 import * as url from 'url'
+
+import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 
 let tray: Tray | null
 let win: BrowserWindow | null
@@ -14,13 +17,13 @@ let TEST_MODE = false
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer')
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
-    const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS']
+    const extensions = ['REACT_DEVELOPER_TOOLS']
 
     return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(console.log)
 }
 
 const getTrayImage = () => {
-    const icon = systemPreferences.isDarkMode() ? 'icon-dark-mode.png' : 'icon.png'
+    const icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode.png' : 'icon.png'
 
     return path.join(__dirname, 'assets', icon)
 }
@@ -51,18 +54,24 @@ const getWindowPosition = () => {
 }
 
 const setup = async () => {
+    reportUnhandledRejections()
+    log.debug('Starting the app')
+
     try {
         if (process.env.NODE_ENV !== 'production') {
             await installExtensions()
-        } else {
-            autoUpdater.checkForUpdatesAndNotify()
         }
+
+        const updateInfo = await autoUpdater.checkForUpdatesAndNotify()
+        log.info(`Latest result for the update check: ${JSON.stringify(updateInfo)}`)
 
         createTray()
         createWindow()
         createMenu()
+
+        log.debug('App started')
     } catch (error) {
-        console.error('could not start the app', error)
+        log.error(`Could not start the app: ${JSON.stringify(error)}`)
     }
 }
 

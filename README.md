@@ -26,9 +26,6 @@ Please download it for your platform and double click it to install.
 macOS: Merge.Request.Notifier-x.y.z.dmg or Merge.Request.Notifier-x.y.z-mac.zip
 Linux: [...]
 
-Note: On macOS, trying to install app may be rejected by OS at first time since this app is not signed with code signing. 
-In the case, please install from it 'Preferences -> Security'.
-
 ### With homebrew-cask
 If you're macOS user and using homebrew-cask, this app can be installed via it. Please tap the repository URL and install this app via brew cask as follows.
 
