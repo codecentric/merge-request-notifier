@@ -1,7 +1,7 @@
 {
   "name": "merge-request-notifier",
-  "version": "0.8.0",
-  "description": "",
+  "version": "0.8.2",
+  "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main.js",
   "engines": {
     "yarn": "1.17.3"
