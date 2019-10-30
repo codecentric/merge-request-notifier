@@ -126,7 +126,7 @@
     "electron-log": "^3.0.8",
     "electron-notarize": "^0.1.1",
     "electron-unhandled": "^3.0.0",
-    "electron-updater": "^4.1.2",
+    "electron-updater": "^4.2.0",
     "electron-util": "^0.12.2",
     "emotion-theming": "^10.0.18",
     "file-loader": "^4.2.0",
