@@ -212,7 +212,11 @@ if (app.dock) {
     app.dock.hide()
 }
 
-app.on('ready', setup)
+app.on('ready', () => {
+    setup().then(() => {
+        log.debug('Setup completed')
+    })
+})
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
