@@ -5,6 +5,7 @@ import { Box } from 'rebass'
 import { useConfig } from '../hooks/config'
 import { MergeRequestsPage } from './merge-requests/MergeRequestsPage'
 import { SettingsPage } from './settings/SettingsPage'
+import { AboutUsPage } from './about-us/AboutUsPage'
 
 export const Content: React.FunctionComponent = () => {
     const { config } = useConfig()
@@ -14,6 +15,9 @@ export const Content: React.FunctionComponent = () => {
             <Switch>
                 <Route path='/config'>
                     <SettingsPage />
+                </Route>
+                <Route path='/about-us'>
+                    <AboutUsPage />
                 </Route>
                 {config ? (
                     <Route path='/'>

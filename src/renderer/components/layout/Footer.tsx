@@ -3,6 +3,7 @@ import { ipcRenderer } from 'electron'
 import { Flex, Box, Link } from 'rebass'
 import { Link as RouterLink } from 'react-router-dom'
 
+import InfoIcon from '@material-ui/icons/Info'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { LoadingIndicator } from '../util/LoadingIndicator'
@@ -20,6 +21,11 @@ export const Footer: React.FunctionComponent = () => {
             <Box py={1} flex='1 0 auto'>
                 <LoadingIndicator visible={isLoading} title='Trying to fetch data' />
             </Box>
+            <RouterLink to='/about-us' title='About Us'>
+                <Box p={2} color='gray' sx={{ ':hover': { color: 'black' } }}>
+                    <InfoIcon fontSize='small' />
+                </Box>
+            </RouterLink>
             <RouterLink to='/config' title='Settings'>
                 <Box p={2} color='gray' sx={{ ':hover': { color: 'black' } }}>
                     <SettingsIcon fontSize='small' />

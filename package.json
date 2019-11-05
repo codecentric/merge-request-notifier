@@ -1,10 +1,19 @@
 {
   "name": "merge-request-notifier",
-  "version": "0.8.4",
+  "version": "0.9.0",
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main.js",
   "engines": {
     "yarn": "1.17.3"
+  },
+  "homepage": "https://github.com/codecentric/merge-request-notifier",
+  "author": {
+    "name": "Matthias Rütten",
+    "email": "matthias.ruetten@codecentric.de"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:codecentric/merge-request-notifier.git"
   },
   "scripts": {
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
@@ -39,23 +48,6 @@
       "git add"
     ]
   },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/test/.+\\.spec)\\.tsx?$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json",
-      "node"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/mocks/fileMock.js",
-      "\\.(s?css|sass)$": "<rootDir>/mocks/styleMock.js"
-    }
-  },
   "build": {
     "productName": "Merge Request Notifier",
     "appId": "de.codecentric.ruettenm.mergeRequestNotifier",
@@ -82,15 +74,6 @@
       "github"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:codecentric/merge-request-notifier.git"
-  },
-  "author": {
-    "name": "Matthias Rütten",
-    "email": "matthias.ruetten@codecentric.de"
-  },
-  "homepage": "https://github.com/codecentric/merge-request-notifier",
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
