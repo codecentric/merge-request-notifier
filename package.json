@@ -4,7 +4,7 @@
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main.js",
   "engines": {
-    "yarn": "1.17.3"
+    "yarn": "1.19.1"
   },
   "scripts": {
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
