@@ -25,6 +25,12 @@ export const Header: React.FunctionComponent = () => {
                             <Box flex='1 0 auto'>Settings</Box>
                         </Flex>
                     </Route>
+                    <Route path='/about-us'>
+                        <Flex sx={{ position: 'relative' }}>
+                            <BackLink />
+                            <Box flex='1 0 auto'>About us</Box>
+                        </Flex>
+                    </Route>
                     <Route>Merge Requests</Route>
                 </Switch>
             </Text>
