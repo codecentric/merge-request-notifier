@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Box, Button, Text } from 'rebass'
+import { Box, Button, Flex, Text } from 'rebass'
 import { useHistory } from 'react-router-dom'
 import * as moment from 'moment'
 
@@ -45,9 +45,28 @@ export const UpdateInfoPage = () => {
                     __html: releaseNotes,
                 }}
             />
-            <Button mt={3} sx={{ display: 'block', width: '100%' }} disabled={installButtonDisabled} variant='primary' aria-label='add' onClick={installUpdate}>
-                {installButtonText}
-            </Button>
+            <Flex mt={3}>
+                <Button
+                    mr={1}
+                    sx={{ display: 'block', width: '100%' }}
+                    variant='secondary'
+                    aria-label='cancel'
+                    onClick={() => {
+                        history.push('/')
+                    }}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    sx={{ display: 'block', width: '100%' }}
+                    disabled={installButtonDisabled}
+                    variant='primary'
+                    aria-label='install update'
+                    onClick={installUpdate}
+                >
+                    {installButtonText}
+                </Button>
+            </Flex>
         </Box>
     )
 }
