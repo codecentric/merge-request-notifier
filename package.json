@@ -90,6 +90,7 @@
     "@rebass/preset": "^4.0.5",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/jest": "^24.0.13",
+    "@types/reach__tabs": "^0.1.0",
     "@types/react": "^16.8.18",
     "@types/react-dom": "^16.8.4",
     "@types/react-hot-loader": "^4.1.0",
@@ -144,5 +145,8 @@
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.4.1",
     "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {
+    "@reach/tabs": "^0.5.4"
   }
 }
