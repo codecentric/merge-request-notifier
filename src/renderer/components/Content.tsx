@@ -6,9 +6,13 @@ import { useConfig } from '../hooks/config'
 import { MergeRequestsPage } from './merge-requests/MergeRequestsPage'
 import { SettingsPage } from './settings/SettingsPage'
 import { AboutUsPage } from './about-us/AboutUsPage'
+import { UpdateInfoPage } from './update/UpdateInfoPage'
+import { useUpdater } from '../hooks/updater'
+import { NewUpdateAlert } from './update/NewUpdateAlert'
 
 export const Content: React.FunctionComponent = () => {
     const { config } = useConfig()
+    const { updateInfo } = useUpdater()
 
     return (
         <Box>
@@ -19,8 +23,12 @@ export const Content: React.FunctionComponent = () => {
                 <Route path='/about-us'>
                     <AboutUsPage />
                 </Route>
+                <Route path='/update'>
+                    <UpdateInfoPage />
+                </Route>
                 {config ? (
                     <Route path='/'>
+                        {updateInfo && <NewUpdateAlert />}
                         <MergeRequestsPage />
                     </Route>
                 ) : (

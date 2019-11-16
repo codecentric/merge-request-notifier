@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
-import { ipcRenderer } from 'electron'
 
-import { useBackend } from '../hooks/backend'
-import { MergeRequestWithProject } from '../hooks/types'
+import { useBackend } from '../hooks/merge-requests/backend'
+import { MergeRequestWithProject } from '../hooks/merge-requests/types'
 
 export const NotificationsEmiter = () => {
     const { mergeRequestWithProjects } = useBackend()

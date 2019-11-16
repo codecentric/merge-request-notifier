@@ -11,3 +11,11 @@ button {
     all: unset;
     cursor: pointer;
 }
+
+.release-notes {
+    p,
+    ul {
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+}

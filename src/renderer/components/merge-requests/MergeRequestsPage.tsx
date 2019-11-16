@@ -5,8 +5,8 @@ import { ipcRenderer, shell } from 'electron'
 import { MergeRequestGroup } from './list/MergeRequestGroup'
 import { MergeRequestItem } from './list/MergeRequestItem'
 
-import { useBackend } from '../../hooks/backend'
-import { MergeRequest } from '../../hooks/types'
+import { useBackend } from '../../hooks/merge-requests/backend'
+import { MergeRequest } from '../../hooks/merge-requests/types'
 import * as Alerts from './Alerts'
 
 const openMergeRequest = (url: string) => () => {

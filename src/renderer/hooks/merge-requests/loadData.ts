@@ -1,8 +1,8 @@
 import * as request from 'superagent'
 
-import { Config } from './config'
+import { Config } from '../config'
 import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, PipelineStatus, Project } from './types'
-import sleep from '../util/sleep'
+import sleep from '../../util/sleep'
 
 const projectCache: { [id: number]: Project } = {}
 

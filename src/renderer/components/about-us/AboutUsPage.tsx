@@ -1,5 +1,5 @@
-import { remote, shell } from 'electron'
 import * as React from 'react'
+import { remote, shell } from 'electron'
 import { Box, Text } from 'rebass'
 
 const openUrl = (url: string): React.MouseEventHandler<HTMLAnchorElement> => event => {

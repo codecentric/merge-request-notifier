@@ -7,7 +7,7 @@ import InfoIcon from '@material-ui/icons/Info'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { LoadingIndicator } from '../util/LoadingIndicator'
-import { useBackend } from '../../hooks/backend'
+import { useBackend } from '../../hooks/merge-requests/backend'
 
 const closeApp = () => {
     ipcRenderer.send('close-application')

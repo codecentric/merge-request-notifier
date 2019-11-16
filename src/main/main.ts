@@ -62,8 +62,7 @@ const setup = async () => {
             await installExtensions()
         }
 
-        const updateInfo = await autoUpdater.checkForUpdatesAndNotify()
-        log.info(`Latest result for the update check: ${JSON.stringify(updateInfo)}`)
+        autoUpdater.autoDownload = false
 
         createTray()
         createWindow()
@@ -238,6 +237,18 @@ ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => 
             tray.setTitle(String(openMergeRequests))
         }
     }
+})
+
+ipcMain.on('download-and-install-update', () => {
+    autoUpdater.once('update-downloaded', () => {
+        autoUpdater.quitAndInstall()
+    })
+
+    autoUpdater.downloadUpdate()
+})
+
+ipcMain.handle('check-for-updates', async () => {
+    return autoUpdater.checkForUpdates()
 })
 
 ipcMain.on('close-application', () => {

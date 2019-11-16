@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 
 import { Box, Heading, Button, Text, Flex } from 'rebass'
 
-import { useBackend } from '../../hooks/backend'
+import { useBackend } from '../../hooks/merge-requests/backend'
 import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
 import { FormInput } from './FormInput'
@@ -156,7 +156,7 @@ export const SettingsPage: React.FunctionComponent = () => {
                                 mr={1}
                                 sx={{ display: 'block', width: '100%' }}
                                 variant='secondary'
-                                aria-label='add'
+                                aria-label='cancel'
                                 disabled={submitting}
                                 onClick={() => {
                                     history.push('/')
