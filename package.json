@@ -1,6 +1,6 @@
 {
   "name": "merge-request-notifier",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main.js",
   "engines": {
@@ -29,6 +29,7 @@
     "pretest:e2e": "yarn build",
     "test:e2e": "jest '(\\/test\\/e2e/).*'",
     "package": "electron-builder --publish always",
+    "package:only": "electron-builder --publish never",
     "postinstall": "electron-builder install-app-deps",
     "prettier:check": "prettier --check 'src/**/*.ts*'",
     "prettier:write": "prettier --write 'src/**/*.ts*'"
