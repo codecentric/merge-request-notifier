@@ -1179,25 +1179,25 @@
     "@nodelib/fs.scandir" "2.1.2"
     fastq "^1.6.0"
 
-"@reach/auto-id@^0.5.3":
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.5.3.tgz#f86ed38b04fa464c5d48a8c4ba27f07993e37e6a"
-  integrity sha512-IkWKzMxNUG1xYXYDhkDtwfcslnNAQgUKTch4Vx+whswTGhhoXMjIzIjlxeufIvOvJ3HGWBzaNYdY7OUDTq37AQ==
+"@reach/auto-id@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.6.1.tgz#af30c153787a335cfb258289537d5ea355688821"
+  integrity sha512-t3uhdZwalO3Mph+CUdFIvMcYsMtRZoBHE5rw/+3UvQxV+AeQGNqmtlOix9mq3rOpxi0KEaf1q4CjWx4myFXkRQ==
 
-"@reach/tabs@^0.5.4":
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/@reach/tabs/-/tabs-0.5.4.tgz#c0d16f43654df726ae1fa5116be6d529dcd19bb5"
-  integrity sha512-yQkkIZHX88xMmx9H3EuDAONNAPxKq+cW94gaKQh5do4tvg0/fwgsiJjWi8/vzsBNjdPRpiV8evQHGufg/MvdNg==
+"@reach/tabs@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@reach/tabs/-/tabs-0.6.2.tgz#19846c080906cd2b1e3097cd680b7f6a489565f0"
+  integrity sha512-NgSpPZatSAm2qDeUf2wVwy6e40K03dZwMfoEgYKfxAZ50wkKZQYod2zHLvAuLu3CVR1ulX6KSmRq1TItAVCUsA==
   dependencies:
-    "@reach/auto-id" "^0.5.3"
-    "@reach/utils" "^0.5.0"
+    "@reach/auto-id" "^0.6.1"
+    "@reach/utils" "^0.6.1"
     prop-types "^15.7.2"
     warning "^4.0.3"
 
-"@reach/utils@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.5.0.tgz#2a64238a5a3ee57ee9742cf2579cacf41ae3a036"
-  integrity sha512-MXYKmCz7BGiCLuZnPI1sBlxQFdpdv3O1Oc13k6oumJGd0eMN3+utGSs20gBH17Ml3IKVqY+9UOLEuqGfyWytHQ==
+"@reach/utils@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.6.1.tgz#7345dcd624f92779fb4a0fc4a28ab16d69b53476"
+  integrity sha512-SMGDydSjmvOz3Q4faGGJikdeqHumHmxB1YfYR7XTWrDQxJMod+J7mSkaS12NY4o/uPQ4xOwwL6cXWN+KpFjOQg==
 
 "@rebass/forms@^4.0.5":
   version "4.0.5"
