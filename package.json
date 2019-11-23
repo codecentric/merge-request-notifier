@@ -147,6 +147,6 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "@reach/tabs": "^0.5.4"
+    "@reach/tabs": "^0.6.2"
   }
 }
