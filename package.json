@@ -3,9 +3,6 @@
   "version": "0.9.1",
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main.js",
-  "engines": {
-    "yarn": "1.19.1"
-  },
   "homepage": "https://github.com/codecentric/merge-request-notifier",
   "author": {
     "name": "Matthias Rütten",
@@ -24,8 +21,10 @@
     "start-main-dev": "webpack --config webpack.main.config.js && electron ./dist/main.js",
     "start": "cross-env START_HOT=1 yarn start-renderer-dev",
     "prestart": "yarn build",
+    "test": "echo \"not yet implemented.\"",
     "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project ./tsconfig.json",
     "package": "electron-builder --publish always",
+    "package:only": "electron-builder --publish never",
     "postinstall": "electron-builder install-app-deps",
     "prettier:check": "prettier --check 'src/**/*.ts*'",
     "prettier:write": "prettier --write 'src/**/*.ts*'"

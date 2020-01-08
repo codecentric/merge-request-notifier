@@ -16,7 +16,11 @@ export interface StatsProps {
 }
 
 export const Stats: React.FunctionComponent<StatsProps> = ({ upVotes, downVotes, commentCount, pipelineStatus }) => {
-    const statsToRender = [{ count: upVotes, Icon: ThumbUpIcon }, { count: downVotes, Icon: ThumbDownIcon }, { count: commentCount, Icon: CommentIcon }]
+    const statsToRender = [
+        { count: upVotes, Icon: ThumbUpIcon },
+        { count: downVotes, Icon: ThumbDownIcon },
+        { count: commentCount, Icon: CommentIcon },
+    ]
         .filter(({ count }) => count > 0)
         .map(({ count, Icon }) => (
             <>
