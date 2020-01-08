@@ -83,6 +83,7 @@
     "@hot-loader/react-dom": "^16.8.6",
     "@material-ui/core": "^4.4.2",
     "@material-ui/icons": "^4.2.1",
+    "@reach/tabs": "^0.6.2",
     "@rebass/forms": "^4.0.5",
     "@rebass/preset": "^4.0.5",
     "@types/electron-devtools-installer": "^2.2.0",
@@ -139,8 +140,5 @@
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.4.1",
     "webpack-merge": "^4.2.1"
-  },
-  "dependencies": {
-    "@reach/tabs": "^0.6.2"
   }
 }
