@@ -107,7 +107,7 @@
     "electron": "^7.0.0",
     "electron-builder": "^22.1.0",
     "electron-devtools-installer": "^2.2.4",
-    "electron-log": "^3.0.8",
+    "electron-log": "^4.0.0",
     "electron-notarize": "^0.2.0",
     "electron-unhandled": "^3.0.0",
     "electron-updater": "^4.2.0",
