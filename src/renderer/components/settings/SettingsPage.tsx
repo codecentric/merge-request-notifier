@@ -8,6 +8,9 @@ import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
 import { FormInput } from './FormInput'
 import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
+import { Tabs, TabPanel, TabPanels, TabList, Tab } from '@reach/tabs'
+
+import '@reach/tabs/styles.css'
 
 type FormErrorData = FormData & { invalidSettings: boolean }
 
@@ -91,102 +94,121 @@ export const SettingsPage: React.FunctionComponent = () => {
     }
 
     return (
-        <>
-            <Box p={2}>
-                <form autoComplete='off'>
-                    {errors.invalidSettings && (
-                        <Text p={1} color='white' bg='red' mb={3}>
-                            Could not load your merge requests. Please verify your settings.
-                        </Text>
-                    )}
-                    <FormInput
-                        error={errors.url}
-                        label='GitLab Hostname'
-                        id='url'
-                        name='url'
-                        type='url'
-                        placeholder='https://gitlab.com'
-                        value={values.url}
-                        onChange={handleChange('url')}
-                        disabled={submitting}
-                        required
-                    />
-
-                    <FormInput
-                        label='Personal Access Token'
-                        id='token'
-                        name='token'
-                        type='text'
-                        value={values.token}
-                        onChange={handleChange('token')}
-                        disabled={submitting}
-                        required
-                        error={errors.token}
-                        info={<PersonalAccessTokenInfo hostname={values.url} />}
-                    />
-
-                    <FormInput
-                        label='GitLab Group Names'
-                        id='group'
-                        name='group'
-                        type='text'
-                        placeholder='my-first-group, another-group'
-                        value={values.groups}
-                        onChange={handleChange('groups')}
-                        disabled={submitting}
-                        error={errors.groups}
-                        info={
-                            <span>
-                                Find it your projects URL:
-                                <br />
-                                <em>
-                                    https://your-host.com/<strong>&lt;groupName&gt;</strong>/&lt;projectName&gt;
-                                </em>
-                                <br />
-                                Separate multiple groups with a comma.
-                            </span>
-                        }
-                        required
-                    />
-
-                    <Flex>
-                        {!!config && (
-                            <Button
-                                mt={2}
-                                mr={1}
-                                sx={{ display: 'block', width: '100%' }}
-                                variant='secondary'
-                                aria-label='cancel'
+        <Tabs>
+            <TabList>
+                <Tab>Connection</Tab>
+                <Tab>General</Tab>
+            </TabList>
+            <TabPanels>
+                <TabPanel>
+                    <Box p={2}>
+                        <form autoComplete='off'>
+                            {errors.invalidSettings && (
+                                <Text p={1} color='white' bg='red' mb={3}>
+                                    Could not load your merge requests. Please verify your settings.
+                                </Text>
+                            )}
+                            <FormInput
+                                error={errors.url}
+                                label='GitLab Hostname'
+                                id='url'
+                                name='url'
+                                type='url'
+                                placeholder='https://gitlab.com'
+                                value={values.url}
+                                onChange={handleChange('url')}
                                 disabled={submitting}
-                                onClick={() => {
-                                    history.push('/')
-                                }}
-                            >
-                                Cancel
-                            </Button>
-                        )}
-                        <Button mt={2} ml={1} sx={{ display: 'block', width: '100%' }} variant='primary' aria-label='add' onClick={save} disabled={submitting}>
-                            Save
-                        </Button>
-                    </Flex>
-                </form>
-            </Box>
-            {!!config && !submitting && (
-                <Box bg='lightred' px={2} pb={2} mt={3} sx={{ borderTop: '1px dashed', borderColor: 'red' }}>
-                    <Heading my={3} fontSize={2} color='red'>
-                        Danger zone
-                    </Heading>
-                    {confirmDelete ? (
-                        <Button my={3} sx={{ display: 'block' }} variant='danger' onClick={remove}>
-                            Are you sure?
-                        </Button>
-                    ) : (
-                        <Button my={3} sx={{ display: 'block' }} variant='danger' onClick={confirmRemove}>
-                            Remove Configuration
-                        </Button>
+                                required
+                            />
+
+                            <FormInput
+                                label='Personal Access Token'
+                                id='token'
+                                name='token'
+                                type='text'
+                                value={values.token}
+                                onChange={handleChange('token')}
+                                disabled={submitting}
+                                required
+                                error={errors.token}
+                                info={<PersonalAccessTokenInfo hostname={values.url} />}
+                            />
+
+                            <FormInput
+                                label='GitLab Group Names'
+                                id='group'
+                                name='group'
+                                type='text'
+                                placeholder='my-first-group, another-group'
+                                value={values.groups}
+                                onChange={handleChange('groups')}
+                                disabled={submitting}
+                                error={errors.groups}
+                                info={
+                                    <span>
+                                        Find it your projects URL:
+                                        <br />
+                                        <em>
+                                            https://your-host.com/<strong>&lt;groupName&gt;</strong>/&lt;projectName&gt;
+                                        </em>
+                                        <br />
+                                        Separate multiple groups with a comma.
+                                    </span>
+                                }
+                                required
+                            />
+
+                            <Flex>
+                                {!!config && (
+                                    <Button
+                                        mt={2}
+                                        mr={1}
+                                        sx={{ display: 'block', width: '100%' }}
+                                        variant='secondary'
+                                        aria-label='cancel'
+                                        disabled={submitting}
+                                        onClick={() => {
+                                            history.push('/')
+                                        }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                )}
+                                <Button
+                                    mt={2}
+                                    ml={1}
+                                    sx={{ display: 'block', width: '100%' }}
+                                    variant='primary'
+                                    aria-label='add'
+                                    onClick={save}
+                                    disabled={submitting}
+                                >
+                                    Save
+                                </Button>
+                            </Flex>
+                        </form>
+                    </Box>
+                    {!!config && !submitting && (
+                        <Box bg='lightred' px={2} pb={2} mt={3} sx={{ borderTop: '1px dashed', borderColor: 'red' }}>
+                            <Heading my={3} fontSize={2} color='red'>
+                                Danger zone
+                            </Heading>
+                            {confirmDelete ? (
+                                <Button my={3} sx={{ display: 'block' }} variant='danger' onClick={remove}>
+                                    Are you sure?
+                                </Button>
+                            ) : (
+                                <Button my={3} sx={{ display: 'block' }} variant='danger' onClick={confirmRemove}>
+                                    Remove Configuration
+                                </Button>
+                            )}
+                        </Box>
                     )}
-                </Box>
-            )}
-        </>
+                </TabPanel>
+                <TabPanel>
+                    <Box p={2}>{/*"General Settings"*/}</Box>
+                </TabPanel>
+            </TabPanels>
+        </Tabs>
     )
 }
