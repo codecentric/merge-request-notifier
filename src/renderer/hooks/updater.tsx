@@ -68,7 +68,8 @@ export const UpdaterProvider = ({ ...props }) => {
     React.useEffect(() => {
         checkForUpdates()
 
-        const interval = setInterval(checkForUpdates, 10000)
+        const everyTenMinutes = 10 * 60 * 1000
+        const interval = setInterval(checkForUpdates, everyTenMinutes)
 
         return () => {
             clearInterval(interval)
