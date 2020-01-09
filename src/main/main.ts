@@ -258,7 +258,7 @@ ipcMain.on('download-and-install-update', () => {
 })
 
 ipcMain.handle('check-for-updates', async () => {
-    return autoUpdater.checkForUpdates()
+    return autoUpdater.checkForUpdates().catch(error => log.error('error while checking for updates', error))
 })
 
 ipcMain.on('close-application', () => {

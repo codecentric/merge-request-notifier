@@ -55,10 +55,14 @@ export const UpdaterProvider = ({ ...props }) => {
     }
 
     const checkForUpdates = () => {
-        ipcRenderer.invoke('check-for-updates').then(result => {
-            console.log('check-for-updates result', result)
-            setUpdateInfo(result as UpdateCheckResult)
-        })
+        ipcRenderer
+            .invoke('check-for-updates')
+            .then(result => {
+                setUpdateInfo(result as UpdateCheckResult)
+            })
+            .catch(error => {
+                console.error('could not check for updates', error)
+            })
     }
 
     React.useEffect(() => {
