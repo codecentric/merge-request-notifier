@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main.js",
-  "engines": {
-    "yarn": "1.19.1"
-  },
   "homepage": "https://github.com/codecentric/merge-request-notifier",
   "author": {
     "name": "Matthias Rütten",

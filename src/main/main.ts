@@ -56,11 +56,13 @@ const setup = async () => {
     log.debug('Starting the app')
 
     try {
+        autoUpdater.autoDownload = false
+
         if (process.env.NODE_ENV !== 'production') {
+            // __dirname is the "dist" folder
+            autoUpdater.updateConfigPath = path.join(__dirname, '../dev-app-update.yml')
             await installExtensions()
         }
-
-        autoUpdater.autoDownload = false
 
         createTray()
         createWindow()
