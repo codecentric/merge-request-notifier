@@ -8,7 +8,7 @@ import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
 import { FormInput } from './FormInput'
 import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
-import { Tabs, TabPanel, TabPanels, TabList, Tab } from '@reach/tabs'
+// import { Tabs, TabPanel, TabPanels, TabList, Tab } from '@reach/tabs'
 
 import '@reach/tabs/styles.css'
 
