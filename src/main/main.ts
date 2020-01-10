@@ -12,8 +12,6 @@ let win: BrowserWindow | null
 const WINDOW_WIDTH = 380
 const WINDOW_HEIGHT = 460
 
-let TEST_MODE = false
-
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer')
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
@@ -58,12 +56,13 @@ const setup = async () => {
     log.debug('Starting the app')
 
     try {
+        autoUpdater.autoDownload = false
+
         if (process.env.NODE_ENV !== 'production') {
+            // __dirname is the "dist" folder
+            autoUpdater.updateConfigPath = path.join(__dirname, '../dev-app-update.yml')
             await installExtensions()
         }
-
-        const updateInfo = await autoUpdater.checkForUpdatesAndNotify()
-        log.info(`Latest result for the update check: ${JSON.stringify(updateInfo)}`)
 
         createTray()
         createWindow()
@@ -122,17 +121,15 @@ const createMenu = () => {
                       },
                   },
                   {
-                      label: 'Toggle Test Mode',
+                      label: 'Toggle Test Data',
                       click: () => {
-                          if (win) {
-                              if (TEST_MODE) {
-                                  win.loadURL('http://localhost:2003')
-                              } else {
-                                  win.loadURL('http://localhost:2003?test')
-                              }
-
-                              TEST_MODE = !TEST_MODE
-                          }
+                          toggleQueryParam('test-data')
+                      },
+                  },
+                  {
+                      label: 'Toggle Fake update',
+                      click: () => {
+                          toggleQueryParam('fake-update')
                       },
                   },
               ]
@@ -169,6 +166,20 @@ const createMenu = () => {
     Menu.setApplicationMenu(menu)
 }
 
+const toggleQueryParam = (parameter: string) => {
+    if (win) {
+        const currentUrl = new URL(win.webContents.getURL())
+
+        if (currentUrl.searchParams.has(parameter)) {
+            currentUrl.searchParams.delete(parameter)
+        } else {
+            currentUrl.searchParams.set(parameter, '1')
+        }
+
+        win.loadURL(currentUrl.href)
+    }
+}
+
 const createWindow = () => {
     win = new BrowserWindow({
         width: WINDOW_WIDTH,
@@ -202,9 +213,7 @@ const createWindow = () => {
     })
 
     win.on('blur', () => {
-        if (!TEST_MODE) {
-            hideWindow()
-        }
+        hideWindow()
     })
 }
 
@@ -238,6 +247,18 @@ ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => 
             tray.setTitle(String(openMergeRequests))
         }
     }
+})
+
+ipcMain.on('download-and-install-update', () => {
+    autoUpdater.once('update-downloaded', () => {
+        autoUpdater.quitAndInstall()
+    })
+
+    autoUpdater.downloadUpdate()
+})
+
+ipcMain.handle('check-for-updates', async () => {
+    return autoUpdater.checkForUpdates().catch(error => log.error('error while checking for updates', error))
 })
 
 ipcMain.on('close-application', () => {

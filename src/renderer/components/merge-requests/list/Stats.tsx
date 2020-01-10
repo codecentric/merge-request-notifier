@@ -5,7 +5,7 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 import ThumbDownIcon from '@material-ui/icons/ThumbDown'
 import CommentIcon from '@material-ui/icons/Comment'
 
-import { PipelineStatus } from '../../../hooks/types'
+import { PipelineStatus } from '../../../hooks/merge-requests/types'
 import { PipelineStatusIndicator } from './PipelineStatusIndicator'
 
 export interface StatsProps {

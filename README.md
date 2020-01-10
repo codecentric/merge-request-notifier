@@ -49,6 +49,9 @@ This will start the application with hot-reload so you can instantly start devel
 yarn start
 ```
 
+### Logs
+You will find the application logs in the following folder: `~/Library/Logs/merge-request-notifier/`
+
 ### New Releases
 #### Create a new Release and Publish it
 ```bash

@@ -1,0 +1,4 @@
+owner: codecentric
+repo: merge-request-notifier
+provider: github
+updaterCacheDirName: merge-request-notifier-updater

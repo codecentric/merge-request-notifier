@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Config, useConfig } from './config'
+import { Config, useConfig } from '../config'
 import { loadData, loadGroups } from './loadData'
 import { GroupedMergeRequest, MergeRequestWithProject } from './types'
 
@@ -27,7 +27,6 @@ export const BackendProvider = ({ ...props }) => {
     const [mergeRequestWithProjects, setMergeRequestWithProjects] = React.useState<MergeRequestWithProject[] | undefined>(undefined)
     const [loadErrors, setLoadErrors] = React.useState<number>(0)
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
-    console.log('BackendProvider', config)
 
     const updateData = async (newConfig?: Config) => {
         try {

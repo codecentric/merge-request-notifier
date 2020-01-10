@@ -1,4 +1,4 @@
-import { GroupedMergeRequest, MergeRequest, MergeRequestWithProject, User } from './types'
+import { MergeRequest, MergeRequestWithProject, User } from './types'
 import { Data } from './loadData'
 
 let count = 0
@@ -8,13 +8,13 @@ const users: User[] = [
         id: 1,
         name: 'Matthias',
         username: 'ruettenm',
-        avatar_url: require('../images/matthias.jpg'),
+        avatar_url: require('../../images/matthias.jpg'),
     },
     {
         id: 2,
         name: 'Julian',
         username: 'jukempff',
-        avatar_url: require('../images/julian.jpg'),
+        avatar_url: require('../../images/julian.jpg'),
     },
 ]
 
