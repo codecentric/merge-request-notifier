@@ -7,14 +7,14 @@ import sleep from '../../util/sleep'
 const projectCache: { [id: number]: Project } = {}
 
 const url = new URL(document.location.href)
-const TEST_MODE = url.searchParams.has('test-data')
+const SHOW_TEST_DATA = url.searchParams.has('test-data')
 
-if (TEST_MODE) {
+if (SHOW_TEST_DATA) {
     console.info('Application is running in the "TEST MODE"')
 }
 
 export const loadGroups = async (config: Config): Promise<Group[]> => {
-    if (TEST_MODE) {
+    if (SHOW_TEST_DATA) {
         return sleep(500).then(() => [])
     }
 
@@ -37,7 +37,7 @@ export interface Data {
 }
 
 export const loadData = async (config: Config): Promise<Data> => {
-    if (TEST_MODE) {
+    if (SHOW_TEST_DATA) {
         return sleep(500).then(() => require('./testData').default())
     }
 
