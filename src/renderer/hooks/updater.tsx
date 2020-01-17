@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { UpdateCheckResult } from 'electron-updater'
 import { ipcRenderer } from 'electron'
+import * as moment from 'moment'
 
 export type UpdateInfo = undefined | UpdateCheckResult
 
@@ -19,14 +20,14 @@ if (SHOW_FAKE_UPDATE) {
 
 const FAKE_UPDATE: UpdateCheckResult = {
     updateInfo: {
-        version: '1.0.0',
+        version: '13.3.7',
         files: [],
         path: 'deprecated',
         sha512: 'deprecated',
-        releaseName: 'Version 1.0',
+        releaseName: 'Version 13.3.7',
         releaseNotes:
             '<p><g-emoji class="g-emoji" alias="raised_hands" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f64c.png">🙌</g-emoji> <strong>New Features:</strong></p>\n<ul>\n<li>New "about us" page</li>\n<li>showing the current app version</li>\n</ul>\n<p>🧐 <strong>Under the hood:</strong></p>\n<ul>\n<li>Updating some dependencies</li>\n</ul>', // tslint:disable-line:max-line-length
-        releaseDate: '2019-11-07T11:49:04.948Z',
+        releaseDate: moment().toISOString(),
     },
     versionInfo: {
         version: 'deprecated',
@@ -55,6 +56,10 @@ export const UpdaterProvider = ({ ...props }) => {
     }
 
     const checkForUpdates = () => {
+        if (SHOW_FAKE_UPDATE) {
+            return
+        }
+
         ipcRenderer
             .invoke('check-for-updates')
             .then(result => {
