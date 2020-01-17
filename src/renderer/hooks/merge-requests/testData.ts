@@ -8,13 +8,13 @@ const users: User[] = [
         id: 1,
         name: 'Matthias',
         username: 'ruettenm',
-        avatar_url: require('../../images/matthias.jpg'),
+        avatar_url: require('../../images/matthias.jpg').default,
     },
     {
         id: 2,
         name: 'Julian',
         username: 'jukempff',
-        avatar_url: require('../../images/julian.jpg'),
+        avatar_url: require('../../images/julian.jpg').default,
     },
 ]
 
@@ -40,7 +40,7 @@ const createMr = (title: string, projectId: number): MergeRequest => {
         source_project_id: projectId,
         work_in_progress: false,
         user_notes: {
-            all: randomArrayEntry([3, 3, 5]),
+            all: randomArrayEntry([3, 5]),
             resolved: randomArrayEntry([1, 2, 3]),
         },
         web_url: `https://www.google.de?q=mr-${mrId}`,
