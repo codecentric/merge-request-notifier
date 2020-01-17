@@ -16,12 +16,28 @@ export interface User {
 
 export type PipelineStatus = 'running' | 'pending' | 'success' | 'failed'
 
+export interface UserNotesStatus {
+    all: number
+    resolved: number
+}
+
 export interface Group {
     id: number
     name: string
     path: string
     description: string
     visibility: 'private' | 'internal' | 'public'
+}
+
+export interface Note {
+    id: number
+    noteable_id: number
+    noteable_iid: number
+    type: null
+    author: User
+    resolvable: boolean
+    resolved?: boolean
+    resolved_by?: User
 }
 
 export interface MergeRequest {
@@ -40,8 +56,8 @@ export interface MergeRequest {
     assignee?: User
     source_project_id: number
     work_in_progress: boolean
-    user_notes_count: number
     web_url: string
+    user_notes: UserNotesStatus
     pipeline_status?: PipelineStatus
 }
 

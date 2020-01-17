@@ -39,7 +39,10 @@ const createMr = (title: string, projectId: number): MergeRequest => {
         assignee: randomArrayEntry(users),
         source_project_id: projectId,
         work_in_progress: false,
-        user_notes_count: randomArrayEntry([0, 0, 0, 0, 0, 1, 3, 5]),
+        user_notes: {
+            all: randomArrayEntry([3, 3, 5]),
+            resolved: randomArrayEntry([1, 2, 3]),
+        },
         web_url: `https://www.google.de?q=mr-${mrId}`,
         pipeline_status: randomArrayEntry(['running', 'pending', 'success', 'failed']),
     }

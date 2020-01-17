@@ -1,7 +1,7 @@
 import * as request from 'superagent'
 
 import { Config } from '../config'
-import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, PipelineStatus, Project } from './types'
+import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, Note, PipelineStatus, Project, UserNotesStatus } from './types'
 import sleep from '../../util/sleep'
 
 const projectCache: { [id: number]: Project } = {}
@@ -96,12 +96,31 @@ const loadMergeRequests = async (config: Config): Promise<MergeRequest[]> => {
                         return {
                             ...mergeRequest,
                             pipeline_status: await loadPipelineStatus(config, mergeRequest.project_id, mergeRequest.iid),
+                            user_notes: await loadUserNotes(config, mergeRequest.project_id, mergeRequest.iid),
                         }
                     }),
                 )
             }),
         )),
     )
+}
+
+const loadUserNotes = async (config: Config, projectId: number, mergeRequestIid: number): Promise<UserNotesStatus> => {
+    const apiUrl = `${config.url}/api/v4/projects/${projectId}/merge_requests/${mergeRequestIid}/notes`
+
+    const notes = await request
+        .get(apiUrl)
+        .set('Private-Token', config.token)
+        .timeout(4000)
+        .then(res => res.body as Note[])
+
+    const all = notes.filter(note => note.resolvable).length
+    const resolved = notes.filter(note => note.resolved).length
+
+    return {
+        all,
+        resolved,
+    }
 }
 
 const loadPipelineStatus = async (config: Config, projectId: number, mergeRequestIid: number): Promise<PipelineStatus | undefined> => {
