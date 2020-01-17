@@ -31,20 +31,19 @@ On the details page you find the release notes from github.
 
 ## Installation
 ### From release page
-Installers for each platforms are ready at [releases page](https://github.com/codecentric/merge-request-notifier/releases).
-Please download it for your platform and double click it to install.
+The macOS installer is uploaded at the [releases page](https://github.com/codecentric/merge-request-notifier/releases).
+Please download it and double click it to install.
 
-macOS: Merge.Request.Notifier-x.y.z.dmg or Merge.Request.Notifier-x.y.z-mac.zip
-Linux: [...]
+**Merge.Request.Notifier-x.y.z.dmg**
 
 ### With homebrew-cask
-If you're macOS user and using homebrew-cask, this app can be installed via it. Please tap the repository URL and install this app via brew cask as follows.
+If you're using homebrew-cask, this app can be installed via it. Please tap the repository URL and install this app via brew cask as follows.
 
 ```
 brew tap codecentric/merge-request-notifier https://github.com/codecentric/merge-request-notifier
 brew cask install merge-request-notifier
 ```
-It's easiest way to install and manage this app on macOS.
+It's the easiest way to install and manage this app on macOS.
 
 ## Development
 ### Install all dependencies 
