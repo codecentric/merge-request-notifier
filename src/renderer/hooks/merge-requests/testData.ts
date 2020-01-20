@@ -16,6 +16,12 @@ const users: User[] = [
         username: 'jukempff',
         avatar_url: require('../../images/julian.jpg').default,
     },
+    {
+        id: 3,
+        name: 'Polina',
+        username: 'polina.tagirova',
+        avatar_url: require('../../images/polina.jpg').default,
+    },
 ]
 
 let mrId = 0
