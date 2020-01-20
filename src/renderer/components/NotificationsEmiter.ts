@@ -2,16 +2,17 @@ import { useState, useEffect } from 'react'
 
 import { useBackend } from '../hooks/merge-requests/backend'
 import { MergeRequestWithProject } from '../hooks/merge-requests/types'
+import { useConfig } from '../hooks/config'
 
 export const NotificationsEmiter = () => {
     const { mergeRequestWithProjects } = useBackend()
+    const { config } = useConfig()
+
     const [previousMergeRequests, setPreviousMergeRequests] = useState<MergeRequestWithProject[] | undefined>(undefined)
 
     useEffect(() => {
         const newMergeRequests = getNewMergeRequests(mergeRequestWithProjects, previousMergeRequests)
-        if (newMergeRequests.length > 0) {
-            const moreThenOneNewMergeRequest = newMergeRequests.length > 1
-
+        if (newMergeRequests.length > 0 && config.generalConfig.useNotifications) {
             newMergeRequests.forEach(newMergeRequest => {
                 const body = newMergeRequest.title
                 const icon = newMergeRequest.author.avatar_url

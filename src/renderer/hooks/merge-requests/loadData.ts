@@ -1,6 +1,6 @@
 import * as request from 'superagent'
 
-import { Config } from '../config'
+import { ConnectionConfig } from '../config'
 import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, PipelineStatus, Project } from './types'
 import sleep from '../../util/sleep'
 
@@ -13,18 +13,18 @@ if (TEST_MODE) {
     console.info('Application is running in the "TEST MODE"')
 }
 
-export const loadGroups = async (config: Config): Promise<Group[]> => {
+export const loadGroups = async (connectionConfig: ConnectionConfig): Promise<Group[]> => {
     if (TEST_MODE) {
         return sleep(500).then(() => [])
     }
 
     return Promise.all(
-        config.groups.map(async group => {
-            const apiUrl = `${config.url}/api/v4/groups/${group}`
+        connectionConfig.groups.map(async group => {
+            const apiUrl = `${connectionConfig.url}/api/v4/groups/${group}`
 
             return request
                 .get(apiUrl)
-                .set('Private-Token', config.token)
+                .set('Private-Token', connectionConfig.token)
                 .timeout(4000)
                 .then(response => response.body)
         }),
@@ -36,12 +36,12 @@ export interface Data {
     mergeRequestWithProjects: MergeRequestWithProject[]
 }
 
-export const loadData = async (config: Config): Promise<Data> => {
+export const loadData = async (connectionConfig: ConnectionConfig): Promise<Data> => {
     if (TEST_MODE) {
         return sleep(500).then(() => require('./testData').default())
     }
 
-    const mergeRequests = await loadMergeRequests(config)
+    const mergeRequests = await loadMergeRequests(connectionConfig)
 
     const groupedMergeRequests = [] as GroupedMergeRequest[]
     const mergeRequestWithProjects = [] as MergeRequestWithProject[]
@@ -49,7 +49,7 @@ export const loadData = async (config: Config): Promise<Data> => {
         const projectId = mergeRequest.work_in_progress ? -1 * mergeRequest.project_id : mergeRequest.project_id
         let entry = groupedMergeRequests.find(group => group.project.id === projectId)
         if (!entry) {
-            const project = await loadProject(config, projectId)
+            const project = await loadProject(connectionConfig, projectId)
 
             entry = { project, mergeRequests: [] }
             groupedMergeRequests.push(entry)
@@ -78,15 +78,15 @@ export const loadData = async (config: Config): Promise<Data> => {
     }
 }
 
-const loadMergeRequests = async (config: Config): Promise<MergeRequest[]> => {
+const loadMergeRequests = async (connectionConfig: ConnectionConfig): Promise<MergeRequest[]> => {
     return ([] as MergeRequest[]).concat(
         ...(await Promise.all(
-            config.groups.map(async group => {
-                const apiUrl = `${config.url}/api/v4/groups/${group}/merge_requests`
+            connectionConfig.groups.map(async group => {
+                const apiUrl = `${connectionConfig.url}/api/v4/groups/${group}/merge_requests`
 
                 const mergeRequests = await request
                     .get(apiUrl)
-                    .set('Private-Token', config.token)
+                    .set('Private-Token', connectionConfig.token)
                     .query({ state: 'opened' })
                     .timeout(4000)
                     .then(response => response.body as MergeRequest[])
@@ -95,7 +95,7 @@ const loadMergeRequests = async (config: Config): Promise<MergeRequest[]> => {
                     mergeRequests.map(async mergeRequest => {
                         return {
                             ...mergeRequest,
-                            pipeline_status: await loadPipelineStatus(config, mergeRequest.project_id, mergeRequest.iid),
+                            pipeline_status: await loadPipelineStatus(connectionConfig, mergeRequest.project_id, mergeRequest.iid),
                         }
                     }),
                 )
@@ -104,12 +104,12 @@ const loadMergeRequests = async (config: Config): Promise<MergeRequest[]> => {
     )
 }
 
-const loadPipelineStatus = async (config: Config, projectId: number, mergeRequestIid: number): Promise<PipelineStatus | undefined> => {
-    const apiUrl = `${config.url}/api/v4/projects/${projectId}/merge_requests/${mergeRequestIid}/pipelines`
+const loadPipelineStatus = async (connectionConfig: ConnectionConfig, projectId: number, mergeRequestIid: number): Promise<PipelineStatus | undefined> => {
+    const apiUrl = `${connectionConfig.url}/api/v4/projects/${projectId}/merge_requests/${mergeRequestIid}/pipelines`
 
     const pipelines = await request
         .get(apiUrl)
-        .set('Private-Token', config.token)
+        .set('Private-Token', connectionConfig.token)
         .query({ per_page: 1, page: 1 })
         .timeout(4000)
         .then(res => res.body)
@@ -121,9 +121,9 @@ const loadPipelineStatus = async (config: Config, projectId: number, mergeReques
     return pipelines[0].status
 }
 
-const loadProject = async (config: Config, projectId: number): Promise<Project> => {
+const loadProject = async (connectionConfig: ConnectionConfig, projectId: number): Promise<Project> => {
     const realProjectId = Math.abs(projectId)
-    const apiUrl = `${config.url}/api/v4/projects/${realProjectId}`
+    const apiUrl = `${connectionConfig.url}/api/v4/projects/${realProjectId}`
 
     if (projectCache[realProjectId]) {
         return applyOptionalWIPStatus(projectId, projectCache[realProjectId])
@@ -131,7 +131,7 @@ const loadProject = async (config: Config, projectId: number): Promise<Project> 
 
     const project = await request
         .get(apiUrl)
-        .set('Private-Token', config.token)
+        .set('Private-Token', connectionConfig.token)
         .timeout(4000)
         .then(res => res.body)
 
