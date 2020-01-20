@@ -1,20 +1,20 @@
 import * as request from 'superagent'
 
 import { ConnectionConfig } from '../config'
-import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, PipelineStatus, Project } from './types'
+import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, Note, PipelineStatus, Project, UserNotesStatus } from './types'
 import sleep from '../../util/sleep'
 
 const projectCache: { [id: number]: Project } = {}
 
 const url = new URL(document.location.href)
-const TEST_MODE = url.searchParams.has('test-data')
+const SHOW_TEST_DATA = url.searchParams.has('test-data')
 
-if (TEST_MODE) {
+if (SHOW_TEST_DATA) {
     console.info('Application is running in the "TEST MODE"')
 }
 
 export const loadGroups = async (connectionConfig: ConnectionConfig): Promise<Group[]> => {
-    if (TEST_MODE) {
+    if (SHOW_TEST_DATA) {
         return sleep(500).then(() => [])
     }
 
@@ -37,7 +37,7 @@ export interface Data {
 }
 
 export const loadData = async (connectionConfig: ConnectionConfig): Promise<Data> => {
-    if (TEST_MODE) {
+    if (SHOW_TEST_DATA) {
         return sleep(500).then(() => require('./testData').default())
     }
 
@@ -96,12 +96,31 @@ const loadMergeRequests = async (connectionConfig: ConnectionConfig): Promise<Me
                         return {
                             ...mergeRequest,
                             pipeline_status: await loadPipelineStatus(connectionConfig, mergeRequest.project_id, mergeRequest.iid),
+                            user_notes: await loadUserNotes(config, mergeRequest.project_id, mergeRequest.iid),
                         }
                     }),
                 )
             }),
         )),
     )
+}
+
+const loadUserNotes = async (config: Config, projectId: number, mergeRequestIid: number): Promise<UserNotesStatus> => {
+    const apiUrl = `${config.url}/api/v4/projects/${projectId}/merge_requests/${mergeRequestIid}/notes`
+
+    const notes = await request
+        .get(apiUrl)
+        .set('Private-Token', config.token)
+        .timeout(4000)
+        .then(res => res.body as Note[])
+
+    const all = notes.filter(note => note.resolvable).length
+    const resolved = notes.filter(note => note.resolved).length
+
+    return {
+        all,
+        resolved,
+    }
 }
 
 const loadPipelineStatus = async (connectionConfig: ConnectionConfig, projectId: number, mergeRequestIid: number): Promise<PipelineStatus | undefined> => {

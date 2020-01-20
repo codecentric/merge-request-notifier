@@ -7,7 +7,7 @@ import { Stats } from './Stats'
 interface MergeRequestItemStats {
     upVotes: number
     downVotes: number
-    commentCount: number
+    commentCount?: string
     pipelineStatus?: PipelineStatus
 }
 

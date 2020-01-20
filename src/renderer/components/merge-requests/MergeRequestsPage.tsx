@@ -17,6 +17,7 @@ const renderMergeRequest = (mergeRequest: MergeRequest) => {
     const time = moment(mergeRequest.updated_at).format('DD.MM. HH:mm')
     const assignee = mergeRequest.assignee ? ` — ${mergeRequest.assignee.name}` : ''
     const secondaryText = `${time} ${assignee}`
+    const commentCount = mergeRequest.user_notes.all ? `${mergeRequest.user_notes.resolved}/${mergeRequest.user_notes.all}` : undefined
 
     return (
         <MergeRequestItem
@@ -27,7 +28,7 @@ const renderMergeRequest = (mergeRequest: MergeRequest) => {
             stats={{
                 downVotes: mergeRequest.downvotes,
                 upVotes: mergeRequest.upvotes,
-                commentCount: mergeRequest.user_notes_count,
+                commentCount,
                 pipelineStatus: mergeRequest.pipeline_status,
             }}
             onClick={openMergeRequest(mergeRequest.web_url)}

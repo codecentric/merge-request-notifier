@@ -18,22 +18,32 @@ You are able to configure multiple groups.
 
 <img src="./images/settings.png" width=500 alt="Settings Screenshot">
 
+## App Updates
+You will be always up to date with our integrated in app updates 🎉 Once there is a new update 
+available you will be notified with a prominent alert above the merge requests. 
+
+<img src="./images/new-update-alert.png" width=500 alt="New Update Alert">
+
+### Release Notes
+On the details page you find the release notes from github.
+
+<img src="./images/update-info.png" width=500 alt="New Update Alert">
+
 ## Installation
 ### From release page
-Installers for each platforms are ready at [releases page](https://github.com/codecentric/merge-request-notifier/releases).
-Please download it for your platform and double click it to install.
+The macOS installer is uploaded at the [releases page](https://github.com/codecentric/merge-request-notifier/releases).
+Please download it and double click it to install.
 
-macOS: Merge.Request.Notifier-x.y.z.dmg or Merge.Request.Notifier-x.y.z-mac.zip
-Linux: [...]
+**Merge.Request.Notifier-x.y.z.dmg**
 
 ### With homebrew-cask
-If you're macOS user and using homebrew-cask, this app can be installed via it. Please tap the repository URL and install this app via brew cask as follows.
+If you're using homebrew-cask, this app can be installed via it. Please tap the repository URL and install this app via brew cask as follows.
 
 ```
 brew tap codecentric/merge-request-notifier https://github.com/codecentric/merge-request-notifier
 brew cask install merge-request-notifier
 ```
-It's easiest way to install and manage this app on macOS.
+It's the easiest way to install and manage this app on macOS.
 
 ## Development
 ### Install all dependencies 

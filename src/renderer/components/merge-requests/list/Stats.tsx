@@ -11,7 +11,7 @@ import { PipelineStatusIndicator } from './PipelineStatusIndicator'
 export interface StatsProps {
     upVotes: number
     downVotes: number
-    commentCount: number
+    commentCount?: string
     pipelineStatus?: PipelineStatus
 }
 
@@ -21,7 +21,7 @@ export const Stats: React.FunctionComponent<StatsProps> = ({ upVotes, downVotes,
         { count: downVotes, Icon: ThumbDownIcon },
         { count: commentCount, Icon: CommentIcon },
     ]
-        .filter(({ count }) => count > 0)
+        .filter(({ count }) => count)
         .map(({ count, Icon }) => (
             <>
                 <Icon style={{ fontSize: '0.6rem', verticalAlign: 'middle' }} fontSize='small' />
