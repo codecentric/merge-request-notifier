@@ -96,7 +96,7 @@ const loadMergeRequests = async (connectionConfig: ConnectionConfig): Promise<Me
                         return {
                             ...mergeRequest,
                             pipeline_status: await loadPipelineStatus(connectionConfig, mergeRequest.project_id, mergeRequest.iid),
-                            user_notes: await loadUserNotes(config, mergeRequest.project_id, mergeRequest.iid),
+                            user_notes: await loadUserNotes(connectionConfig, mergeRequest.project_id, mergeRequest.iid),
                         }
                     }),
                 )
@@ -105,12 +105,12 @@ const loadMergeRequests = async (connectionConfig: ConnectionConfig): Promise<Me
     )
 }
 
-const loadUserNotes = async (config: Config, projectId: number, mergeRequestIid: number): Promise<UserNotesStatus> => {
-    const apiUrl = `${config.url}/api/v4/projects/${projectId}/merge_requests/${mergeRequestIid}/notes`
+const loadUserNotes = async (connectionConfig: ConnectionConfig, projectId: number, mergeRequestIid: number): Promise<UserNotesStatus> => {
+    const apiUrl = `${connectionConfig.url}/api/v4/projects/${projectId}/merge_requests/${mergeRequestIid}/notes`
 
     const notes = await request
         .get(apiUrl)
-        .set('Private-Token', config.token)
+        .set('Private-Token', connectionConfig.token)
         .timeout(4000)
         .then(res => res.body as Note[])
 
