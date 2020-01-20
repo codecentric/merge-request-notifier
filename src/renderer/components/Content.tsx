@@ -24,7 +24,7 @@ export const Content: React.FunctionComponent = () => {
                 <Route path='/update'>
                     <UpdateInfoPage />
                 </Route>
-                {config ? (
+                {config.connectionConfig ? (
                     <Route path='/'>
                         <NewUpdateAlert />
                         <MergeRequestsPage />

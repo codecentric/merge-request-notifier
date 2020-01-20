@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Config, useConfig } from '../config'
+import { Config, ConnectionConfig, useConfig } from '../config'
 import { loadData, loadGroups } from './loadData'
 import { GroupedMergeRequest, MergeRequestWithProject } from './types'
 
@@ -8,7 +8,7 @@ export interface BackendContext {
     isLoading: boolean
     groupedMergeRequests: GroupedMergeRequest[] | undefined
     mergeRequestWithProjects: MergeRequestWithProject[] | undefined
-    testConfig: (config: Config) => Promise<boolean>
+    testConnectionConfig: (connectionConfig: ConnectionConfig) => Promise<boolean>
 }
 
 const Context = React.createContext<BackendContext | null>(null)
@@ -31,9 +31,9 @@ export const BackendProvider = ({ ...props }) => {
     const updateData = async (newConfig?: Config) => {
         try {
             const configToUse = newConfig || config
-            if (configToUse) {
+            if (configToUse.connectionConfig) {
                 setIsLoading(true)
-                const data = await loadData(configToUse)
+                const data = await loadData(configToUse.connectionConfig)
                 setGroupedMergeRequests(data.groupedMergeRequests)
                 setMergeRequestWithProjects(data.mergeRequestWithProjects)
                 setLoadErrors(0)
@@ -59,9 +59,9 @@ export const BackendProvider = ({ ...props }) => {
         }
     }, [config])
 
-    const testConfig = async (newConfig: Config): Promise<boolean> => {
+    const testConnectionConfig = async (newConnectionConfig: ConnectionConfig): Promise<boolean> => {
         setIsLoading(true)
-        return loadGroups(newConfig)
+        return loadGroups(newConnectionConfig)
             .then(() => true)
             .catch(() => false)
             .then(validConfig => {
@@ -70,5 +70,5 @@ export const BackendProvider = ({ ...props }) => {
             })
     }
 
-    return <Context.Provider value={{ isLoading, groupedMergeRequests, mergeRequestWithProjects, testConfig }} {...props} />
+    return <Context.Provider value={{ isLoading, groupedMergeRequests, mergeRequestWithProjects, testConnectionConfig }} {...props} />
 }
