@@ -22,16 +22,16 @@ export const Footer: React.FunctionComponent = () => {
                 <LoadingIndicator visible={isLoading} title='Trying to fetch data' />
             </Box>
             <RouterLink to='/about-us' title='About Us'>
-                <Box p={2} color='gray' sx={{ ':hover': { color: 'black' } }}>
+                <Box p={2} color='gray' sx={{ ':hover': { color: 'textColor' } }}>
                     <InfoIcon fontSize='small' />
                 </Box>
             </RouterLink>
             <RouterLink to='/config' title='Settings'>
-                <Box p={2} color='gray' sx={{ ':hover': { color: 'black' } }}>
+                <Box p={2} color='gray' sx={{ ':hover': { color: 'textColor' } }}>
                     <SettingsIcon fontSize='small' />
                 </Box>
             </RouterLink>
-            <Link variant='nav' as='button' color='gray' sx={{ ':hover': { color: 'black' } }} title='Close Application' onClick={closeApp}>
+            <Link variant='nav' as='button' color='gray' sx={{ ':hover': { color: 'textColor' } }} title='Close Application' onClick={closeApp}>
                 <Box p={2}>
                     <ExitToAppIcon fontSize='small' />
                 </Box>

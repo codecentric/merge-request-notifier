@@ -12,15 +12,15 @@ export const AboutUsPage = () => {
 
     return (
         <Box p={2}>
-            <Text fontSize='14px'>
+            <Text fontSize='14px' color='textColor'>
                 This app was build because our team was searching for a tool to see the number of our current open merge requests and make them easily
                 accessible. We didn't found such a tool and so we decided to build one by our own ;-)
             </Text>
 
-            <Text mt={3} fontWeight='bold'>
+            <Text mt={3} fontWeight='bold' color='textColor'>
                 Thanks
             </Text>
-            <Text fontSize='14px'>
+            <Text fontSize='14px' color='textColor'>
                 We want to thank our employers (
                 <a href='#' onClick={openUrl('https://codecentric.de')}>
                     codecentric
@@ -32,10 +32,10 @@ export const AboutUsPage = () => {
                 ) to make it possible to develop this app in our +1 time.
             </Text>
 
-            <Text mt={3} fontWeight='bold'>
+            <Text mt={3} fontWeight='bold' color='textColor'>
                 Issues / Feedback
             </Text>
-            <Text fontSize='14px'>
+            <Text fontSize='14px' color='textColor'>
                 You found an issue or missed some feature? We are very keen about your feedback and appreciate any help. Please{' '}
                 <a href='#' onClick={openUrl('https://github.com/codecentric/merge-request-notifier/issues/new')}>
                     create an issue
@@ -43,7 +43,7 @@ export const AboutUsPage = () => {
                 on GitHub.
             </Text>
 
-            <Text mt={3} textAlign='right'>
+            <Text mt={3} textAlign='right' color='textColor'>
                 <small>Version: {appVersion}</small>
             </Text>
         </Box>

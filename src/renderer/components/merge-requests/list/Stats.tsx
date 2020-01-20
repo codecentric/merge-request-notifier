@@ -40,7 +40,7 @@ export const Stats: React.FunctionComponent<StatsProps> = ({ upVotes, downVotes,
     }
 
     return (
-        <Box p={1} flex='0 0 auto' sx={{ borderRadius: 4, background: 'transparent', color: 'black', border: '1px solid', borderColor: 'gray' }}>
+        <Box p={1} flex='0 0 auto' sx={{ borderRadius: 4, background: 'transparent', color: 'textColor', border: '1px solid', borderColor: 'gray' }}>
             <Flex flex='0 0 auto' flexWrap='nowrap'>
                 {statsToRender.map((content, index) => (
                     <Text fontSize={0} key={index}>

@@ -2,15 +2,27 @@ export const theme = {
     breakpoints: ['40em', '52em', '64em'],
     fontSizes: [10, 12, 14, 16, 24],
     colors: {
-        siteBackground: '#f5f5f5',
-        blue: '#192CFD',
+        // lightBackground: '#515454', // white // #ffffff
+        // defaultBackground: '#383634', // #f5f5f5
+        // siteBackground: '#383634',
+        // gray: '#a7a7aa', // can leave like this
+        // lightgray: '#f6f6ff',
+        defaultBackground: '#555555', // #f5f5f5
+        siteBackground: '#555555',
+        lightBackground: '#676767', // white // #ffffff
+        lightgray: '#848484',
+        gray: '#B3B3B3', // can leave like this
+
+        shadow: '#d2d2da',
+
         black: '#212121',
         blackTinted: '#6d6d66',
+        textColor: '#e8e9e9',
+        textColorTinted: '#c1c5c8',
+
+        blue: '#192CFD',
         primary: '#192CFD',
         primaryDarkened: '#091CED',
-        gray: '#a7a7aa',
-        lightgray: '#f6f6ff',
-        shadow: '#d2d2da',
         green: '#1fad56',
         red: '#FC3D53',
         lightred: '#ffeaea',
@@ -41,8 +53,8 @@ export const theme = {
             height: '2.25rem',
         },
         barGradient: {
-            backgroundColor: 'white',
-            backgroundImage: 'linear-gradient(white, #d2d2da4f)',
+            backgroundColor: 'lightBackground',
+            backgroundImage: 'linear-gradient(lightBackground, #d2d2da4f)',
         },
     },
     text: {
@@ -53,7 +65,7 @@ export const theme = {
     buttons: {
         primary: {
             backgroundColor: 'primary',
-            color: 'white',
+            color: 'lightBackground',
             fontWeight: 'bold',
             fontSize: 1,
             ':hover': {
@@ -70,7 +82,7 @@ export const theme = {
             color: 'black',
             fontSize: 1,
             ':hover': {
-                backgroundColor: 'white',
+                backgroundColor: 'lightBackground',
             },
             ':focus': {
                 textDecoration: 'underline',
@@ -78,7 +90,7 @@ export const theme = {
         },
         danger: {
             backgroundColor: 'red',
-            color: 'white',
+            color: 'lightBackground',
             fontWeight: 'bold',
             fontSize: 1,
         },

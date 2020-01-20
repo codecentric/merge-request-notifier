@@ -84,7 +84,7 @@ export const LoadingIndicator: React.FunctionComponent<LoadingIndicatorProps> = 
                     key={`box-${index}`}
                     as={Circle}
                     sx={{
-                        fill: 'black',
+                        fill: 'textColor',
                         cx: `${DOT_GUTTER + DOT_WIDTH / 2 + (index + 1) * DOT_WIDTH + (index + 1) * DOT_GUTTER}px`,
                         cy: `${HEIGHT / 2 + DOT_HEIGHT / 2}px`,
                         r: `${DOT_WIDTH / 2}px`,
