@@ -22,22 +22,30 @@ export const Header: React.FunctionComponent = () => {
                     <Route path='/config'>
                         <Flex sx={{ position: 'relative' }}>
                             <BackLink />
-                            <Box flex='1 0 auto'>Settings</Box>
+                            <Box flex='1 0 auto'>
+                                <Text color='textColor'>Settings</Text>
+                            </Box>
                         </Flex>
                     </Route>
                     <Route path='/update'>
                         <Flex sx={{ position: 'relative' }}>
                             <BackLink />
-                            <Box flex='1 0 auto'>Update Information</Box>
+                            <Box flex='1 0 auto'>
+                                <Text color='textColor'>Update Information</Text>
+                            </Box>
                         </Flex>
                     </Route>
                     <Route path='/about-us'>
                         <Flex sx={{ position: 'relative' }}>
                             <BackLink />
-                            <Box flex='1 0 auto'>About us</Box>
+                            <Box flex='1 0 auto'>
+                                <Text color='textColor'>About us</Text>
+                            </Box>
                         </Flex>
                     </Route>
-                    <Route>Merge Requests</Route>
+                    <Route>
+                        <Text color='textColor'>Merge Requests</Text>
+                    </Route>
                 </Switch>
             </Text>
         </Box>

@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { isValidHostname } from '../../util/isValidHostname'
 import { shell } from 'electron'
+import { Link } from 'rebass'
 
 interface PersonalAccessTokenInfoProps {
     hostname: string
@@ -18,9 +19,9 @@ export const PersonalAccessTokenInfo: React.FunctionComponent<PersonalAccessToke
         return (
             <span>
                 Create one in your GitLab{' '}
-                <a href='#' onClick={openProfileSettingsLink(hostname)}>
+                <Link href='#' onClick={openProfileSettingsLink(hostname)} color='linkColor'>
                     profile settings
-                </a>
+                </Link>
                 .
                 <br />
                 It requires <strong>API scope</strong>.

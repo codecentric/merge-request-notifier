@@ -5,6 +5,7 @@ import { useConfig } from '../../hooks/config'
 
 interface FormData {
     useNotifications: boolean
+    darkMode: boolean
 }
 
 export const GeneralSettings: React.FunctionComponent = () => {
@@ -12,9 +13,10 @@ export const GeneralSettings: React.FunctionComponent = () => {
 
     const [values, setValues] = React.useState<FormData>({
         useNotifications: config.generalConfig.useNotifications,
+        darkMode: config.generalConfig.darkMode,
     })
 
-    const save = (name: keyof FormData) => async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updateGeneralSettings = (name: keyof FormData) => async (event: React.ChangeEvent<HTMLInputElement>) => {
         const newConfig = { ...values, [name]: event.target.checked }
         setValues(newConfig)
         updateGeneralConfig(newConfig)
@@ -29,7 +31,14 @@ export const GeneralSettings: React.FunctionComponent = () => {
                         id='useNotifications'
                         name='useNotifications'
                         defaultChecked={values.useNotifications}
-                        onChange={save('useNotifications')}
+                        onChange={updateGeneralSettings('useNotifications')}
+                    />
+                    <CheckboxInput
+                        label='Dark mode'
+                        id='darkMode'
+                        name='darkMode'
+                        defaultChecked={values.darkMode}
+                        onChange={updateGeneralSettings('darkMode')}
                     />
                 </form>
             </Box>

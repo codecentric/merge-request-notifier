@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { remote, shell } from 'electron'
-import { Box, Text } from 'rebass'
+import { Box, Link, Text } from 'rebass'
 
 const openUrl = (url: string): React.MouseEventHandler<HTMLAnchorElement> => event => {
     event.preventDefault()
@@ -22,13 +22,13 @@ export const AboutUsPage = () => {
             </Text>
             <Text fontSize='14px' color='textColor'>
                 We want to thank our employers (
-                <a href='#' onClick={openUrl('https://codecentric.de')}>
+                <Link href='#' onClick={openUrl('https://codecentric.de')} color='linkColor'>
                     codecentric
-                </a>{' '}
+                </Link>{' '}
                 and{' '}
-                <a href='#' onClick={openUrl('https://uxi.de')}>
+                <Link href='#' onClick={openUrl('https://uxi.de')} color='linkColor'>
                     UX&I
-                </a>
+                </Link>
                 ) to make it possible to develop this app in our +1 time.
             </Text>
 
@@ -37,9 +37,9 @@ export const AboutUsPage = () => {
             </Text>
             <Text fontSize='14px' color='textColor'>
                 You found an issue or missed some feature? We are very keen about your feedback and appreciate any help. Please{' '}
-                <a href='#' onClick={openUrl('https://github.com/codecentric/merge-request-notifier/issues/new')}>
+                <Link href='#' onClick={openUrl('https://github.com/codecentric/merge-request-notifier/issues/new')} color='linkColor'>
                     create an issue
-                </a>{' '}
+                </Link>{' '}
                 on GitHub.
             </Text>
 

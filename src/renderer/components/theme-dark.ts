@@ -1,4 +1,4 @@
-export const theme = {
+export const darkTheme = {
     breakpoints: ['40em', '52em', '64em'],
     fontSizes: [10, 12, 14, 16, 24],
     colors: {
@@ -13,19 +13,19 @@ export const theme = {
         lightgray: '#848484',
         gray: '#B3B3B3', // can leave like this
 
-        shadow: '#d2d2da',
+        shadow: '#adb0b3', // border color
 
-        black: '#212121',
-        blackTinted: '#6d6d66',
         textColor: '#e8e9e9',
         textColorTinted: '#c1c5c8',
+        linkColor: '#4ea7f5',
 
-        blue: '#192CFD',
-        primary: '#192CFD',
-        primaryDarkened: '#091CED',
+        blue: '#3e93de',
+        primary: '#3e93de',
+        primaryDarkened: '#3e93de',
         green: '#1fad56',
-        red: '#FC3D53',
-        lightred: '#ffeaea',
+        red: '#e67373',
+        // lightred: '#783b3b',
+        lightred: '#806767',
     },
     space: [0, 4, 8, 16, 32, 64, 128, 256],
     fonts: {
@@ -61,6 +61,9 @@ export const theme = {
         uppercase: {
             textTransform: 'uppercase',
         },
+    },
+    a: {
+        color: 'red',
     },
     buttons: {
         primary: {
