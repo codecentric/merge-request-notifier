@@ -16,14 +16,14 @@ const BackLink = () => (
 
 export const Header: React.FunctionComponent = () => {
     return (
-        <Box p={2} variant='barGradient' sx={{ borderBottom: '1px solid', overflow: 'hidden', borderColor: 'shadow' }}>
+        <Box p={2} variant='barGradient' sx={{ borderBottom: '1px solid', overflow: 'hidden', borderColor: 'shadow', color: 'textColor' }}>
             <Text textAlign='center' fontWeight='bold' fontSize={3}>
                 <Switch>
                     <Route path='/config'>
                         <Flex sx={{ position: 'relative' }}>
                             <BackLink />
                             <Box flex='1 0 auto'>
-                                <Text color='textColor'>Settings</Text>
+                                <Text>Settings</Text>
                             </Box>
                         </Flex>
                     </Route>
@@ -31,7 +31,7 @@ export const Header: React.FunctionComponent = () => {
                         <Flex sx={{ position: 'relative' }}>
                             <BackLink />
                             <Box flex='1 0 auto'>
-                                <Text color='textColor'>Update Information</Text>
+                                <Text>Update Information</Text>
                             </Box>
                         </Flex>
                     </Route>
@@ -39,12 +39,12 @@ export const Header: React.FunctionComponent = () => {
                         <Flex sx={{ position: 'relative' }}>
                             <BackLink />
                             <Box flex='1 0 auto'>
-                                <Text color='textColor'>About us</Text>
+                                <Text>About us</Text>
                             </Box>
                         </Flex>
                     </Route>
                     <Route>
-                        <Text color='textColor'>Merge Requests</Text>
+                        <Text>Merge Requests</Text>
                     </Route>
                 </Switch>
             </Text>

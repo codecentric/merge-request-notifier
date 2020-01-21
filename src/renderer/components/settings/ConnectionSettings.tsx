@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { Box, Button, Flex, Heading, Text } from 'rebass'
-import { FormInput } from './FormInput'
 import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
 import { useHistory } from 'react-router'
 import { useBackend } from '../../hooks/merge-requests/backend'
 import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
+import { FormInput } from '../form/FormInput'
 
 type FormErrorData = FormData & { invalidSettings: boolean }
 

@@ -8,8 +8,8 @@ import { SettingsPage } from './settings/SettingsPage'
 import { AboutUsPage } from './about-us/AboutUsPage'
 import { UpdateInfoPage } from './update/UpdateInfoPage'
 import { NewUpdateAlert } from './update/NewUpdateAlert'
-import { lightTheme } from './theme-light'
-import { darkTheme } from './theme-dark'
+import { defaultTheme } from './themes/theme-default'
+import { darkTheme } from './themes/theme-dark'
 import { Wrapper } from './layout/Wrapper'
 import { Header } from './layout/Header'
 import { Main } from './layout/Main'
@@ -19,7 +19,7 @@ import { Footer } from './layout/Footer'
 export const Content: React.FunctionComponent = () => {
     const { config } = useConfig()
 
-    const theme = config.generalConfig.darkMode ? darkTheme : lightTheme
+    const theme = config.generalConfig.darkMode ? darkTheme : defaultTheme
 
     return (
         <ThemeProvider theme={theme}>

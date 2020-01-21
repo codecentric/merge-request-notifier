@@ -40,7 +40,7 @@ export const MergeRequestItem: React.FunctionComponent<MergeRequestItemProps> = 
                 </Box>
             )}
             <Box mr={2} flex='1 1 auto' sx={{}}>
-                <Text color='textColor' fontSize={1} mb={1}>
+                <Text fontSize={1} mb={1}>
                     {title}
                 </Text>
                 <Text sx={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }} fontSize={0} color='gray'>

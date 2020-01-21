@@ -1,31 +1,24 @@
-export const darkTheme = {
+export const defaultTheme = {
     breakpoints: ['40em', '52em', '64em'],
     fontSizes: [10, 12, 14, 16, 24],
     colors: {
-        // lightBackground: '#515454', // white // #ffffff
-        // defaultBackground: '#383634', // #f5f5f5
-        // siteBackground: '#383634',
-        // gray: '#a7a7aa', // can leave like this
-        // lightgray: '#f6f6ff',
-        defaultBackground: '#555555', // #f5f5f5
-        siteBackground: '#555555',
-        lightBackground: '#676767', // white // #ffffff
-        lightgray: '#848484',
-        gray: '#B3B3B3', // can leave like this
+        defaultBackground: '#f5f5f5',
+        siteBackground: '#f5f5f5',
+        lightBackground: '#ffffff',
+        lightgray: '#f6f6ff',
+        gray: '#a7a7aa',
+        shadow: '#d2d2da',
 
-        shadow: '#adb0b3', // border color
+        textColor: '#212121',
+        textColorTinted: '#6d6d66',
+        linkColor: '#0000ee',
 
-        textColor: '#e8e9e9',
-        textColorTinted: '#c1c5c8',
-        linkColor: '#4ea7f5',
-
-        blue: '#3e93de',
-        primary: '#3e93de',
-        primaryDarkened: '#3e93de',
+        blue: '#192CFD',
+        primary: '#192CFD',
+        primaryDarkened: '#091CED',
         green: '#1fad56',
-        red: '#e67373',
-        // lightred: '#783b3b',
-        lightred: '#806767',
+        red: '#FC3D53',
+        lightred: '#ffeaea',
     },
     space: [0, 4, 8, 16, 32, 64, 128, 256],
     fonts: {
@@ -61,9 +54,10 @@ export const darkTheme = {
         uppercase: {
             textTransform: 'uppercase',
         },
-    },
-    a: {
-        color: 'red',
+        primary: {
+            color: 'textColor',
+        },
+        color: 'textColor',
     },
     buttons: {
         primary: {

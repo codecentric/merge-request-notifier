@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Box } from 'rebass'
-import { CheckboxInput } from './CheckboxInput'
 import { useConfig } from '../../hooks/config'
+import { CheckboxInput } from '../form/CheckboxInput'
 
 interface FormData {
     useNotifications: boolean
