@@ -54,10 +54,6 @@ export const defaultTheme = {
         uppercase: {
             textTransform: 'uppercase',
         },
-        primary: {
-            color: 'textColor',
-        },
-        color: 'textColor',
     },
     buttons: {
         primary: {

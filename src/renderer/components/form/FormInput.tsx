@@ -17,7 +17,7 @@ export const FormInput: React.FunctionComponent<FormInputProps> = ({ id, label, 
         </Label>
         <Input fontSize={2} id={id} {...props} sx={{ background: 'lightBackground' }} />
         {(!!error || !!info) && (
-            <Text mt={1} mb={2} fontSize={1} lineHeight={1.4} color={!!error ? 'red' : 'textColor'}>
+            <Text mt={1} mb={2} fontSize={1} lineHeight={1.4} color={!!error ? 'red' : ''}>
                 {error || info}
             </Text>
         )}

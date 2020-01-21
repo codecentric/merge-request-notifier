@@ -18,7 +18,7 @@ export const CheckboxInput: React.FunctionComponent<FormCheckboxProps> = ({ id, 
             <Text p='3.5px'>{label}</Text>
         </Label>
         {(!!error || !!info) && (
-            <Text mt={1} mb={2} fontSize={1} lineHeight={1.4} color={!!error ? 'red' : 'textColor'}>
+            <Text mt={1} mb={2} fontSize={1} lineHeight={1.4} color={!!error ? 'red' : ''}>
                 {error || info}
             </Text>
         )}
