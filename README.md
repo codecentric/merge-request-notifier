@@ -22,14 +22,11 @@ You are able to configure multiple groups.
 
 ## App Updates
 You will be always up to date with our integrated in app updates 🎉 Once there is a new update 
-available you will be notified with a prominent alert above the merge requests. 
+available you will be notified with a prominent alert above the merge requests. On the details page you find the release notes from github. 
 
-<img src="./images/new-update-alert.png" width=500 alt="New Update Alert">
-
-### Release Notes
-On the details page you find the release notes from github.
-
-<img src="./images/update-info.png" width=500 alt="New Update Alert">
+| New Update Alert  | Release Notes |
+| ------------- | ------------- |
+| <img src="./images/new-update-alert.png" width=500 alt="New Update Alert"> | <img src="./images/update-info.png" width=500 alt="Release Notes"> |
 
 ## Installation
 ### From release page
