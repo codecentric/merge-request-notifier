@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { remote } from 'electron'
 
 export interface Config {
     connectionConfig?: ConnectionConfig
@@ -27,7 +28,7 @@ interface ConfigContext {
 const defaultConfig: Config = {
     generalConfig: {
         useNotifications: true,
-        darkMode: false,
+        darkMode: remote.nativeTheme.shouldUseDarkColors,
     },
 }
 

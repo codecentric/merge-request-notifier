@@ -23,25 +23,17 @@ export const GeneralSettings: React.FunctionComponent = () => {
     }
 
     return (
-        <>
-            <Box p={2}>
-                <form autoComplete='off'>
-                    <CheckboxInput
-                        label='Send me a notification for new MRs'
-                        id='useNotifications'
-                        name='useNotifications'
-                        defaultChecked={values.useNotifications}
-                        onChange={updateGeneralSettings('useNotifications')}
-                    />
-                    <CheckboxInput
-                        label='Dark mode'
-                        id='darkMode'
-                        name='darkMode'
-                        defaultChecked={values.darkMode}
-                        onChange={updateGeneralSettings('darkMode')}
-                    />
-                </form>
-            </Box>
-        </>
+        <Box p={2}>
+            <form autoComplete='off'>
+                <CheckboxInput
+                    label='Send me a notification for new MRs'
+                    id='useNotifications'
+                    name='useNotifications'
+                    defaultChecked={values.useNotifications}
+                    onChange={updateGeneralSettings('useNotifications')}
+                />
+                <CheckboxInput label='Dark mode' id='darkMode' name='darkMode' defaultChecked={values.darkMode} onChange={updateGeneralSettings('darkMode')} />
+            </form>
+        </Box>
     )
 }
