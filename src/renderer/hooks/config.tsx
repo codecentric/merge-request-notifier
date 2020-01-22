@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { remote } from 'electron'
 
 export interface Config {
     connectionConfig?: ConnectionConfig
@@ -13,6 +14,7 @@ export interface ConnectionConfig {
 
 export interface GeneralConfig {
     useNotifications: boolean
+    darkMode: boolean
 }
 
 interface ConfigContext {
@@ -26,6 +28,7 @@ interface ConfigContext {
 const defaultConfig: Config = {
     generalConfig: {
         useNotifications: true,
+        darkMode: remote.nativeTheme.shouldUseDarkColors,
     },
 }
 
@@ -46,13 +49,11 @@ const configPreviousVersion = (oldKey: string, newKey: string): Config | null =>
         const config = JSON.parse(localStorageValue)
 
         const newConfig = {
+            ...defaultConfig,
             connectionConfig: {
                 url: config.url,
                 groups: config.group ? [config.group] : config.groups,
                 token: config.token,
-            },
-            generalConfig: {
-                useNotifications: true,
             },
         }
 

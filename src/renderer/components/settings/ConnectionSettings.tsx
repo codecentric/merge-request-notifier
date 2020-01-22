@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { Box, Button, Flex, Heading, Text } from 'rebass'
-import { FormInput } from './FormInput'
 import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
 import { useHistory } from 'react-router'
 import { useBackend } from '../../hooks/merge-requests/backend'
 import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
+import { FormInput } from '../form/FormInput'
 
 type FormErrorData = FormData & { invalidSettings: boolean }
 
@@ -92,7 +92,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
             <Box p={2}>
                 <form autoComplete='off'>
                     {errors.invalidSettings && (
-                        <Text p={1} color='white' bg='red' mb={3}>
+                        <Text p={1} color='lightBackground' bg='red' mb={3}>
                             Could not load your merge requests. Please verify your settings.
                         </Text>
                     )}
