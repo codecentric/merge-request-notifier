@@ -5,7 +5,9 @@
 
 This app shows your merge quests grouped by projects and WIP status. It is accessible from the system tray.
 
-<img src="./images/app.png" width=500 alt="App Screenshot">
+| Light Mode  | Dark Mode |
+| ------------- | ------------- |
+| <img src="./images/app.png" width=500 alt="App Screenshot (Light Mode)"> | <img src="./images/app-dark-mode.png" width=500 alt="App Screenshot (Dark Mode)"> |
 
 ## Notification
 You will receive a desktop notification when a new merge request is created.
