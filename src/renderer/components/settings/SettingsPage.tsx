@@ -4,25 +4,27 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@reach/tabs'
 import { ConnectionSettings } from './ConnectionSettings'
 import { GeneralSettings } from './GeneralSettings'
 import { Text } from 'rebass'
+import { useConfig } from '../../hooks/config'
 
 export const SettingsPage: React.FunctionComponent = () => {
+    const { config } = useConfig()
     return (
         <>
-            <Tabs>
+            <Tabs defaultIndex={config.connectionConfig ? 0 : 1}>
                 <TabList>
                     <Tab>
-                        <Text>Connection</Text>
+                        <Text>General</Text>
                     </Tab>
                     <Tab>
-                        <Text>General</Text>
+                        <Text>Connection</Text>
                     </Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <ConnectionSettings />
+                        <GeneralSettings />
                     </TabPanel>
                     <TabPanel>
-                        <GeneralSettings />
+                        <ConnectionSettings />
                     </TabPanel>
                 </TabPanels>
             </Tabs>
