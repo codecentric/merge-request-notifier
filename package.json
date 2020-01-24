@@ -127,7 +127,7 @@
     "rebass": "^4.0.5",
     "sass-loader": "^8.0.0",
     "source-map-loader": "^0.2.4",
-    "spectron": "^9.0.0",
+    "spectron": "^10.0.0",
     "style-loader": "^1.0.0",
     "superagent": "^5.1.0",
     "tslint": "^5.16.0",
