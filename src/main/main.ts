@@ -3,6 +3,7 @@ import { autoUpdater } from 'electron-updater'
 import * as log from 'electron-log'
 import * as path from 'path'
 import * as url from 'url'
+import * as positioner from 'electron-traywindow-positioner'
 
 import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 
@@ -35,20 +36,6 @@ const createTray = () => {
 
 const toggleWindow = () => {
     win && win.isVisible() ? hideWindow() : showWindow()
-}
-
-const getWindowPosition = () => {
-    if (!win || !tray) {
-        return undefined
-    }
-
-    const windowBounds = win.getBounds()
-    const trayBounds = tray.getBounds()
-
-    const x = Math.round(trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2)
-    const y = Math.round(trayBounds.y + trayBounds.height + 4)
-
-    return { x, y }
 }
 
 const setup = async () => {
@@ -84,9 +71,7 @@ const hideWindow = () => {
 }
 
 const showWindow = () => {
-    const position = getWindowPosition()
-
-    if (position && win) {
+    if (win) {
         if (app.dock) {
             app.dock.show()
         }
@@ -94,7 +79,9 @@ const showWindow = () => {
         // We have to wait a bit because the dock.show() is triggering a "window.hide" event
         // otherwise the app would be closed immediately
         setTimeout(() => {
-            win!.setPosition(position.x, position.y, false)
+            if (tray) {
+                positioner.position(win, tray.getBounds(), { x: 'center', y: 'down' })
+            }
             win!.show()
         }, 200)
     }
