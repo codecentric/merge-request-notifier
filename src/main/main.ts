@@ -252,8 +252,10 @@ ipcMain.on('close-application', () => {
     app.quit()
 })
 
-systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
-    if (tray) {
-        tray.setImage(getTrayImage())
-    }
-})
+if (process.platform === 'darwin') {
+    systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
+        if (tray) {
+            tray.setImage(getTrayImage())
+        }
+    })
+}
