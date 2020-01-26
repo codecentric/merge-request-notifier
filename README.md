@@ -28,6 +28,10 @@ available you will be notified with a prominent alert above the merge requests. 
 | ------------- | ------------- |
 | <img src="./images/new-update-alert.png" width=500 alt="New Update Alert"> | <img src="./images/update-info.png" width=500 alt="Release Notes"> |
 
+## Troubleshooting
+### The tray icon is black even in dark mode
+The tray icon color currently does not depend on your internal dark mode settings, but on the OS theme as detected via the Chromium engine. If the detection does not work, you may force dark mode on startup via `merge-request-notifier --force-dark-mode`.
+
 ## Installation
 ### From release page
 The macOS installer is uploaded at the [releases page](https://github.com/codecentric/merge-request-notifier/releases).
