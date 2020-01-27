@@ -99,7 +99,7 @@
     "babel-loader": "^8.0.6",
     "compare-versions": "^3.5.1",
     "copy-webpack-plugin": "^5.0.4",
-    "cross-env": "^6.0.0",
+    "cross-env": "^7.0.0",
     "css-loader": "^3.2.0",
     "electron": "^7.1.8",
     "electron-builder": "^22.1.0",
