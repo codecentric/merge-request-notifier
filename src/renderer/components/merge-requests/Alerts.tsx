@@ -13,9 +13,10 @@ export const NoMergeRequests: React.FunctionComponent = () => (
 )
 
 export const CouldNotLoadMergeRequests: React.FunctionComponent = () => (
-    <Box p={3}>
+    <Box p={3} style={{ textAlign: 'center' }}>
+        <ErrorOutlineIcon style={{ fontSize: '72px' }} color='error' fontSize='inherit' />
         <Heading my={2} fontSize={4}>
-            <ErrorOutlineIcon color='error' /> Something went wrong
+            Something went wrong
         </Heading>
         <Text>Could not load your merge requests</Text>
     </Box>
