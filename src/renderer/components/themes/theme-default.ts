@@ -12,6 +12,7 @@ export const defaultTheme = {
         textColor: '#212121',
         textColorTinted: '#6d6d66',
         linkColor: '#0000ee',
+        buttonText: '#000',
 
         blue: '#192CFD',
         primary: '#192CFD',
@@ -58,7 +59,7 @@ export const defaultTheme = {
     buttons: {
         primary: {
             backgroundColor: 'primary',
-            color: 'lightBackground',
+            color: 'white',
             fontWeight: 'bold',
             fontSize: 1,
             ':hover': {
@@ -72,7 +73,7 @@ export const defaultTheme = {
             backgroundColor: 'lightgray',
             border: '1px solid',
             borderColor: 'gray',
-            color: 'black',
+            color: 'buttonText',
             fontSize: 1,
             ':hover': {
                 backgroundColor: 'lightBackground',
@@ -83,7 +84,7 @@ export const defaultTheme = {
         },
         danger: {
             backgroundColor: 'red',
-            color: 'lightBackground',
+            color: 'buttonText',
             fontWeight: 'bold',
             fontSize: 1,
         },
