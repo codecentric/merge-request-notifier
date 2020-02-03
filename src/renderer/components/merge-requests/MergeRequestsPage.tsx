@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as moment from 'moment'
-import { ipcRenderer, shell } from 'electron'
+import { shell } from 'electron'
 
 import { MergeRequestGroup } from './list/MergeRequestGroup'
 import { MergeRequestItem } from './list/MergeRequestItem'
@@ -44,13 +44,6 @@ export const MergeRequestsPage: React.FunctionComponent = () => {
     if (groupedMergeRequests.length === 0) {
         return <Alerts.NoMergeRequests />
     }
-
-    const numberOfOpenMergeRequest = groupedMergeRequests.reduce(
-        (total, entry) => total + entry.mergeRequests.filter(mergeRequest => !mergeRequest.work_in_progress).length,
-        0,
-    )
-
-    ipcRenderer.send('update-open-merge-requests', numberOfOpenMergeRequest)
 
     return (
         <>
