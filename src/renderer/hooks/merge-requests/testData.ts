@@ -55,7 +55,7 @@ const createMr = (title: string, projectId: number): MergeRequest => {
             resolved: randomArrayEntry([1, 2, 3]),
         },
         web_url: `https://www.google.de?q=mr-${mrId}`,
-        pipeline_status: randomArrayEntry(['running', 'pending', 'success', 'failed']),
+        pipeline_status: randomArrayEntry([undefined, 'running', 'pending', 'success', 'failed']),
     }
 }
 
