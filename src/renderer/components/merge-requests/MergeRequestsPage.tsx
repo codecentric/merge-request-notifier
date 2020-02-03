@@ -14,9 +14,9 @@ const openMergeRequest = (url: string) => () => {
 }
 
 const renderMergeRequest = (mergeRequest: MergeRequest) => {
-    const time = moment(mergeRequest.updated_at).format('DD.MM. HH:mm')
+    const age = moment(mergeRequest.updated_at).fromNow()
     const assignee = mergeRequest.assignee ? ` — ${mergeRequest.assignee.name}` : ''
-    const secondaryText = `${time} ${assignee}`
+    const secondaryText = `${age} ${assignee}`
     const commentCount = mergeRequest.user_notes.all ? `${mergeRequest.user_notes.resolved}/${mergeRequest.user_notes.all}` : undefined
 
     return (
