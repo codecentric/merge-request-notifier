@@ -1,5 +1,6 @@
 import { MergeRequest, MergeRequestWithProject, User } from './types'
 import { Data } from './loadData'
+import * as moment from 'moment'
 
 let count = 0
 
@@ -28,12 +29,16 @@ let mrId = 0
 
 const createMr = (title: string, projectId: number): MergeRequest => {
     mrId++
+    const timestamp = moment()
+        .subtract(1, 'hours')
+        .add(mrId * 4 + 10, 'minutes')
+        .format('YYYY-MM-DD HH:mm:ss')
 
     return {
         id: mrId,
         iid: mrId,
-        created_at: '2019-11-25 11:00:00',
-        updated_at: '2019-11-25 11:00:00',
+        created_at: timestamp,
+        updated_at: timestamp,
         project_id: 1,
         title,
         state: 'opened',
