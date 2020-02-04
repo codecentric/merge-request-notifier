@@ -19,7 +19,7 @@ const svgAnimation = css`
 `
 
 const Svg = styled.svg<{ animate?: boolean }>`
-    width: 16px;
+    width: 10px;
     height: 10px;
     vertical-align: middle;
 
@@ -39,7 +39,7 @@ export const PipelineStatusIndicator: React.FunctionComponent<PipelineStatusIndi
         <Box
             as='circle'
             sx={{
-                cx: '8px',
+                cx: '5px',
                 cy: '5px',
                 r: '4px',
                 ...colorFromStatusMap[status],

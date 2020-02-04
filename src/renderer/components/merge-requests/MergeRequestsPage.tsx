@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as moment from 'moment'
-import { ipcRenderer, shell } from 'electron'
+import { shell } from 'electron'
 
 import { MergeRequestGroup } from './list/MergeRequestGroup'
 import { MergeRequestItem } from './list/MergeRequestItem'
@@ -14,9 +14,9 @@ const openMergeRequest = (url: string) => () => {
 }
 
 const renderMergeRequest = (mergeRequest: MergeRequest) => {
-    const time = moment(mergeRequest.updated_at).format('DD.MM. HH:mm')
+    const age = moment(mergeRequest.updated_at).fromNow()
     const assignee = mergeRequest.assignee ? ` — ${mergeRequest.assignee.name}` : ''
-    const secondaryText = `${time} ${assignee}`
+    const secondaryText = `${age} ${assignee}`
     const commentCount = mergeRequest.user_notes.all ? `${mergeRequest.user_notes.resolved}/${mergeRequest.user_notes.all}` : undefined
 
     return (
@@ -44,13 +44,6 @@ export const MergeRequestsPage: React.FunctionComponent = () => {
     if (groupedMergeRequests.length === 0) {
         return <Alerts.NoMergeRequests />
     }
-
-    const numberOfOpenMergeRequest = groupedMergeRequests.reduce(
-        (total, entry) => total + entry.mergeRequests.filter(mergeRequest => !mergeRequest.work_in_progress).length,
-        0,
-    )
-
-    ipcRenderer.send('update-open-merge-requests', numberOfOpenMergeRequest)
 
     return (
         <>
