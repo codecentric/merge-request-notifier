@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Config, ConnectionConfig, useConfig } from '../config'
 import { loadData, loadGroups } from './loadData'
 import { GroupedMergeRequest, MergeRequestWithProject } from './types'
+import { ipcRenderer } from 'electron'
 
 export interface BackendContext {
     isLoading: boolean
@@ -37,6 +38,9 @@ export const BackendProvider = ({ ...props }) => {
                 setGroupedMergeRequests(data.groupedMergeRequests)
                 setMergeRequestWithProjects(data.mergeRequestWithProjects)
                 setLoadErrors(0)
+
+                const numberOfOpenMergeRequest = data.mergeRequestWithProjects.reduce((total, entry) => total + (entry.work_in_progress ? 0 : 1), 0)
+                ipcRenderer.send('update-open-merge-requests', numberOfOpenMergeRequest)
             }
         } catch (error) {
             console.error(error)
