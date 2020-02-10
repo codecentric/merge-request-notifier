@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { shell } from 'electron'
 
 import { useBackend } from '../hooks/merge-requests/backend'
 import { MergeRequestWithProject } from '../hooks/merge-requests/types'
@@ -16,8 +17,17 @@ export const NotificationsEmiter = () => {
             newMergeRequests.forEach(newMergeRequest => {
                 const body = newMergeRequest.title
                 const icon = newMergeRequest.author.avatar_url
+                const data = {
+                    url: newMergeRequest.web_url,
+                }
 
-                new Notification('New Merge Request', { body, icon })
+                const notification = new Notification('New Merge Request', { body, icon, data })
+                notification.onclick = event => {
+                    const url = (event?.currentTarget as any)?.data?.url
+                    if (url) {
+                        shell.openExternal(url)
+                    }
+                }
             })
         }
 
