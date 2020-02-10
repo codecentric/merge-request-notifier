@@ -10,6 +10,7 @@ export interface ConnectionConfig {
     url: string
     groups: string[]
     token: string
+    projects?: { [group: string]: string[] }
 }
 
 export interface GeneralConfig {

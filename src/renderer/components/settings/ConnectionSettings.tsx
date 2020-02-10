@@ -6,36 +6,59 @@ import { useBackend } from '../../hooks/merge-requests/backend'
 import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
 import { FormInput } from '../form/FormInput'
+import { Label } from '@rebass/forms'
+import { IndentedFormInput } from '../form/IndentedFormInput'
 
 type FormErrorData = FormData & { invalidSettings: boolean }
 
 interface FormData {
     url: string
     groups: string
+    projects: { [group: string]: string }
     token: string
 }
 
+const generateSplittedGroups = (groups: string) => {
+    return groups
+        .split(',')
+        .map(group => group.trim())
+        .filter(group => !!group)
+}
+
+// tslint:disable-next-line:cyclomatic-complexity
 export const ConnectionSettings: React.FunctionComponent = () => {
     const history = useHistory()
     const { testConnectionConfig } = useBackend()
     const { config, updateConnectionConfig, removeConfig } = useConfig()
 
     const [confirmDelete, setConfirmDelete] = React.useState(false)
+    const [splittedGroups, setSplittedGroups] = React.useState<string[]>(config?.connectionConfig?.groups || [])
     const [submitting, setSubmitting] = React.useState(false)
     const [errors, setErrors] = React.useState<FormErrorData>({
         url: '',
         token: '',
         groups: '',
+        projects: {},
         invalidSettings: false,
     })
     const [values, setValues] = React.useState<FormData>({
         url: config.connectionConfig ? config.connectionConfig.url : '',
         token: config.connectionConfig ? config.connectionConfig.token : '',
         groups: config.connectionConfig ? (config.connectionConfig.groups || []).join(', ') : '',
+        projects: {}, // TODO
     })
 
     const setError = (name: keyof FormErrorData, errorMessage: string | boolean) => {
         setErrors({ ...errors, [name]: errorMessage })
+    }
+
+    const splitGroupNames = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSplittedGroups(generateSplittedGroups(values.groups))
+    }
+
+    const handleProjectsChange = (group: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log('handleProjectsChange', group, values)
+        setValues({ ...values, projects: { ...values.projects, [group]: event.target.value } })
     }
 
     const handleChange = (name: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,13 +71,13 @@ export const ConnectionSettings: React.FunctionComponent = () => {
 
     const remove = async () => {
         removeConfig()
-        setErrors({ url: '', token: '', groups: '', invalidSettings: false })
-        setValues({ url: '', token: '', groups: '' })
+        setErrors({ url: '', token: '', groups: '', projects: {}, invalidSettings: false })
+        setValues({ url: '', token: '', groups: '', projects: {} })
     }
 
     const save = async () => {
         setSubmitting(true)
-        setErrors({ url: '', token: '', groups: '', invalidSettings: false })
+        setErrors({ url: '', token: '', groups: '', projects: {}, invalidSettings: false })
 
         if (!values.url) {
             setError('url', 'Please enter your GitLab URL.')
@@ -67,10 +90,12 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         }
 
         if (values.url && values.token && values.groups) {
+            console.log('projects', values.projects)
+
             const newConnectionConfig = {
                 url: values.url,
                 token: values.token,
-                groups: values.groups.split(',').map(group => group.trim()),
+                groups: generateSplittedGroups(values.groups),
             }
 
             const testResult = await testConnectionConfig(newConnectionConfig)
@@ -130,6 +155,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         placeholder='my-first-group, another-group'
                         value={values.groups}
                         onChange={handleChange('groups')}
+                        onBlur={splitGroupNames}
                         disabled={submitting}
                         error={errors.groups}
                         info={
@@ -145,6 +171,35 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         }
                         required
                     />
+
+                    <Label fontWeight='bold' fontSize={1} mb={1}>
+                        Projects (optional)
+                    </Label>
+                    <Text mt={1} mb={2} fontSize={1} lineHeight={1.4}>
+                        <span>
+                            You can filter the projects in your groups here.
+                            <br />
+                            Separate multiple projects with a comma.
+                        </span>
+                    </Text>
+
+                    {splittedGroups.map(splittedGroup => {
+                        const key = `projects-${splittedGroup}`
+
+                        return (
+                            <IndentedFormInput
+                                label={`Projects for Group "${splittedGroup}"`}
+                                id={key}
+                                key={key}
+                                name={key}
+                                type='text'
+                                placeholder='my-awesome-project, another-project'
+                                value={values.projects[splittedGroup] || ''}
+                                onChange={handleProjectsChange(splittedGroup)}
+                                disabled={submitting}
+                            />
+                        )
+                    })}
 
                     <Flex>
                         {!!config && (
