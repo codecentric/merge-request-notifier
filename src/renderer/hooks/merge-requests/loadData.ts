@@ -78,18 +78,42 @@ export const loadData = async (connectionConfig: ConnectionConfig): Promise<Data
     }
 }
 
-const loadMergeRequests = async (connectionConfig: ConnectionConfig): Promise<MergeRequest[]> => {
+async function loadMergeRequestsFromProjects(connectionConfig: ConnectionConfig, group: string, projects: string[]): Promise<MergeRequest[]> {
     return ([] as MergeRequest[]).concat(
         ...(await Promise.all(
-            connectionConfig.groups.map(async group => {
-                const apiUrl = `${connectionConfig.url}/api/v4/groups/${group}/merge_requests`
+            projects.map(project => {
+                const apiUrl = `${connectionConfig.url}/api/v4/projects/${encodeURIComponent(`${group}/${project}`)}/merge_requests`
 
-                const mergeRequests = await request
+                return request
                     .get(apiUrl)
                     .set('Private-Token', connectionConfig.token)
                     .query({ state: 'opened' })
                     .timeout(4000)
                     .then(response => response.body as MergeRequest[])
+            }),
+        )),
+    )
+}
+
+async function loadMergeRequestsFromGroup(connectionConfig: ConnectionConfig, group: string): Promise<MergeRequest[]> {
+    const apiUrl = `${connectionConfig.url}/api/v4/groups/${group}/merge_requests`
+
+    return request
+        .get(apiUrl)
+        .set('Private-Token', connectionConfig.token)
+        .query({ state: 'opened' })
+        .timeout(4000)
+        .then(response => response.body as MergeRequest[])
+}
+
+const loadMergeRequests = async (connectionConfig: ConnectionConfig): Promise<MergeRequest[]> => {
+    return ([] as MergeRequest[]).concat(
+        ...(await Promise.all(
+            connectionConfig.groups.map(async group => {
+                const mergeRequests =
+                    connectionConfig.projects && connectionConfig.projects[group]?.length > 0
+                        ? await loadMergeRequestsFromProjects(connectionConfig, group, connectionConfig.projects[group])
+                        : await loadMergeRequestsFromGroup(connectionConfig, group)
 
                 return Promise.all(
                     mergeRequests.map(async mergeRequest => {

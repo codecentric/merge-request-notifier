@@ -6,11 +6,15 @@ export interface Config {
     generalConfig: GeneralConfig
 }
 
+export interface ProjectsConfig {
+    [group: string]: string[]
+}
+
 export interface ConnectionConfig {
     url: string
     groups: string[]
     token: string
-    projects?: { [group: string]: string[] }
+    projects?: ProjectsConfig
 }
 
 export interface GeneralConfig {
