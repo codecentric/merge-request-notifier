@@ -8,10 +8,12 @@ import { useConfig } from '../../hooks/config'
 
 export const SettingsPage: React.FunctionComponent = () => {
     const { config } = useConfig()
+    const backgroundColor = config.generalConfig.darkMode ? '#000' : '#e8e8e8'
+
     return (
         <>
             <Tabs defaultIndex={config.connectionConfig ? 0 : 1}>
-                <TabList>
+                <TabList style={{ position: 'sticky', top: 0, backgroundColor, borderBottom: '1px solid #a9a9a9' }}>
                     <Tab>
                         <Text>General</Text>
                     </Tab>

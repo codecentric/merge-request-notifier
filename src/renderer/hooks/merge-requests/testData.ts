@@ -96,6 +96,24 @@ const testData = (): Data => {
                 createMr('Fix Bug: Internet Explorer is not showning the SVGs icons properly', 2),
             ],
         },
+        {
+            project: {
+                id: 3,
+                name: 'Another Project',
+                name_with_namespace: 'codecentric / Another Project',
+            },
+            mergeRequests: [
+                createMr('1. Merge Request', 3),
+                createMr('2. Merge Request', 3),
+                createMr('3. Merge Request', 3),
+                createMr('4. Merge Request', 3),
+                createMr('5. Merge Request', 3),
+                createMr('6. Merge Request', 3),
+                createMr('7. Merge Request', 3),
+                createMr('8. Merge Request', 3),
+                createMr('9. Merge Request', 3),
+            ],
+        },
     ]
 
     if (count % 2 === 0) {
