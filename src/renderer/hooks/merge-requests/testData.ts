@@ -27,7 +27,7 @@ const users: User[] = [
 
 let mrId = 0
 
-const createMr = (title: string, projectId: number): MergeRequest => {
+const createMr = (title: string, projectId: number, wip = false): MergeRequest => {
     mrId++
     const timestamp = moment()
         .subtract(1, 'hours')
@@ -49,7 +49,7 @@ const createMr = (title: string, projectId: number): MergeRequest => {
         author: randomArrayEntry(users),
         assignee: randomArrayEntry(users),
         source_project_id: projectId,
-        work_in_progress: false,
+        work_in_progress: wip,
         user_notes: {
             all: randomArrayEntry([3, 5]),
             resolved: randomArrayEntry([1, 2, 3]),
@@ -119,11 +119,11 @@ const testData = (): Data => {
     if (count % 2 === 0) {
         groupedMergeRequests.push({
             project: {
-                id: 3,
+                id: 4,
                 name: 'Some other cool project',
                 name_with_namespace: 'codecentric / Some other cool project',
             },
-            mergeRequests: [createMr('Support Emojis 🚀', 3)],
+            mergeRequests: [createMr('Support Emojis 🚀', 4)],
         })
     }
 

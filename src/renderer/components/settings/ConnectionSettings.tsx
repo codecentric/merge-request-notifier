@@ -75,7 +75,6 @@ export const ConnectionSettings: React.FunctionComponent = () => {
     }
 
     const handleProjectsChange = (group: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('handleProjectsChange', group, values)
         setValues({ ...values, projects: { ...values.projects, [group]: event.target.value } })
     }
 
@@ -108,8 +107,6 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         }
 
         if (values.url && values.token && values.groups) {
-            console.log('projects', values.projects)
-
             const projects = Object.keys(values.projects).reduce((previousValue, current) => {
                 previousValue[current] = splitStringByComma(values.projects[current])
 

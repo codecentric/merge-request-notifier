@@ -19,13 +19,13 @@ export interface ConnectionConfig {
 
 export interface GeneralConfig {
     useNotifications: boolean
+    disableWipNotifications: boolean
     darkMode: boolean
 }
 
 interface ConfigContext {
     config: Config
     removeConfig: () => void
-    updateConfig: (newConfig: Config) => void
     updateConnectionConfig: (newConnectionConfig: ConnectionConfig) => void
     updateGeneralConfig: (newGeneralConfig: GeneralConfig) => void
 }
@@ -33,6 +33,7 @@ interface ConfigContext {
 const defaultConfig: Config = {
     generalConfig: {
         useNotifications: true,
+        disableWipNotifications: true,
         darkMode: remote.nativeTheme.shouldUseDarkColors,
     },
 }
@@ -70,13 +71,30 @@ const configPreviousVersion = (oldKey: string, newKey: string): Config | null =>
     return null
 }
 
-const configFromPreviousVersionOrDefault = (): Config | null => {
+const configFromPreviousVersionOrDefault = (): Config => {
     return configPreviousVersion('config', 'config.v3') || configPreviousVersion('config.v2', 'config.v3') || defaultConfig
 }
 
-export const ConfigProvider = ({ ...props }) => {
+const loadConfig = (): Config => {
     const localStorageValue = window.localStorage.getItem('config.v3')
-    const [config, setConfig] = React.useState<Config>(localStorageValue ? JSON.parse(localStorageValue) : configFromPreviousVersionOrDefault())
+
+    if (localStorageValue) {
+        const savedConfig = JSON.parse(localStorageValue)
+
+        return {
+            connectionConfig: savedConfig.connectionConfig,
+            generalConfig: {
+                ...defaultConfig.generalConfig,
+                ...savedConfig.generalConfig,
+            },
+        }
+    }
+
+    return configFromPreviousVersionOrDefault()
+}
+
+export const ConfigProvider = ({ ...props }) => {
+    const [config, setConfig] = React.useState<Config>(loadConfig())
 
     const removeConfig = () => {
         setConfig(defaultConfig)
@@ -104,5 +122,5 @@ export const ConfigProvider = ({ ...props }) => {
         updateConfig(newConfig)
     }
 
-    return <Context.Provider value={{ config, updateConfig, removeConfig, updateConnectionConfig, updateGeneralConfig }} {...props} />
+    return <Context.Provider value={{ config, removeConfig, updateConnectionConfig, updateGeneralConfig }} {...props} />
 }
