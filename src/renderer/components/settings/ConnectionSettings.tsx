@@ -8,7 +8,6 @@ import { useBackend } from '../../hooks/merge-requests/backend'
 import { ProjectsConfig, useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
 import { FormInput } from '../form/FormInput'
-import { IndentedFormInput } from '../form/IndentedFormInput'
 
 interface FormErrorData {
     url: string
@@ -213,11 +212,12 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         const key = `projects-${splittedGroup}`
 
                         return (
-                            <IndentedFormInput
+                            <FormInput
                                 label={`Projects for Group "${splittedGroup}"`}
                                 id={key}
                                 key={key}
                                 name={key}
+                                indented={3}
                                 type='text'
                                 placeholder='my-awesome-project, another-project'
                                 value={values.projects[splittedGroup] || ''}
