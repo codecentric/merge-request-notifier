@@ -1,26 +1,56 @@
 import * as React from 'react'
-import { Box, Button, Flex, Heading, Text } from 'rebass'
-import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
 import { useHistory } from 'react-router'
+import { Box, Button, Flex, Heading, Text } from 'rebass'
+import { Label } from '@rebass/forms'
+
+import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
 import { useBackend } from '../../hooks/merge-requests/backend'
-import { useConfig } from '../../hooks/config'
+import { ProjectsConfig, useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
 import { FormInput } from '../form/FormInput'
 
-type FormErrorData = FormData & { invalidSettings: boolean }
-
-interface FormData {
+interface FormErrorData {
     url: string
     groups: string
+    invalidSettings: boolean
     token: string
 }
 
+interface ProjectsFormData {
+    [group: string]: string
+}
+interface FormData {
+    url: string
+    groups: string
+    projects: ProjectsFormData
+    token: string
+}
+
+const splitStringByComma = (groups: string) => {
+    return groups
+        .split(',')
+        .map(group => group.trim())
+        .filter(group => !!group)
+}
+
+const projectsFromConfig = (projectsConfig?: ProjectsConfig): ProjectsFormData => {
+    return projectsConfig
+        ? Object.keys(projectsConfig).reduce((previousValue, current) => {
+              previousValue[current] = projectsConfig[current].join(', ')
+
+              return previousValue
+          }, {} as ProjectsFormData)
+        : {}
+}
+
+// tslint:disable-next-line:cyclomatic-complexity
 export const ConnectionSettings: React.FunctionComponent = () => {
     const history = useHistory()
     const { testConnectionConfig } = useBackend()
     const { config, updateConnectionConfig, removeConfig } = useConfig()
 
     const [confirmDelete, setConfirmDelete] = React.useState(false)
+    const [splittedGroups, setSplittedGroups] = React.useState<string[]>(config?.connectionConfig?.groups || [])
     const [submitting, setSubmitting] = React.useState(false)
     const [errors, setErrors] = React.useState<FormErrorData>({
         url: '',
@@ -28,14 +58,24 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         groups: '',
         invalidSettings: false,
     })
+
     const [values, setValues] = React.useState<FormData>({
-        url: config.connectionConfig ? config.connectionConfig.url : '',
-        token: config.connectionConfig ? config.connectionConfig.token : '',
-        groups: config.connectionConfig ? (config.connectionConfig.groups || []).join(', ') : '',
+        url: config.connectionConfig?.url || '',
+        token: config.connectionConfig?.token || '',
+        groups: (config.connectionConfig?.groups || []).join(', '),
+        projects: projectsFromConfig(config.connectionConfig?.projects),
     })
 
     const setError = (name: keyof FormErrorData, errorMessage: string | boolean) => {
         setErrors({ ...errors, [name]: errorMessage })
+    }
+
+    const splitGroupNames = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSplittedGroups(splitStringByComma(values.groups))
+    }
+
+    const handleProjectsChange = (group: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        setValues({ ...values, projects: { ...values.projects, [group]: event.target.value } })
     }
 
     const handleChange = (name: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +89,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
     const remove = async () => {
         removeConfig()
         setErrors({ url: '', token: '', groups: '', invalidSettings: false })
-        setValues({ url: '', token: '', groups: '' })
+        setValues({ url: '', token: '', groups: '', projects: {} })
     }
 
     const save = async () => {
@@ -67,10 +107,16 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         }
 
         if (values.url && values.token && values.groups) {
+            const projects = Object.keys(values.projects).reduce((previousValue, current) => {
+                previousValue[current] = splitStringByComma(values.projects[current])
+
+                return previousValue
+            }, {} as ProjectsConfig)
             const newConnectionConfig = {
                 url: values.url,
                 token: values.token,
-                groups: values.groups.split(',').map(group => group.trim()),
+                groups: splitStringByComma(values.groups),
+                projects,
             }
 
             const testResult = await testConnectionConfig(newConnectionConfig)
@@ -130,6 +176,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         placeholder='my-first-group, another-group'
                         value={values.groups}
                         onChange={handleChange('groups')}
+                        onBlur={splitGroupNames}
                         disabled={submitting}
                         error={errors.groups}
                         info={
@@ -145,6 +192,37 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         }
                         required
                     />
+
+                    <Label fontWeight='bold' fontSize={1} mb={1}>
+                        Filter Projects (optional)
+                    </Label>
+                    <Text mt={1} mb={2} fontSize={1} lineHeight={1.4}>
+                        <span>
+                            By default you will see all merge requests of the given groups. If you are only interested in a few projects you can define them
+                            here.
+                            <br />
+                            Separate multiple projects with a comma.
+                        </span>
+                    </Text>
+
+                    {splittedGroups.map(splittedGroup => {
+                        const key = `projects-${splittedGroup}`
+
+                        return (
+                            <FormInput
+                                label={`Projects for Group "${splittedGroup}"`}
+                                id={key}
+                                key={key}
+                                name={key}
+                                indented={3}
+                                type='text'
+                                placeholder='my-awesome-project, another-project'
+                                value={values.projects[splittedGroup] || ''}
+                                onChange={handleProjectsChange(splittedGroup)}
+                                disabled={submitting}
+                            />
+                        )
+                    })}
 
                     <Flex>
                         {!!config && (
@@ -163,7 +241,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                             </Button>
                         )}
                         <Button mt={2} ml={1} sx={{ display: 'block', width: '100%' }} variant='primary' aria-label='add' onClick={save} disabled={submitting}>
-                            Save
+                            {submitting ? 'Testing and Saving...' : 'Save'}
                         </Button>
                     </Flex>
                 </form>

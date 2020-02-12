@@ -5,6 +5,7 @@ import { CheckboxInput } from '../form/CheckboxInput'
 
 interface FormData {
     useNotifications: boolean
+    disableWipNotifications: boolean
     darkMode: boolean
 }
 
@@ -12,8 +13,7 @@ export const GeneralSettings: React.FunctionComponent = () => {
     const { config, updateGeneralConfig } = useConfig()
 
     const [values, setValues] = React.useState<FormData>({
-        useNotifications: config.generalConfig.useNotifications,
-        darkMode: config.generalConfig.darkMode,
+        ...config.generalConfig,
     })
 
     const updateGeneralSettings = (name: keyof FormData) => async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,12 +26,22 @@ export const GeneralSettings: React.FunctionComponent = () => {
         <Box p={2}>
             <form autoComplete='off'>
                 <CheckboxInput
-                    label='Send me a notification for new MRs'
+                    label='Notify about new merge requests'
                     id='useNotifications'
                     name='useNotifications'
                     defaultChecked={values.useNotifications}
                     onChange={updateGeneralSettings('useNotifications')}
                 />
+                {values.useNotifications && (
+                    <CheckboxInput
+                        label='Ignore WIP merge requests'
+                        id='ignoreWip'
+                        name='ignoreWip'
+                        indented={3}
+                        defaultChecked={values.disableWipNotifications}
+                        onChange={updateGeneralSettings('disableWipNotifications')}
+                    />
+                )}
                 <CheckboxInput label='Dark mode' id='darkMode' name='darkMode' defaultChecked={values.darkMode} onChange={updateGeneralSettings('darkMode')} />
             </form>
         </Box>

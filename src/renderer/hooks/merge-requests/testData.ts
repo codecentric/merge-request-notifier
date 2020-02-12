@@ -27,7 +27,7 @@ const users: User[] = [
 
 let mrId = 0
 
-const createMr = (title: string, projectId: number): MergeRequest => {
+const createMr = (title: string, projectId: number, wip = false): MergeRequest => {
     mrId++
     const timestamp = moment()
         .subtract(1, 'hours')
@@ -49,7 +49,7 @@ const createMr = (title: string, projectId: number): MergeRequest => {
         author: randomArrayEntry(users),
         assignee: randomArrayEntry(users),
         source_project_id: projectId,
-        work_in_progress: false,
+        work_in_progress: wip,
         user_notes: {
             all: randomArrayEntry([3, 5]),
             resolved: randomArrayEntry([1, 2, 3]),
@@ -96,16 +96,34 @@ const testData = (): Data => {
                 createMr('Fix Bug: Internet Explorer is not showning the SVGs icons properly', 2),
             ],
         },
+        {
+            project: {
+                id: 3,
+                name: 'Another Project',
+                name_with_namespace: 'codecentric / Another Project',
+            },
+            mergeRequests: [
+                createMr('1. Merge Request', 3),
+                createMr('2. Merge Request', 3),
+                createMr('3. Merge Request', 3),
+                createMr('4. Merge Request', 3),
+                createMr('5. Merge Request', 3),
+                createMr('6. Merge Request', 3),
+                createMr('7. Merge Request', 3),
+                createMr('8. Merge Request', 3),
+                createMr('9. Merge Request', 3),
+            ],
+        },
     ]
 
     if (count % 2 === 0) {
         groupedMergeRequests.push({
             project: {
-                id: 3,
+                id: 4,
                 name: 'Some other cool project',
                 name_with_namespace: 'codecentric / Some other cool project',
             },
-            mergeRequests: [createMr('Support Emojis 🚀', 3)],
+            mergeRequests: [createMr('Support Emojis 🚀', 4)],
         })
     }
 
