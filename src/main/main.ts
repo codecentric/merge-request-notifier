@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme, screen } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import * as log from 'electron-log'
 import * as path from 'path'
@@ -45,8 +45,31 @@ const getWindowPosition = () => {
     const windowBounds = win.getBounds()
     const trayBounds = tray.getBounds()
 
-    const x = Math.round(trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2)
-    const y = Math.round(trayBounds.y + trayBounds.height + 4)
+    const screenwidth = screen.getPrimaryDisplay().workAreaSize.width
+    const screenheight = screen.getPrimaryDisplay().workAreaSize.height
+
+    let startx = Math.round(trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2)
+    let starty = Math.round(trayBounds.y + trayBounds.height + 4)
+
+    if (startx < 0) {
+        startx = 0
+    }
+
+    if (starty < 0) {
+        starty = 0
+    }
+
+    if (startx + WINDOW_WIDTH > screenwidth) {
+        startx = screenwidth - WINDOW_WIDTH
+    }
+
+    if (starty + WINDOW_HEIGHT > screenheight) {
+        starty = screenheight - WINDOW_HEIGHT
+    }
+
+    const x = startx
+    const y = starty
+    return { x, y }
 
     return { x, y }
 }
@@ -67,6 +90,9 @@ const setup = async () => {
         createTray()
         createWindow()
         createMenu()
+        registerForNotifications()
+        // Register for getting notifications
+        app.setAppUserModelId(process.execPath)
 
         log.debug('App started')
     } catch (error) {
@@ -217,6 +243,19 @@ const createWindow = () => {
     })
 }
 
+const registerForNotifications = () => {
+    const os = require('os')
+
+    // This is specific for MACOS
+    if (os.platform === 'darwin') {
+        systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
+            if (tray) {
+                tray.setImage(getTrayImage())
+            }
+        })
+    }
+}
+
 if (app.dock) {
     app.dock.hide()
 }
@@ -263,10 +302,4 @@ ipcMain.handle('check-for-updates', async () => {
 
 ipcMain.on('close-application', () => {
     app.quit()
-})
-
-systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
-    if (tray) {
-        tray.setImage(getTrayImage())
-    }
 })
