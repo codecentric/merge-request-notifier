@@ -246,8 +246,8 @@ const createWindow = () => {
 const registerForNotifications = () => {
     const os = require('os')
 
-    // This is specific for MACOS
-    if (os.platform === 'darwin') {
+    // This does not work on windows
+    if (os.platform !== 'win32') {
         systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
             if (tray) {
                 tray.setImage(getTrayImage())
