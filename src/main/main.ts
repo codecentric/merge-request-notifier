@@ -67,21 +67,24 @@ const setup = async () => {
         createTray()
         createWindow()
         createMenu()
-        subscribeIOSNotification()
+
+        if (process.platform === 'darwin') {
+            // macOS specific configuration
+            systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
+                if (tray) {
+                    tray.setImage(getTrayImage())
+                }
+            })
+        }
+
+        if (process.platform === 'win32') {
+            // windows specific configuration
+            app.setAppUserModelId(process.execPath)
+        }
 
         log.debug('App started')
     } catch (error) {
         log.error(`Could not start the app: ${JSON.stringify(error)}`)
-    }
-}
-
-const subscribeIOSNotification = () => {
-    if (systemPreferences.subscribeNotification) {
-        systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
-            if (tray) {
-                tray.setImage(getTrayImage())
-            }
-        })
     }
 }
 

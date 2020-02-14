@@ -15,7 +15,7 @@
   "scripts": {
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
     "build-renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.prod.config.js",
-    "build": "yarn clean && yarn build-main && yarn build-renderer",
+    "build": "yarn build-main && yarn build-renderer",
     "clean": "run-script-os",
     "clean:win32": "rmdir dist /s /q && rmd release /s /q",
     "clean:default": "rm -rf dist && rm -rf release",

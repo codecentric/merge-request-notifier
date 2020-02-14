@@ -38,6 +38,7 @@ jobs:
       os: osx
       osx_image: xcode10.1
       script:
+        - yarn clean
         - yarn build
         - yarn package-and-publish
       before_cache:
