@@ -6,6 +6,10 @@ import * as url from 'url'
 
 import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 
+import { macOsWindowPosition } from './positioning/mac-os'
+import { windowsWindowPosition } from './positioning/windows'
+import { linuxWindowPosition } from './positioning/linux'
+
 let tray: Tray | null
 let win: BrowserWindow | null
 
@@ -42,13 +46,17 @@ const getWindowPosition = () => {
         return undefined
     }
 
-    const windowBounds = win.getBounds()
-    const trayBounds = tray.getBounds()
+    if (process.platform === 'darwin') {
+        return macOsWindowPosition(win, tray)
+    }
+    if (process.platform === 'win32') {
+        return windowsWindowPosition(win, tray)
+    }
+    if (process.platform === 'linux') {
+        return linuxWindowPosition(win, tray)
+    }
 
-    const x = Math.round(trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2)
-    const y = Math.round(trayBounds.y + trayBounds.height + 4)
-
-    return { x, y }
+    return undefined
 }
 
 const setup = async () => {
