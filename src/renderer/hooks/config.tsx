@@ -1,5 +1,8 @@
 import * as React from 'react'
 import { remote } from 'electron'
+import * as settings from 'electron-settings'
+
+const electronSettings: typeof settings = remote.require('electron-settings')
 
 export interface Config {
     connectionConfig?: ConnectionConfig
@@ -48,39 +51,25 @@ export function useConfig() {
     return context
 }
 
-const configPreviousVersion = (oldKey: string, newKey: string): Config | null => {
-    const localStorageValue = window.localStorage.getItem(oldKey)
-
-    if (localStorageValue) {
-        const config = JSON.parse(localStorageValue)
-
-        const newConfig = {
-            ...defaultConfig,
-            connectionConfig: {
-                url: config.url,
-                groups: config.group ? [config.group] : config.groups,
-                token: config.token,
-            },
-        }
-
-        window.localStorage.setItem(newKey, JSON.stringify(newConfig))
-        window.localStorage.removeItem(oldKey)
-
-        return newConfig
-    }
-    return null
-}
-
 const configFromPreviousVersionOrDefault = (): Config => {
-    return configPreviousVersion('config', 'config.v3') || configPreviousVersion('config.v2', 'config.v3') || defaultConfig
+    const localStorageConfig = window.localStorage.getItem('config.v3')
+
+    if (localStorageConfig) {
+        const config = JSON.parse(localStorageConfig)
+
+        electronSettings.set('config.v3', config as any)
+        window.localStorage.removeItem('config.v3')
+
+        return config
+    }
+
+    return defaultConfig
 }
 
 const loadConfig = (): Config => {
-    const localStorageValue = window.localStorage.getItem('config.v3')
+    const savedConfig = electronSettings.get('config.v3') as Config | null
 
-    if (localStorageValue) {
-        const savedConfig = JSON.parse(localStorageValue)
-
+    if (savedConfig) {
         return {
             connectionConfig: savedConfig.connectionConfig,
             generalConfig: {
@@ -98,12 +87,12 @@ export const ConfigProvider = ({ ...props }) => {
 
     const removeConfig = () => {
         setConfig(defaultConfig)
-        window.localStorage.removeItem('config.v3')
+        electronSettings.delete('config.v3')
     }
 
     const updateConfig = (newConfig: Config) => {
         setConfig(newConfig)
-        window.localStorage.setItem('config.v3', JSON.stringify(newConfig))
+        electronSettings.set('config.v3', newConfig as any)
     }
 
     const updateConnectionConfig = (newConnectionConfig: ConnectionConfig) => {

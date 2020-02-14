@@ -17,12 +17,11 @@
     "build-renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.prod.config.js",
     "build": "yarn clean && yarn build-main && yarn build-renderer",
     "clean": "run-script-os",
-    "clean:win32": "rmdir dist /s /q && rmdir release /s /q",
+    "clean:win32": "rmdir dist /s /q && rmd release /s /q",
     "clean:default": "rm -rf dist && rm -rf release",
     "start-renderer-dev": "webpack-dev-server --config webpack.renderer.dev.config.js",
     "start-main-dev": "webpack --config webpack.main.config.js && electron ./dist/main.js",
     "start": "cross-env START_HOT=1 yarn start-renderer-dev",
-    "prestart": "yarn build",
     "test": "echo \"not yet implemented.\"",
     "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project ./tsconfig.json",
     "package-and-publish": "electron-builder --publish always",
@@ -79,6 +78,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
@@ -92,6 +92,7 @@
     "@rebass/forms": "^4.0.5",
     "@rebass/preset": "^4.0.5",
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/electron-settings": "^3.1.1",
     "@types/reach__tabs": "^0.1.0",
     "@types/react": "^16.8.18",
     "@types/react-dom": "^16.8.4",
@@ -112,6 +113,7 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-log": "^4.0.0",
     "electron-notarize": "^0.2.0",
+    "electron-settings": "^3.2.0",
     "electron-unhandled": "^3.0.0",
     "electron-updater": "^4.2.0",
     "electron-util": "^0.13.0",
@@ -131,6 +133,7 @@
     "react-router-dom": "^5.1.2",
     "react-test-renderer": "^16.8.6",
     "rebass": "^4.0.5",
+    "run-script-os": "^1.0.7",
     "sass-loader": "^8.0.0",
     "source-map-loader": "^0.2.4",
     "spectron": "^10.0.0",
@@ -146,9 +149,5 @@
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.4.1",
     "webpack-merge": "^4.2.1"
-  },
-  "dependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
-    "run-script-os": "^1.0.7"
   }
 }
