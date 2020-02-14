@@ -67,10 +67,21 @@ const setup = async () => {
         createTray()
         createWindow()
         createMenu()
+        subscribeIOSNotification()
 
         log.debug('App started')
     } catch (error) {
         log.error(`Could not start the app: ${JSON.stringify(error)}`)
+    }
+}
+
+const subscribeIOSNotification = () => {
+    if (systemPreferences.subscribeNotification) {
+        systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
+            if (tray) {
+                tray.setImage(getTrayImage())
+            }
+        })
     }
 }
 
@@ -263,10 +274,4 @@ ipcMain.handle('check-for-updates', async () => {
 
 ipcMain.on('close-application', () => {
     app.quit()
-})
-
-systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
-    if (tray) {
-        tray.setImage(getTrayImage())
-    }
 })

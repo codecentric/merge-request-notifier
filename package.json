@@ -16,15 +16,20 @@
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
     "build-renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.prod.config.js",
     "build": "yarn clean && yarn build-main && yarn build-renderer",
-    "clean": "rm -rf dist && rm -rf release",
+    "clean": "run-script-os",
+    "clean:win32": "rmdir dist /s /q && rmdir release /s /q",
+    "clean:default": "rm -rf dist && rm -rf release",
     "start-renderer-dev": "webpack-dev-server --config webpack.renderer.dev.config.js",
     "start-main-dev": "webpack --config webpack.main.config.js && electron ./dist/main.js",
     "start": "cross-env START_HOT=1 yarn start-renderer-dev",
     "prestart": "yarn build",
     "test": "echo \"not yet implemented.\"",
     "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project ./tsconfig.json",
+    "package-and-publish": "electron-builder --publish always",
     "package": "electron-builder --publish always",
-    "package:only": "electron-builder --publish never",
+    "package:windows": "electron-builder --publish never --windows",
+    "package:linux": "electron-builder --publish never --linux",
+    "package:mac": "electron-builder --publish never --mac",
     "postinstall": "electron-builder install-app-deps",
     "prettier:check": "prettier --check 'src/**/*.ts*'",
     "prettier:write": "prettier --write 'src/**/*.ts*'"
@@ -62,6 +67,7 @@
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
     },
+    "win": {},
     "afterSign": "scripts/notarize.js",
     "dmg": {
       "sign": false
@@ -142,6 +148,7 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.8.3"
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
+    "run-script-os": "^1.0.7"
   }
 }
