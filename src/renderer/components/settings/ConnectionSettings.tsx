@@ -5,9 +5,10 @@ import { Label } from '@rebass/forms'
 
 import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
 import { useBackend } from '../../hooks/merge-requests/backend'
-import { ProjectsConfig, useConfig } from '../../hooks/config'
+import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
 import { FormInput } from '../form/FormInput'
+import { ProjectsConfig } from '../../../share/config'
 
 interface FormErrorData {
     url: string

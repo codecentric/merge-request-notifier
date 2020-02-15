@@ -1,9 +1,10 @@
 import * as React from 'react'
+import { ipcRenderer } from 'electron'
 
-import { Config, ConnectionConfig, useConfig } from '../config'
+import { useConfig } from '../config'
 import { loadData, loadGroups } from './loadData'
 import { GroupedMergeRequest, MergeRequestWithProject } from './types'
-import { ipcRenderer } from 'electron'
+import { Config, ConnectionConfig } from '../../../share/config'
 
 export interface BackendContext {
     isLoading: boolean

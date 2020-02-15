@@ -2,11 +2,12 @@ require('dotenv').config();
 const { notarize } = require('electron-notarize');
 
 exports.default = async function notarizing(context) {
-    console.log('notarizing the app')
     const { electronPlatformName, appOutDir } = context;
     if (electronPlatformName !== 'darwin') {
+        console.log(`notarizing the app is skipped because the electron platform name is "${electronPlatformName}"`)
         return;
     }
+    console.log('notarizing the app')
 
     const appName = context.packager.appInfo.productFilename;
 

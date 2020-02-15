@@ -1,8 +1,8 @@
 import * as request from 'superagent'
 
-import { ConnectionConfig } from '../config'
 import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, Note, PipelineStatus, Project, UserNotesStatus } from './types'
 import sleep from '../../util/sleep'
+import { ConnectionConfig } from '../../../share/config'
 
 const projectCache: { [id: number]: Project } = {}
 

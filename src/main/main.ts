@@ -3,18 +3,28 @@ import { autoUpdater } from 'electron-updater'
 import * as log from 'electron-log'
 import * as path from 'path'
 import * as url from 'url'
+import * as electronSettings from 'electron-settings'
 
 import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 
 import { macOsWindowPosition } from './positioning/mac-os'
 import { windowsWindowPosition } from './positioning/windows'
 import { linuxWindowPosition } from './positioning/linux'
+import { Config } from '../share/config'
 
 let tray: Tray | null
 let win: BrowserWindow | null
 
 const WINDOW_WIDTH = 380
 const WINDOW_HEIGHT = 460
+
+const DEFAULT_CONFIG: Config = {
+    generalConfig: {
+        useNotifications: true,
+        disableWipNotifications: true,
+        darkMode: nativeTheme.shouldUseDarkColors,
+    },
+}
 
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer')
@@ -123,39 +133,6 @@ const showWindow = () => {
 }
 
 const createMenu = () => {
-    const devMenuTemplate: MenuItemConstructorOptions[] =
-        process.env.NODE_ENV === 'production'
-            ? []
-            : [
-                  { type: 'separator' },
-                  {
-                      label: 'Toggle DevTools',
-                      click: () => {
-                          if (win) {
-                              if (win.webContents.isDevToolsOpened()) {
-                                  win.webContents.closeDevTools()
-                                  win.setSize(WINDOW_WIDTH, WINDOW_HEIGHT)
-                              } else {
-                                  win.webContents.openDevTools()
-                                  win.setSize(WINDOW_WIDTH * 3, WINDOW_HEIGHT * 2)
-                              }
-                          }
-                      },
-                  },
-                  {
-                      label: 'Toggle Test Data',
-                      click: () => {
-                          toggleQueryParam('test-data')
-                      },
-                  },
-                  {
-                      label: 'Toggle Fake update',
-                      click: () => {
-                          toggleQueryParam('fake-update')
-                      },
-                  },
-              ]
-
     const menuTemplate: MenuItemConstructorOptions[] = [
         {
             label: 'Application',
@@ -167,7 +144,38 @@ const createMenu = () => {
                         app.quit()
                     },
                 },
-                ...devMenuTemplate,
+            ],
+        },
+        {
+            label: 'Development',
+            submenu: [
+                { type: 'separator' },
+                {
+                    label: 'Toggle DevTools',
+                    click: () => {
+                        if (win) {
+                            if (win.webContents.isDevToolsOpened()) {
+                                win.webContents.closeDevTools()
+                                win.setSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+                            } else {
+                                win.webContents.openDevTools()
+                                win.setSize(WINDOW_WIDTH * 3, WINDOW_HEIGHT * 2)
+                            }
+                        }
+                    },
+                },
+                {
+                    label: 'Toggle Test Data',
+                    click: () => {
+                        toggleQueryParam('test-data')
+                    },
+                },
+                {
+                    label: 'Toggle Fake update',
+                    click: () => {
+                        toggleQueryParam('fake-update')
+                    },
+                },
             ],
         },
         {
@@ -200,6 +208,23 @@ const toggleQueryParam = (parameter: string) => {
 
         win.loadURL(currentUrl.href)
     }
+}
+
+const getConfig = (): Config => {
+    const savedConfig = electronSettings.get('config.v3') as any
+    log.debug('loading config', savedConfig)
+
+    if (savedConfig) {
+        return {
+            connectionConfig: savedConfig.connectionConfig,
+            generalConfig: {
+                ...DEFAULT_CONFIG.generalConfig,
+                ...savedConfig.generalConfig,
+            },
+        }
+    }
+
+    return DEFAULT_CONFIG
 }
 
 const createWindow = () => {
@@ -277,6 +302,21 @@ ipcMain.on('download-and-install-update', () => {
     })
 
     autoUpdater.downloadUpdate()
+})
+
+ipcMain.on('remove-config', (event: Electron.IpcMainEvent) => {
+    electronSettings.delete('config.v3')
+
+    event.returnValue = DEFAULT_CONFIG
+})
+
+ipcMain.on('get-config', (event: Electron.IpcMainEvent) => {
+    event.returnValue = getConfig()
+})
+
+ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
+    log.debug('saving the config', data)
+    electronSettings.set('config.v3', data as any)
 })
 
 ipcMain.handle('check-for-updates', async () => {
