@@ -59,7 +59,13 @@ yarn start
 ```
 
 ### Logs
-You will find the application logs in the following folder: `~/Library/Logs/merge-request-notifier/`
+You will find the application logs in the following folders
+
+| OS  | Folder |
+| ------------- | ------------- |
+| Linux | ~/.config/merge-request-notifier/logs/{process type}.log |
+| macOS | ~/Library/Logs/merge-request-notifier/{process type}.log |
+| Windows | %USERPROFILE%\AppData\Roaming\merge-request-notifier\logs\{process type}.log |
 
 ### New Releases
 #### Create a new Release and Publish it
