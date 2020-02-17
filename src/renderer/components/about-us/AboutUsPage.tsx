@@ -13,8 +13,8 @@ export const AboutUsPage = () => {
     return (
         <Box p={2}>
             <Text fontSize='14px'>
-                This app was build because our team was searching for a tool to see the number of our current open merge requests and make them easily
-                accessible. We didn't found such a tool and so we decided to build one by our own ;-)
+                This app was built because our team was searching for a tool to see the number of our current open merge requests and make them easily
+                accessible. We didn't find such a tool and so we decided to build one by our own ;-)
             </Text>
 
             <Text mt={3} fontWeight='bold'>
