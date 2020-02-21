@@ -67,6 +67,16 @@ You will find the application logs in the following folders
 | macOS | ~/Library/Logs/merge-request-notifier/{process type}.log |
 | Windows | %USERPROFILE%\AppData\Roaming\merge-request-notifier\logs\{process type}.log |
 
+### App Settings
+You will find the application settings in the following folders
+
+| OS  | Folder |
+| ------------- | ------------- |
+| Linux | $XDG_CONFIG_HOME/<Your App> or ~/.config/<Your App>s |
+| macOS | ~/Library/Application\ Support/<Your App> |
+| Windows | %APPDATA%/<Your App> |
+
+
 ### New Releases
 #### Create a new Release and Publish it
 ```bash
