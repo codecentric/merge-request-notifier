@@ -9,7 +9,8 @@ import { useBackend } from '../../hooks/merge-requests/backend'
 import { MergeRequest } from '../../hooks/merge-requests/types'
 import * as Alerts from './Alerts'
 
-const openMergeRequest = (url: string) => () => {
+const openMergeRequest = (url: string) => (event: React.MouseEvent) => {
+    event.preventDefault()
     shell.openExternal(url)
 }
 

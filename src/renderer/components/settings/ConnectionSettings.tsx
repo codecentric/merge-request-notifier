@@ -83,17 +83,25 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         setValues({ ...values, [name]: event.target.value })
     }
 
-    const confirmRemove = async () => {
+    const confirmRemove: React.MouseEventHandler<HTMLButtonElement> = event => {
+        event.preventDefault()
         setConfirmDelete(true)
     }
 
-    const remove = async () => {
+    const remove: React.MouseEventHandler<HTMLButtonElement> = event => {
+        event.preventDefault()
         removeConfig()
         setErrors({ url: '', token: '', groups: '', invalidSettings: false })
         setValues({ url: '', token: '', groups: '', projects: {} })
     }
 
-    const save = async () => {
+    const cancel: React.MouseEventHandler<HTMLButtonElement> = event => {
+        event.preventDefault()
+        history.push('/')
+    }
+
+    const save: React.MouseEventHandler<HTMLButtonElement> = async event => {
+        event.preventDefault()
         setSubmitting(true)
         setErrors({ url: '', token: '', groups: '', invalidSettings: false })
 
@@ -234,9 +242,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                                 variant='secondary'
                                 aria-label='cancel'
                                 disabled={submitting}
-                                onClick={() => {
-                                    history.push('/')
-                                }}
+                                onClick={cancel}
                             >
                                 Cancel
                             </Button>
