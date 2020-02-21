@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme, globalShortcut } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import * as log from 'electron-log'
 import * as path from 'path'
@@ -23,6 +23,8 @@ const DEFAULT_CONFIG: Config = {
         useNotifications: true,
         disableWipNotifications: true,
         darkMode: nativeTheme.shouldUseDarkColors,
+        startOnLogin: true,
+        openShortcut: 'CmdOrCtrl+Shift+m',
     },
 }
 
@@ -85,6 +87,10 @@ const setup = async () => {
         createTray()
         createWindow()
         createMenu()
+
+        const config = getConfig()
+        updateGlobalShortcut(config.generalConfig.openShortcut)
+        updateStartOnLoginConfiguration(config.generalConfig.startOnLogin)
 
         if (process.platform === 'darwin') {
             // macOS specific configuration
@@ -264,6 +270,26 @@ const createWindow = () => {
     })
 }
 
+const updateStartOnLoginConfiguration = (startOnLogin: boolean) => {
+    app.setLoginItemSettings({
+        openAtLogin: startOnLogin,
+        openAsHidden: true,
+    })
+}
+
+const updateGlobalShortcut = (shortcut: string) => {
+    globalShortcut.unregisterAll()
+    globalShortcut.register(shortcut, () => {
+        if (win) {
+            if (win.isVisible()) {
+                hideWindow()
+            } else {
+                win.show()
+            }
+        }
+    })
+}
+
 if (app.dock) {
     app.dock.hide()
 }
@@ -272,6 +298,10 @@ app.on('ready', () => {
     setup().then(() => {
         log.debug('Setup completed')
     })
+})
+
+app.on('will-quit', () => {
+    globalShortcut.unregisterAll()
 })
 
 app.on('window-all-closed', () => {
@@ -316,6 +346,10 @@ ipcMain.on('get-config', (event: Electron.IpcMainEvent) => {
 
 ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
     log.debug('saving the config', data)
+
+    updateGlobalShortcut(data.generalConfig.openShortcut)
+    updateStartOnLoginConfiguration(data.generalConfig.startOnLogin)
+
     electronSettings.set('config.v3', data as any)
 })
 

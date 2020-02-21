@@ -18,4 +18,6 @@ export interface GeneralConfig {
     useNotifications: boolean
     disableWipNotifications: boolean
     darkMode: boolean
+    startOnLogin: boolean
+    openShortcut: string
 }
