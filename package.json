@@ -1,6 +1,6 @@
 {
   "name": "merge-request-notifier",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main.js",
   "homepage": "https://github.com/codecentric/merge-request-notifier",
@@ -24,8 +24,8 @@
     "start": "cross-env START_HOT=1 yarn start-renderer-dev",
     "test": "echo \"not yet implemented.\"",
     "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project ./tsconfig.json",
-    "package-and-publish": "electron-builder --publish always",
-    "package": "electron-builder --publish always",
+    "package-and-publish": "electron-builder --publish always --windows --mac",
+    "package": "electron-builder --publish never",
     "package:windows": "electron-builder --publish never --windows",
     "package:linux": "electron-builder --publish never --linux",
     "package:mac": "electron-builder --publish never --mac",
