@@ -35,11 +35,11 @@ const createMr = (title: string, projectId: number, wip = false): MergeRequest =
         .format('YYYY-MM-DD HH:mm:ss')
 
     return {
-        id: mrId,
+        id: wip ? mrId * -1 : mrId,
         iid: mrId,
         created_at: timestamp,
         updated_at: timestamp,
-        project_id: 1,
+        project_id: wip ? projectId * -1 : projectId,
         title,
         state: 'opened',
         target_branch: 'something',
@@ -117,16 +117,15 @@ const testData = (): Data => {
         },
     ]
 
-    if (count % 2 === 0) {
-        groupedMergeRequests.push({
-            project: {
-                id: 4,
-                name: 'Some other cool project',
-                name_with_namespace: 'codecentric / Some other cool project',
-            },
-            mergeRequests: [createMr('Support Emojis 🚀', 4)],
-        })
-    }
+    const wip = count % 2 === 1
+    groupedMergeRequests.push({
+        project: {
+            id: wip ? -4 : 4,
+            name: wip ? 'WIP / Some other cool project' : 'Some other cool project',
+            name_with_namespace: wip ? 'WIP / codecentric / Some other cool project' : 'codecentric / Some other cool project',
+        },
+        mergeRequests: [createMr('Rotating WIP Merge Request 🙏', 4, wip)],
+    })
 
     const mergeRequestWithProjects: MergeRequestWithProject[] = []
     groupedMergeRequests.forEach(groupedMergeRequest => {
