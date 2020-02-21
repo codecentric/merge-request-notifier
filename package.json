@@ -24,7 +24,7 @@
     "start": "cross-env START_HOT=1 yarn start-renderer-dev",
     "test": "echo \"not yet implemented.\"",
     "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project ./tsconfig.json",
-    "package-and-publish": "electron-builder --publish always --windows --mac",
+    "package-and-publish": "electron-builder --publish always --mac",
     "package": "electron-builder --publish never",
     "package:windows": "electron-builder --publish never --windows",
     "package:linux": "electron-builder --publish never --linux",
