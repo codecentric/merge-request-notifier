@@ -146,11 +146,6 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         <>
             <Box p={2}>
                 <form autoComplete='off'>
-                    {errors.invalidSettings && (
-                        <Text p={1} color='lightBackground' bg='red' mb={3}>
-                            Could not load your merge requests. Please verify your settings.
-                        </Text>
-                    )}
                     <FormInput
                         error={errors.url}
                         label='GitLab Hostname'
@@ -232,6 +227,12 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                             />
                         )
                     })}
+
+                    {errors.invalidSettings && (
+                        <Text p={1} color='lightBackground' bg='red' mb={3}>
+                            Could not load your merge requests. Please verify your settings.
+                        </Text>
+                    )}
 
                     <Flex>
                         {!!config && (
