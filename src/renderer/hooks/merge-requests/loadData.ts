@@ -70,6 +70,7 @@ export const loadData = async (connectionConfig: ConnectionConfig): Promise<Data
     return {
         mergeRequestWithProjects,
         groupedMergeRequests: groupedMergeRequests.sort((a, b) => {
+            // We use the project id multiplied with -1 for WIP MRs. They should be shown at the end
             const nameA = a.project.id > 0 ? a.project.name_with_namespace : `Z${a.project.name_with_namespace}`
             const nameB = b.project.id > 0 ? b.project.name_with_namespace : `Z${b.project.name_with_namespace}`
 

@@ -21,3 +21,13 @@ export interface GeneralConfig {
     startOnLogin: boolean
     openShortcut: string
 }
+
+export const DEFAULT_CONFIG: Config = {
+    generalConfig: {
+        useNotifications: true,
+        disableWipNotifications: true,
+        darkMode: false,
+        startOnLogin: true,
+        openShortcut: 'CmdOrCtrl+Shift+m',
+    },
+}

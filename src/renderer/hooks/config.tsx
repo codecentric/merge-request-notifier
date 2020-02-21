@@ -2,7 +2,7 @@ import * as React from 'react'
 import { ipcRenderer, remote } from 'electron'
 import * as log from 'electron-log'
 
-import { Config, ConnectionConfig, GeneralConfig } from '../../share/config'
+import { Config, ConnectionConfig, DEFAULT_CONFIG, GeneralConfig } from '../../share/config'
 
 interface ConfigContext {
     config: Config
@@ -25,12 +25,19 @@ const getAndTransferLocalStorageConfig = (): Config | undefined => {
     const localStorageConfig = window.localStorage.getItem('config.v3')
 
     if (localStorageConfig) {
-        const config = JSON.parse(localStorageConfig)
+        const config: Config = JSON.parse(localStorageConfig)
+        const configToTransfer = {
+            connectionConfig: config.connectionConfig,
+            generalConfig: {
+                ...DEFAULT_CONFIG.generalConfig,
+                ...config.generalConfig,
+            },
+        }
 
-        ipcRenderer.send('set-config', config)
+        ipcRenderer.send('set-config', configToTransfer)
         window.localStorage.removeItem('config.v3')
 
-        return config
+        return configToTransfer
     }
 }
 

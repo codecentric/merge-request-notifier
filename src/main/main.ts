@@ -10,23 +10,13 @@ import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 import { macOsWindowPosition } from './positioning/mac-os'
 import { windowsWindowPosition } from './positioning/windows'
 import { linuxWindowPosition } from './positioning/linux'
-import { Config } from '../share/config'
+import { Config, DEFAULT_CONFIG } from '../share/config'
 
 let tray: Tray | null
 let win: BrowserWindow | null
 
 const WINDOW_WIDTH = 380
 const WINDOW_HEIGHT = 460
-
-const DEFAULT_CONFIG: Config = {
-    generalConfig: {
-        useNotifications: true,
-        disableWipNotifications: true,
-        darkMode: nativeTheme.shouldUseDarkColors,
-        startOnLogin: true,
-        openShortcut: 'CmdOrCtrl+Shift+m',
-    },
-}
 
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer')
