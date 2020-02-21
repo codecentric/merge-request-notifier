@@ -81,6 +81,7 @@ const testData = (): Data => {
                 createMr('My amazing Merge Request', 1),
                 createMr('An other fancy new feature', 1),
                 createMr('Refactor ui components', 1),
+                createMr('MergeRequestWithAVeryVeryVeryVeryLongTitleWithoutSpaces', 1),
                 createMr('Fix Bug: The app is crashing after login', 1),
             ],
         },
