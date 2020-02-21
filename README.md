@@ -30,8 +30,7 @@ available you will be notified with a prominent alert above the merge requests. 
 
 ## Installation
 ### From release page
-The macOS installer is uploaded at the [releases page](https://github.com/codecentric/merge-request-notifier/releases).
-Please download it and double click it to install.
+The macOS and windows installer is uploaded at the [releases page](https://github.com/codecentric/merge-request-notifier/releases). Please download and double click it to install.
 
 **Merge.Request.Notifier-x.y.z.dmg**
 
