@@ -1,5 +1,4 @@
 import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme, globalShortcut } from 'electron'
-import { autoUpdater } from 'electron-updater'
 import * as log from 'electron-log'
 import * as path from 'path'
 import * as url from 'url'
@@ -11,6 +10,7 @@ import { macOsWindowPosition } from './positioning/mac-os'
 import { windowsWindowPosition } from './positioning/windows'
 import { linuxWindowPosition } from './positioning/linux'
 import { Config, DEFAULT_CONFIG } from '../share/config'
+import { setupAutoUpdater } from './autoUpdates'
 
 let tray: Tray | null
 let win: BrowserWindow | null
@@ -40,7 +40,7 @@ const createTray = () => {
 }
 
 const toggleWindow = () => {
-    win && win.isVisible() ? hideWindow() : showWindow()
+    win?.isVisible() ? hideWindow() : showWindow()
 }
 
 const getWindowPosition = () => {
@@ -66,11 +66,9 @@ const setup = async () => {
     log.debug('Starting the app')
 
     try {
-        autoUpdater.autoDownload = false
+        setupAutoUpdater()
 
         if (process.env.NODE_ENV !== 'production') {
-            // __dirname is the "dist" folder
-            autoUpdater.updateConfigPath = path.join(__dirname, '../dev-app-update.yml')
             await installExtensions()
         }
 
@@ -103,11 +101,9 @@ const setup = async () => {
 }
 
 const hideWindow = () => {
-    if (win && win.isVisible()) {
+    if (win?.isVisible()) {
         win.hide()
-        if (app.dock) {
-            app.dock.hide()
-        }
+        app.dock?.hide()
     }
 }
 
@@ -115,15 +111,13 @@ const showWindow = () => {
     const position = getWindowPosition()
 
     if (position && win) {
-        if (app.dock) {
-            app.dock.show()
-        }
+        app.dock?.show()
 
         // We have to wait a bit because the dock.show() is triggering a "window.hide" event
         // otherwise the app would be closed immediately
         setTimeout(() => {
-            win!.setPosition(position.x, position.y, false)
-            win!.show()
+            win?.setPosition(position.x, position.y, false)
+            win?.show()
         }, 200)
     }
 }
@@ -188,8 +182,7 @@ const createMenu = () => {
         },
     ]
 
-    const menu = Menu.buildFromTemplate(menuTemplate)
-    Menu.setApplicationMenu(menu)
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
 }
 
 const toggleQueryParam = (parameter: string) => {
@@ -280,9 +273,7 @@ const updateGlobalShortcut = (shortcut: string) => {
     })
 }
 
-if (app.dock) {
-    app.dock.hide()
-}
+app.dock?.hide()
 
 app.on('ready', () => {
     setup().then(() => {
@@ -316,14 +307,6 @@ ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => 
     }
 })
 
-ipcMain.on('download-and-install-update', () => {
-    autoUpdater.once('update-downloaded', () => {
-        autoUpdater.quitAndInstall()
-    })
-
-    autoUpdater.downloadUpdate()
-})
-
 ipcMain.on('remove-config', (event: Electron.IpcMainEvent) => {
     electronSettings.delete('config.v3')
 
@@ -341,10 +324,6 @@ ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
     updateStartOnLoginConfiguration(data.generalConfig.startOnLogin)
 
     electronSettings.set('config.v3', data as any)
-})
-
-ipcMain.handle('check-for-updates', async () => {
-    return autoUpdater.checkForUpdates().catch(error => log.error('error while checking for updates', error))
 })
 
 ipcMain.on('close-application', () => {
