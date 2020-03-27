@@ -1,6 +1,6 @@
 {
   "name": "merge-request-notifier",
-  "version": "1.4.0",
+  "version": "1.6.1",
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main.js",
   "homepage": "https://github.com/codecentric/merge-request-notifier",
@@ -15,16 +15,20 @@
   "scripts": {
     "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
     "build-renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.prod.config.js",
-    "build": "yarn clean && yarn build-main && yarn build-renderer",
-    "clean": "rm -rf dist && rm -rf release",
+    "build": "yarn build-main && yarn build-renderer",
+    "clean": "run-script-os",
+    "clean:win32": "rmdir dist /s /q && rmd release /s /q",
+    "clean:default": "rm -rf dist && rm -rf release",
     "start-renderer-dev": "webpack-dev-server --config webpack.renderer.dev.config.js",
     "start-main-dev": "webpack --config webpack.main.config.js && electron ./dist/main.js",
     "start": "cross-env START_HOT=1 yarn start-renderer-dev",
-    "prestart": "yarn build",
     "test": "echo \"not yet implemented.\"",
     "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project ./tsconfig.json",
-    "package": "electron-builder --publish always",
-    "package:only": "electron-builder --publish never",
+    "package-and-publish": "electron-builder --publish always --mac",
+    "package": "electron-builder --publish never",
+    "package:windows": "electron-builder --publish never --windows",
+    "package:linux": "electron-builder --publish never --linux",
+    "package:mac": "electron-builder --publish never --mac",
     "postinstall": "electron-builder install-app-deps",
     "prettier:check": "prettier --check 'src/**/*.ts*'",
     "prettier:write": "prettier --write 'src/**/*.ts*'"
@@ -62,18 +66,7 @@
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
     },
-    "linux": {
-      "target": ["tar.xz"],
-      "executableName": "merge-request-notifier",
-      "category": "Development",
-      "desktop": {
-        "Exec": "merge-request-notifier",
-        "Terminal": false,
-        "Name": "Merge Request Notifier",
-        "GenericName": "Merge Request Notifier",
-        "Categories": "Development"
-      }
-    },
+    "win": {},
     "afterSign": "scripts/notarize.js",
     "dmg": {
       "sign": false
@@ -85,6 +78,7 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
     "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
@@ -94,12 +88,13 @@
     "@hot-loader/react-dom": "^16.8.6",
     "@material-ui/core": "^4.4.2",
     "@material-ui/icons": "^4.2.1",
-    "@reach/tabs": "^0.8.0",
+    "@reach/tabs": "^0.9.0",
     "@rebass/forms": "^4.0.5",
     "@rebass/preset": "^4.0.5",
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/electron-settings": "^3.1.1",
     "@types/reach__tabs": "^0.1.0",
-    "@types/react": "^16.8.18",
+    "@types/react": "^16.9.25",
     "@types/react-dom": "^16.8.4",
     "@types/react-hot-loader": "^4.1.0",
     "@types/react-router-dom": "^5.1.0",
@@ -118,16 +113,15 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-log": "^4.0.0",
     "electron-notarize": "^0.2.0",
-    "electron-traywindow-positioner": "^0.0.2",
+    "electron-settings": "^3.2.0",
     "electron-unhandled": "^3.0.0",
     "electron-updater": "^4.2.0",
-    "electron-util": "^0.13.0",
+    "electron-util": "^0.14.0",
     "emotion-theming": "^10.0.18",
-    "file-loader": "^5.0.0",
+    "file-loader": "^6.0.0",
     "fork-ts-checker-webpack-plugin": "^4.0.1",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^4.0.10",
-    "image-webpack-loader": "^6.0.0",
     "lint-staged": "^10.0.3",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
@@ -138,6 +132,7 @@
     "react-router-dom": "^5.1.2",
     "react-test-renderer": "^16.8.6",
     "rebass": "^4.0.5",
+    "run-script-os": "^1.0.7",
     "sass-loader": "^8.0.0",
     "source-map-loader": "^0.2.4",
     "spectron": "^10.0.0",
@@ -154,7 +149,7 @@
     "webpack-dev-server": "^3.4.1",
     "webpack-merge": "^4.2.1"
   },
-  "dependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.8.3"
+  "resolutions": {
+    "minimist": "1.2.5"
   }
 }

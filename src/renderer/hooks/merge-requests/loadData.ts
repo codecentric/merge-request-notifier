@@ -1,8 +1,8 @@
 import * as request from 'superagent'
 
-import { ConnectionConfig } from '../config'
 import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, Note, PipelineStatus, Project, UserNotesStatus } from './types'
 import sleep from '../../util/sleep'
+import { ConnectionConfig } from '../../../share/config'
 
 const projectCache: { [id: number]: Project } = {}
 
@@ -47,6 +47,7 @@ export const loadData = async (connectionConfig: ConnectionConfig): Promise<Data
     const mergeRequestWithProjects = [] as MergeRequestWithProject[]
     for (const mergeRequest of mergeRequests) {
         const projectId = mergeRequest.work_in_progress ? -1 * mergeRequest.project_id : mergeRequest.project_id
+        const mergeRequestId = mergeRequest.work_in_progress ? -1 * mergeRequest.id : mergeRequest.id
         let entry = groupedMergeRequests.find(group => group.project.id === projectId)
         if (!entry) {
             const project = await loadProject(connectionConfig, projectId)
@@ -55,6 +56,7 @@ export const loadData = async (connectionConfig: ConnectionConfig): Promise<Data
             groupedMergeRequests.push(entry)
             mergeRequestWithProjects.push({
                 ...mergeRequest,
+                id: mergeRequestId,
                 project,
             })
         } else {
@@ -70,6 +72,7 @@ export const loadData = async (connectionConfig: ConnectionConfig): Promise<Data
     return {
         mergeRequestWithProjects,
         groupedMergeRequests: groupedMergeRequests.sort((a, b) => {
+            // We use the project id multiplied with -1 for WIP MRs. They should be shown at the end
             const nameA = a.project.id > 0 ? a.project.name_with_namespace : `Z${a.project.name_with_namespace}`
             const nameB = b.project.id > 0 ? b.project.name_with_namespace : `Z${b.project.name_with_namespace}`
 

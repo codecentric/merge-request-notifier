@@ -19,6 +19,10 @@ export const UpdateInfoPage = () => {
         )
     }
 
+    const cancel: React.MouseEventHandler<HTMLButtonElement> = event => {
+        event.preventDefault()
+        history.push('/')
+    }
     const installUpdate: React.MouseEventHandler<HTMLButtonElement> = event => {
         event.preventDefault()
         setInstallButtonDisabled(true)
@@ -46,15 +50,7 @@ export const UpdateInfoPage = () => {
                 }}
             />
             <Flex mt={3}>
-                <Button
-                    mr={1}
-                    sx={{ display: 'block', width: '100%' }}
-                    variant='secondary'
-                    aria-label='cancel'
-                    onClick={() => {
-                        history.push('/')
-                    }}
-                >
+                <Button mr={1} sx={{ display: 'block', width: '100%' }} variant='secondary' aria-label='cancel' onClick={cancel}>
                     Cancel
                 </Button>
                 <Button

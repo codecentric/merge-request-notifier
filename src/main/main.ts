@@ -1,11 +1,16 @@
-import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme, globalShortcut } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import * as log from 'electron-log'
 import * as path from 'path'
 import * as url from 'url'
-import * as positioner from 'electron-traywindow-positioner'
+import * as electronSettings from 'electron-settings'
 
 import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
+
+import { macOsWindowPosition } from './positioning/mac-os'
+import { windowsWindowPosition } from './positioning/windows'
+import { linuxWindowPosition } from './positioning/linux'
+import { Config, DEFAULT_CONFIG } from '../share/config'
 
 let tray: Tray | null
 let win: BrowserWindow | null
@@ -38,6 +43,24 @@ const toggleWindow = () => {
     win && win.isVisible() ? hideWindow() : showWindow()
 }
 
+const getWindowPosition = () => {
+    if (!win || !tray) {
+        return undefined
+    }
+
+    if (process.platform === 'darwin') {
+        return macOsWindowPosition(win, tray)
+    }
+    if (process.platform === 'win32') {
+        return windowsWindowPosition(win, tray)
+    }
+    if (process.platform === 'linux') {
+        return linuxWindowPosition(win, tray)
+    }
+
+    return undefined
+}
+
 const setup = async () => {
     reportUnhandledRejections()
     log.debug('Starting the app')
@@ -55,6 +78,24 @@ const setup = async () => {
         createWindow()
         createMenu()
 
+        const config = getConfig()
+        updateGlobalShortcut(config.generalConfig.openShortcut)
+        updateStartOnLoginConfiguration(config.generalConfig.startOnLogin)
+
+        if (process.platform === 'darwin') {
+            // macOS specific configuration
+            systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
+                if (tray) {
+                    tray.setImage(getTrayImage())
+                }
+            })
+        }
+
+        if (process.platform === 'win32') {
+            // windows specific configuration
+            app.setAppUserModelId(process.execPath)
+        }
+
         log.debug('App started')
     } catch (error) {
         log.error(`Could not start the app: ${JSON.stringify(error)}`)
@@ -71,7 +112,9 @@ const hideWindow = () => {
 }
 
 const showWindow = () => {
-    if (win) {
+    const position = getWindowPosition()
+
+    if (position && win) {
         if (app.dock) {
             app.dock.show()
         }
@@ -79,48 +122,13 @@ const showWindow = () => {
         // We have to wait a bit because the dock.show() is triggering a "window.hide" event
         // otherwise the app would be closed immediately
         setTimeout(() => {
-            if (tray) {
-                positioner.position(win, tray.getBounds(), { x: 'center', y: 'down' })
-            }
+            win!.setPosition(position.x, position.y, false)
             win!.show()
         }, 200)
     }
 }
 
 const createMenu = () => {
-    const devMenuTemplate: MenuItemConstructorOptions[] =
-        process.env.NODE_ENV === 'production'
-            ? []
-            : [
-                  { type: 'separator' },
-                  {
-                      label: 'Toggle DevTools',
-                      click: () => {
-                          if (win) {
-                              if (win.webContents.isDevToolsOpened()) {
-                                  win.webContents.closeDevTools()
-                                  win.setSize(WINDOW_WIDTH, WINDOW_HEIGHT)
-                              } else {
-                                  win.webContents.openDevTools()
-                                  win.setSize(WINDOW_WIDTH * 3, WINDOW_HEIGHT * 2)
-                              }
-                          }
-                      },
-                  },
-                  {
-                      label: 'Toggle Test Data',
-                      click: () => {
-                          toggleQueryParam('test-data')
-                      },
-                  },
-                  {
-                      label: 'Toggle Fake update',
-                      click: () => {
-                          toggleQueryParam('fake-update')
-                      },
-                  },
-              ]
-
     const menuTemplate: MenuItemConstructorOptions[] = [
         {
             label: 'Application',
@@ -132,7 +140,38 @@ const createMenu = () => {
                         app.quit()
                     },
                 },
-                ...devMenuTemplate,
+            ],
+        },
+        {
+            label: 'Development',
+            submenu: [
+                { type: 'separator' },
+                {
+                    label: 'Toggle DevTools',
+                    click: () => {
+                        if (win) {
+                            if (win.webContents.isDevToolsOpened()) {
+                                win.webContents.closeDevTools()
+                                win.setSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+                            } else {
+                                win.webContents.openDevTools()
+                                win.setSize(WINDOW_WIDTH * 3, WINDOW_HEIGHT * 2)
+                            }
+                        }
+                    },
+                },
+                {
+                    label: 'Toggle Test Data',
+                    click: () => {
+                        toggleQueryParam('test-data')
+                    },
+                },
+                {
+                    label: 'Toggle Fake update',
+                    click: () => {
+                        toggleQueryParam('fake-update')
+                    },
+                },
             ],
         },
         {
@@ -165,6 +204,23 @@ const toggleQueryParam = (parameter: string) => {
 
         win.loadURL(currentUrl.href)
     }
+}
+
+const getConfig = (): Config => {
+    const savedConfig = electronSettings.get('config.v3') as any
+    log.debug('loading config', savedConfig)
+
+    if (savedConfig) {
+        return {
+            connectionConfig: savedConfig.connectionConfig,
+            generalConfig: {
+                ...DEFAULT_CONFIG.generalConfig,
+                ...savedConfig.generalConfig,
+            },
+        }
+    }
+
+    return DEFAULT_CONFIG
 }
 
 const createWindow = () => {
@@ -204,6 +260,26 @@ const createWindow = () => {
     })
 }
 
+const updateStartOnLoginConfiguration = (startOnLogin: boolean) => {
+    app.setLoginItemSettings({
+        openAtLogin: startOnLogin,
+        openAsHidden: true,
+    })
+}
+
+const updateGlobalShortcut = (shortcut: string) => {
+    globalShortcut.unregisterAll()
+    globalShortcut.register(shortcut, () => {
+        if (win) {
+            if (win.isVisible()) {
+                hideWindow()
+            } else {
+                win.show()
+            }
+        }
+    })
+}
+
 if (app.dock) {
     app.dock.hide()
 }
@@ -212,6 +288,10 @@ app.on('ready', () => {
     setup().then(() => {
         log.debug('Setup completed')
     })
+})
+
+app.on('will-quit', () => {
+    globalShortcut.unregisterAll()
 })
 
 app.on('window-all-closed', () => {
@@ -244,6 +324,25 @@ ipcMain.on('download-and-install-update', () => {
     autoUpdater.downloadUpdate()
 })
 
+ipcMain.on('remove-config', (event: Electron.IpcMainEvent) => {
+    electronSettings.delete('config.v3')
+
+    event.returnValue = DEFAULT_CONFIG
+})
+
+ipcMain.on('get-config', (event: Electron.IpcMainEvent) => {
+    event.returnValue = getConfig()
+})
+
+ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
+    log.debug('saving the config', data)
+
+    updateGlobalShortcut(data.generalConfig.openShortcut)
+    updateStartOnLoginConfiguration(data.generalConfig.startOnLogin)
+
+    electronSettings.set('config.v3', data as any)
+})
+
 ipcMain.handle('check-for-updates', async () => {
     return autoUpdater.checkForUpdates().catch(error => log.error('error while checking for updates', error))
 })
@@ -251,11 +350,3 @@ ipcMain.handle('check-for-updates', async () => {
 ipcMain.on('close-application', () => {
     app.quit()
 })
-
-if (process.platform === 'darwin') {
-    systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
-        if (tray) {
-            tray.setImage(getTrayImage())
-        }
-    })
-}

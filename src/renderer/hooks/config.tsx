@@ -1,41 +1,14 @@
 import * as React from 'react'
-import { remote } from 'electron'
+import { ipcRenderer, remote } from 'electron'
+import * as log from 'electron-log'
 
-export interface Config {
-    connectionConfig?: ConnectionConfig
-    generalConfig: GeneralConfig
-}
-
-export interface ProjectsConfig {
-    [group: string]: string[]
-}
-
-export interface ConnectionConfig {
-    url: string
-    groups: string[]
-    token: string
-    projects?: ProjectsConfig
-}
-
-export interface GeneralConfig {
-    useNotifications: boolean
-    disableWipNotifications: boolean
-    darkMode: boolean
-}
+import { Config, ConnectionConfig, DEFAULT_CONFIG, GeneralConfig } from '../../share/config'
 
 interface ConfigContext {
     config: Config
     removeConfig: () => void
     updateConnectionConfig: (newConnectionConfig: ConnectionConfig) => void
     updateGeneralConfig: (newGeneralConfig: GeneralConfig) => void
-}
-
-const defaultConfig: Config = {
-    generalConfig: {
-        useNotifications: true,
-        disableWipNotifications: true,
-        darkMode: remote.nativeTheme.shouldUseDarkColors,
-    },
 }
 
 const Context = React.createContext<ConfigContext | null>(null)
@@ -48,62 +21,47 @@ export function useConfig() {
     return context
 }
 
-const configPreviousVersion = (oldKey: string, newKey: string): Config | null => {
-    const localStorageValue = window.localStorage.getItem(oldKey)
+const getAndTransferLocalStorageConfig = (): Config | undefined => {
+    const localStorageConfig = window.localStorage.getItem('config.v3')
 
-    if (localStorageValue) {
-        const config = JSON.parse(localStorageValue)
-
-        const newConfig = {
-            ...defaultConfig,
-            connectionConfig: {
-                url: config.url,
-                groups: config.group ? [config.group] : config.groups,
-                token: config.token,
+    if (localStorageConfig) {
+        const config: Config = JSON.parse(localStorageConfig)
+        const configToTransfer = {
+            connectionConfig: config.connectionConfig,
+            generalConfig: {
+                ...DEFAULT_CONFIG.generalConfig,
+                ...config.generalConfig,
             },
         }
 
-        window.localStorage.setItem(newKey, JSON.stringify(newConfig))
-        window.localStorage.removeItem(oldKey)
+        ipcRenderer.send('set-config', configToTransfer)
+        window.localStorage.removeItem('config.v3')
 
-        return newConfig
+        return configToTransfer
     }
-    return null
-}
-
-const configFromPreviousVersionOrDefault = (): Config => {
-    return configPreviousVersion('config', 'config.v3') || configPreviousVersion('config.v2', 'config.v3') || defaultConfig
 }
 
 const loadConfig = (): Config => {
-    const localStorageValue = window.localStorage.getItem('config.v3')
-
-    if (localStorageValue) {
-        const savedConfig = JSON.parse(localStorageValue)
-
-        return {
-            connectionConfig: savedConfig.connectionConfig,
-            generalConfig: {
-                ...defaultConfig.generalConfig,
-                ...savedConfig.generalConfig,
-            },
-        }
+    const oldConfig = getAndTransferLocalStorageConfig()
+    if (oldConfig) {
+        log.info('Found and converted a previous local storage config')
+        return oldConfig
     }
 
-    return configFromPreviousVersionOrDefault()
+    return ipcRenderer.sendSync('get-config') as Config
 }
 
 export const ConfigProvider = ({ ...props }) => {
     const [config, setConfig] = React.useState<Config>(loadConfig())
 
     const removeConfig = () => {
+        const defaultConfig = ipcRenderer.sendSync('remove-config')
         setConfig(defaultConfig)
-        window.localStorage.removeItem('config.v3')
     }
 
     const updateConfig = (newConfig: Config) => {
         setConfig(newConfig)
-        window.localStorage.setItem('config.v3', JSON.stringify(newConfig))
+        ipcRenderer.send('set-config', newConfig)
     }
 
     const updateConnectionConfig = (newConnectionConfig: ConnectionConfig) => {

@@ -34,8 +34,7 @@ The tray icon color currently does not depend on your internal dark mode setting
 
 ## Installation
 ### From release page
-The macOS installer is uploaded at the [releases page](https://github.com/codecentric/merge-request-notifier/releases).
-Please download it and double click it to install.
+The macOS and windows installer is uploaded at the [releases page](https://github.com/codecentric/merge-request-notifier/releases). Please download and double click it to install.
 
 **Merge.Request.Notifier-x.y.z.dmg**
 
@@ -63,7 +62,23 @@ yarn start
 ```
 
 ### Logs
-You will find the application logs in the following folder: `~/Library/Logs/merge-request-notifier/`
+You will find the application logs in the following folders
+
+| OS  | Folder |
+| ------------- | ------------- |
+| Linux | ~/.config/merge-request-notifier/logs/{process type}.log |
+| macOS | ~/Library/Logs/merge-request-notifier/{process type}.log |
+| Windows | %USERPROFILE%\AppData\Roaming\merge-request-notifier\logs\{process type}.log |
+
+### App Settings
+You will find the application settings in the following folders
+
+| OS  | Folder |
+| ------------- | ------------- |
+| Linux | $XDG_CONFIG_HOME/<Your App> or ~/.config/<Your App>s |
+| macOS | ~/Library/Application\ Support/<Your App> |
+| Windows | %APPDATA%/<Your App> |
+
 
 ### New Releases
 #### Create a new Release and Publish it

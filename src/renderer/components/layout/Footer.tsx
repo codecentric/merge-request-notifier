@@ -9,7 +9,8 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { LoadingIndicator } from '../util/LoadingIndicator'
 import { useBackend } from '../../hooks/merge-requests/backend'
 
-const closeApp = () => {
+const closeApp: React.MouseEventHandler<HTMLAnchorElement> = event => {
+    event.preventDefault()
     ipcRenderer.send('close-application')
 }
 

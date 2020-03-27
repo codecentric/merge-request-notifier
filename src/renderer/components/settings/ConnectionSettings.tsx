@@ -5,9 +5,10 @@ import { Label } from '@rebass/forms'
 
 import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
 import { useBackend } from '../../hooks/merge-requests/backend'
-import { ProjectsConfig, useConfig } from '../../hooks/config'
+import { useConfig } from '../../hooks/config'
 import sleep from '../../util/sleep'
 import { FormInput } from '../form/FormInput'
+import { ProjectsConfig } from '../../../share/config'
 
 interface FormErrorData {
     url: string
@@ -82,17 +83,25 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         setValues({ ...values, [name]: event.target.value })
     }
 
-    const confirmRemove = async () => {
+    const confirmRemove: React.MouseEventHandler<HTMLButtonElement> = event => {
+        event.preventDefault()
         setConfirmDelete(true)
     }
 
-    const remove = async () => {
+    const remove: React.MouseEventHandler<HTMLButtonElement> = event => {
+        event.preventDefault()
         removeConfig()
         setErrors({ url: '', token: '', groups: '', invalidSettings: false })
         setValues({ url: '', token: '', groups: '', projects: {} })
     }
 
-    const save = async () => {
+    const cancel: React.MouseEventHandler<HTMLButtonElement> = event => {
+        event.preventDefault()
+        history.push('/')
+    }
+
+    const save: React.MouseEventHandler<HTMLButtonElement> = async event => {
+        event.preventDefault()
         setSubmitting(true)
         setErrors({ url: '', token: '', groups: '', invalidSettings: false })
 
@@ -137,11 +146,6 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         <>
             <Box p={2}>
                 <form autoComplete='off'>
-                    {errors.invalidSettings && (
-                        <Text p={1} color='lightBackground' bg='red' mb={3}>
-                            Could not load your merge requests. Please verify your settings.
-                        </Text>
-                    )}
                     <FormInput
                         error={errors.url}
                         label='GitLab Hostname'
@@ -224,6 +228,12 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         )
                     })}
 
+                    {errors.invalidSettings && (
+                        <Text p={1} color='lightBackground' bg='red' mb={3}>
+                            Could not load your merge requests. Please verify your settings.
+                        </Text>
+                    )}
+
                     <Flex>
                         {!!config && (
                             <Button
@@ -233,9 +243,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                                 variant='secondary'
                                 aria-label='cancel'
                                 disabled={submitting}
-                                onClick={() => {
-                                    history.push('/')
-                                }}
+                                onClick={cancel}
                             >
                                 Cancel
                             </Button>
