@@ -11,12 +11,13 @@ import { windowsWindowPosition } from './positioning/windows'
 import { linuxWindowPosition } from './positioning/linux'
 import { Config, DEFAULT_CONFIG } from '../share/config'
 import { setupAutoUpdater } from './autoUpdates'
+import { createMenu } from './menu'
 
 let tray: Tray | null
 let win: BrowserWindow | null
 
-const WINDOW_WIDTH = 380
-const WINDOW_HEIGHT = 460
+export const WINDOW_WIDTH = 380
+export const WINDOW_HEIGHT = 460
 
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer')
@@ -73,8 +74,8 @@ const setup = async () => {
         }
 
         createTray()
-        createWindow()
-        createMenu()
+        win = createWindow()
+        createMenu(win)
 
         const config = getConfig()
         updateGlobalShortcut(config.generalConfig.openShortcut)
@@ -122,83 +123,6 @@ const showWindow = () => {
     }
 }
 
-const createMenu = () => {
-    const menuTemplate: MenuItemConstructorOptions[] = [
-        {
-            label: 'Application',
-            submenu: [
-                {
-                    label: 'Quit',
-                    accelerator: 'Command+Q',
-                    click: () => {
-                        app.quit()
-                    },
-                },
-            ],
-        },
-        {
-            label: 'Development',
-            submenu: [
-                { type: 'separator' },
-                {
-                    label: 'Toggle DevTools',
-                    click: () => {
-                        if (win) {
-                            if (win.webContents.isDevToolsOpened()) {
-                                win.webContents.closeDevTools()
-                                win.setSize(WINDOW_WIDTH, WINDOW_HEIGHT)
-                            } else {
-                                win.webContents.openDevTools()
-                                win.setSize(WINDOW_WIDTH * 3, WINDOW_HEIGHT * 2)
-                            }
-                        }
-                    },
-                },
-                {
-                    label: 'Toggle Test Data',
-                    click: () => {
-                        toggleQueryParam('test-data')
-                    },
-                },
-                {
-                    label: 'Toggle Fake update',
-                    click: () => {
-                        toggleQueryParam('fake-update')
-                    },
-                },
-            ],
-        },
-        {
-            label: 'Edit',
-            submenu: [
-                { label: 'Undo', accelerator: 'CmdOrCtrl+Z', role: 'undo' },
-                { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', role: 'redo' },
-                { type: 'separator' },
-                { label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut' },
-                { label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy' },
-                { label: 'Paste', accelerator: 'CmdOrCtrl+V', role: 'paste' },
-                { label: 'Select All', accelerator: 'CmdOrCtrl+A', role: 'selectAll' },
-            ],
-        },
-    ]
-
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
-}
-
-const toggleQueryParam = (parameter: string) => {
-    if (win) {
-        const currentUrl = new URL(win.webContents.getURL())
-
-        if (currentUrl.searchParams.has(parameter)) {
-            currentUrl.searchParams.delete(parameter)
-        } else {
-            currentUrl.searchParams.set(parameter, '1')
-        }
-
-        win.loadURL(currentUrl.href)
-    }
-}
-
 const getConfig = (): Config => {
     const savedConfig = electronSettings.get('config.v3') as any
     log.debug('loading config', savedConfig)
@@ -217,7 +141,7 @@ const getConfig = (): Config => {
 }
 
 const createWindow = () => {
-    win = new BrowserWindow({
+    const browserWindow = new BrowserWindow({
         width: WINDOW_WIDTH,
         height: WINDOW_HEIGHT,
         show: false,
@@ -233,9 +157,9 @@ const createWindow = () => {
 
     if (process.env.NODE_ENV !== 'production') {
         process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'
-        win.loadURL(`http://localhost:2003`)
+        browserWindow.loadURL(`http://localhost:2003`)
     } else {
-        win.loadURL(
+        browserWindow.loadURL(
             url.format({
                 pathname: path.join(__dirname, 'index.html'),
                 protocol: 'file:',
@@ -244,13 +168,15 @@ const createWindow = () => {
         )
     }
 
-    win.on('closed', () => {
+    browserWindow.on('closed', () => {
         win = null
     })
 
-    win.on('blur', () => {
+    browserWindow.on('blur', () => {
         hideWindow()
     })
+
+    return browserWindow
 }
 
 const updateStartOnLoginConfiguration = (startOnLogin: boolean) => {
