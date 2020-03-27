@@ -119,6 +119,7 @@
     "emotion-theming": "^10.0.18",
     "file-loader": "^6.0.0",
     "fork-ts-checker-webpack-plugin": "^4.0.1",
+    "hard-source-webpack-plugin": "^0.13.1",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^4.0.10",
     "lint-staged": "^10.0.3",
