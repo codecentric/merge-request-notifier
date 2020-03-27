@@ -11,7 +11,7 @@ const DOT_COUNT = 3
 const DOT_WIDTH = 4
 const DOT_HEIGHT = DOT_WIDTH
 
-const Svg: React.FunctionComponent<{ visible: boolean }> = styled.svg`
+const Svg: React.FunctionComponent<{ visible: boolean }> = styled.svg<{ visible: boolean }>`
     width: ${WIDTH}px;
     height: ${HEIGHT}px;
     vertical-align: middle;
