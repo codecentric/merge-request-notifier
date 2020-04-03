@@ -79,7 +79,7 @@ You will find the application settings in the following folders
 
 | OS  | Folder |
 | ------------- | ------------- |
-| Linux | $XDG_CONFIG_HOME/<Your App> or ~/.config/<Your App>s |
+| Linux | $XDG_CONFIG_HOME/<Your App> or ~/.config/<Your App> |
 | macOS | ~/Library/Application\ Support/<Your App> |
 | Windows | %APPDATA%/<Your App> |
 
