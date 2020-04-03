@@ -67,6 +67,18 @@
       "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "win": {},
+    "linux": {
+      "target": ["tar.xz"],
+      "executableName": "merge-request-notifier",
+      "category": "Development",
+      "desktop": {
+        "Exec": "merge-request-notifier",
+        "Terminal": false,
+        "Name": "Merge Request Notifier",
+        "GenericName": "Merge Request Notifier",
+        "Categories": "Development"
+      }
+    },
     "afterSign": "scripts/notarize.js",
     "dmg": {
       "sign": false
