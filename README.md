@@ -58,7 +58,11 @@ yarn install
 This will start the application with hot-reload so you can instantly start developing your application.
 
 ```bash
-yarn start
+# start the renderer process with webpack-dev-server
+yarn start-renderer
+
+# start the main process (electron app)
+yarn start-main
 ```
 
 ### Logs

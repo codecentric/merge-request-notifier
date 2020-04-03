@@ -1,5 +1,6 @@
 const merge = require('webpack-merge');
 const spawn = require('child_process').spawn;
+const DashboardPlugin = require("webpack-dashboard/plugin");
 
 const baseConfig = require('./webpack.renderer.config');
 
@@ -20,18 +21,9 @@ module.exports = merge.smart(baseConfig, {
         historyApiFallback: {
             verbose: true,
             disableDotRule: false
-        },
-        before() {
-            if (process.env.START_HOT) {
-                console.log('Starting main process');
-                spawn('npm', ['run', 'start-main-dev'], {
-                    shell: true,
-                    env: process.env,
-                    stdio: 'inherit'
-                })
-                    .on('close', code => process.exit(code))
-                    .on('error', spawnError => console.error(spawnError));
-            }
         }
-    }
+    },
+    plugins: [
+        new DashboardPlugin()
+    ]
 });
