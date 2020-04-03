@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, ipcMain, Menu, MenuItemConstructorOptions, systemPreferences, nativeTheme, globalShortcut } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain, nativeTheme, systemPreferences, Tray } from 'electron'
 import * as log from 'electron-log'
 import * as path from 'path'
 import * as url from 'url'
@@ -37,14 +37,10 @@ const createTray = () => {
     tray = new Tray(getTrayImage())
 
     tray.setToolTip('Merge Request Notifier')
-    tray.on('click', toggleWindow)
+    tray.on('click', () => toggleWindow(true))
 }
 
-const toggleWindow = () => {
-    win?.isVisible() ? hideWindow() : showWindow()
-}
-
-const getWindowPosition = () => {
+const getWindowPosition = (fromTray: boolean) => {
     if (!win || !tray) {
         return undefined
     }
@@ -56,7 +52,7 @@ const getWindowPosition = () => {
         return windowsWindowPosition(win, tray)
     }
     if (process.platform === 'linux') {
-        return linuxWindowPosition(win, tray)
+        return linuxWindowPosition(win, tray, fromTray)
     }
 
     return undefined
@@ -101,6 +97,10 @@ const setup = async () => {
     }
 }
 
+const toggleWindow = (fromTray: boolean) => {
+    win?.isVisible() ? hideWindow() : showWindow(fromTray)
+}
+
 const hideWindow = () => {
     if (win?.isVisible()) {
         win.hide()
@@ -108,8 +108,8 @@ const hideWindow = () => {
     }
 }
 
-const showWindow = () => {
-    const position = getWindowPosition()
+const showWindow = (fromTray: boolean) => {
+    const position = getWindowPosition(fromTray)
 
     if (position && win) {
         app.dock?.show()
@@ -190,11 +190,7 @@ const updateGlobalShortcut = (shortcut: string) => {
     globalShortcut.unregisterAll()
     globalShortcut.register(shortcut, () => {
         if (win) {
-            if (win.isVisible()) {
-                hideWindow()
-            } else {
-                win.show()
-            }
+            toggleWindow(false)
         }
     })
 }
