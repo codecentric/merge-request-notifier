@@ -37,6 +37,11 @@
       "pre-commit": "lint-staged"
     }
   },
+  "greenkeeper": {
+    "ignore": [
+      "electron"
+    ]
+  },
   "lint-staged": {
     "{src,test,mocks}/**/*.{js,ts,tsx,json,css,scss,md}": [
       "prettier --config ./.prettierrc --write",
@@ -67,7 +72,9 @@
     },
     "win": {},
     "linux": {
-      "target": ["tar.xz"],
+      "target": [
+        "tar.xz"
+      ],
       "executableName": "merge-request-notifier",
       "category": "Development",
       "desktop": {
@@ -119,7 +126,7 @@
     "copy-webpack-plugin": "^5.0.4",
     "cross-env": "^7.0.0",
     "css-loader": "^3.2.0",
-    "electron": "^8.0.0",
+    "electron": "^7.1.8",
     "electron-builder": "^22.1.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-log": "^4.0.0",
