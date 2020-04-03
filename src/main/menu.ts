@@ -1,5 +1,4 @@
-import { app, Menu, MenuItemConstructorOptions } from 'electron'
-import BrowserWindow = Electron.BrowserWindow
+import { app, Menu, MenuItemConstructorOptions, BrowserWindow } from 'electron'
 
 import { WINDOW_HEIGHT, WINDOW_WIDTH } from './main'
 
