@@ -28,10 +28,10 @@ const installExtensions = async () => {
 }
 
 const getTrayImage = (openMergeRequests: number = 0) => {
-    const suffix = openMergeRequests === 0 ? '' : openMergeRequests > 20 ? '-more' : `-${openMergeRequests}`
-    const icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode' : 'icon'
+    const suffix = openMergeRequests === 0 ? 'default' : openMergeRequests > 9 ? 'more' : openMergeRequests
+    const icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode' : 'icon-light-mode'
 
-    return path.join(__dirname, 'assets', `${icon}${suffix}@2x.png`)
+    return path.join(__dirname, 'assets', `${icon}-${suffix}.png`)
 }
 
 const createTray = () => {
