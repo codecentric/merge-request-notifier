@@ -77,11 +77,15 @@
         "pacman",
         "snap",
         "deb",
-        "rpm",
         "freebsd"
       ],
       "executableName": "merge-request-notifier",
-      "category": "Development"
+      "category": "Development",
+      "snap": {
+        "publish": [
+          "github"
+        ]
+      }
     },
     "afterSign": "scripts/notarize.js",
     "dmg": {
