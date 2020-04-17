@@ -73,17 +73,10 @@
     "win": {},
     "linux": {
       "target": [
-        "tar.xz"
+        "tar.xz", "pacman", "snap"
       ],
       "executableName": "merge-request-notifier",
-      "category": "Development",
-      "desktop": {
-        "Exec": "merge-request-notifier",
-        "Terminal": false,
-        "Name": "Merge Request Notifier",
-        "GenericName": "Merge Request Notifier",
-        "Categories": "Development"
-      }
+      "category": "Development"
     },
     "afterSign": "scripts/notarize.js",
     "dmg": {
