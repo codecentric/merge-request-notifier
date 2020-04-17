@@ -85,36 +85,36 @@ const testData = (): Data => {
                 createMr('Fix Bug: The app is crashing after login', 1),
             ],
         },
-        {
-            project: {
-                id: 2,
-                name: 'Component Library',
-                name_with_namespace: 'UX & I / Component Library',
-            },
-            mergeRequests: [
-                createMr('New Button styles', 2),
-                createMr('Implement Date Picker', 2),
-                createMr('Fix Bug: Internet Explorer is not showning the SVGs icons properly', 2),
-            ],
-        },
-        {
-            project: {
-                id: 3,
-                name: 'Another Project',
-                name_with_namespace: 'codecentric / Another Project',
-            },
-            mergeRequests: [
-                createMr('1. Merge Request', 3),
-                createMr('2. Merge Request', 3),
-                createMr('3. Merge Request', 3),
-                createMr('4. Merge Request', 3),
-                createMr('5. Merge Request', 3),
-                createMr('6. Merge Request', 3),
-                createMr('7. Merge Request', 3),
-                createMr('8. Merge Request', 3),
-                createMr('9. Merge Request', 3),
-            ],
-        },
+        // {
+        //     project: {
+        //         id: 2,
+        //         name: 'Component Library',
+        //         name_with_namespace: 'UX & I / Component Library',
+        //     },
+        //     mergeRequests: [
+        //         createMr('New Button styles', 2),
+        //         createMr('Implement Date Picker', 2),
+        //         createMr('Fix Bug: Internet Explorer is not showning the SVGs icons properly', 2),
+        //     ],
+        // },
+        // {
+        //     project: {
+        //         id: 3,
+        //         name: 'Another Project',
+        //         name_with_namespace: 'codecentric / Another Project',
+        //     },
+        //     mergeRequests: [
+        //         createMr('1. Merge Request', 3),
+        //         createMr('2. Merge Request', 3),
+        //         createMr('3. Merge Request', 3),
+        //         createMr('4. Merge Request', 3),
+        //         createMr('5. Merge Request', 3),
+        //         createMr('6. Merge Request', 3),
+        //         createMr('7. Merge Request', 3),
+        //         createMr('8. Merge Request', 3),
+        //         createMr('9. Merge Request', 3),
+        //     ],
+        // },
     ]
 
     const wip = count % 2 === 1

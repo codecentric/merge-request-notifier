@@ -20,6 +20,7 @@ export interface GeneralConfig {
     darkMode: boolean
     startOnLogin: boolean
     openShortcut: string
+    showOpenMergeRequestsInTrayIcon: boolean
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -29,5 +30,6 @@ export const DEFAULT_CONFIG: Config = {
         darkMode: false,
         startOnLogin: true,
         openShortcut: 'CmdOrCtrl+Shift+m',
+        showOpenMergeRequestsInTrayIcon: true,
     },
 }

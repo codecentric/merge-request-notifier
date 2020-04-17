@@ -27,10 +27,11 @@ const installExtensions = async () => {
     return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(console.log)
 }
 
-const getTrayImage = () => {
-    const icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode.png' : 'icon.png'
+const getTrayImage = (openMergeRequests: number = 0) => {
+    const suffix = openMergeRequests === 0 ? '' : openMergeRequests > 20 ? '-more' : `-${openMergeRequests}`
+    const icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode' : 'icon'
 
-    return path.join(__dirname, 'assets', icon)
+    return path.join(__dirname, 'assets', `${icon}${suffix}@2x.png`)
 }
 
 const createTray = () => {
@@ -221,10 +222,9 @@ app.on('activate', async () => {
 
 ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => {
     if (tray) {
-        if (openMergeRequests === 0) {
-            tray.setTitle('')
-        } else {
-            tray.setTitle(String(openMergeRequests))
+        const { showOpenMergeRequestsInTrayIcon } = getConfig().generalConfig
+        if (showOpenMergeRequestsInTrayIcon) {
+            tray.setImage(getTrayImage(openMergeRequests))
         }
     }
 })
