@@ -80,12 +80,12 @@
         "freebsd"
       ],
       "executableName": "merge-request-notifier",
-      "category": "Development",
-      "snap": {
-        "publish": [
-          "github"
-        ]
-      }
+      "category": "Development"
+    },
+    "snap": {
+      "publish": [
+        "github"
+      ]
     },
     "afterSign": "scripts/notarize.js",
     "dmg": {
