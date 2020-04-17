@@ -73,7 +73,12 @@
     "win": {},
     "linux": {
       "target": [
-        "tar.xz", "pacman", "snap"
+        "tar.xz",
+        "pacman",
+        "snap",
+        "deb",
+        "rpm",
+        "freebsd"
       ],
       "executableName": "merge-request-notifier",
       "category": "Development"
