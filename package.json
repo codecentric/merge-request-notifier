@@ -23,7 +23,7 @@
     "start-main": "webpack --config webpack.main.config.js && electron ./dist/main.js",
     "test": "echo \"not yet implemented.\"",
     "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project ./tsconfig.json",
-    "package-and-publish": "electron-builder --publish always --mac --linux --windows",
+    "package-and-publish": "electron-builder --publish always --mac --linux",
     "package": "electron-builder --publish never",
     "package:windows": "electron-builder --publish never --windows",
     "package:linux": "electron-builder --publish never --linux",
