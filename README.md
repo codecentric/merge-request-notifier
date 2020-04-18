@@ -9,6 +9,11 @@ This app shows your merge quests grouped by projects and WIP status. It is acces
 | ------------- | ------------- |
 | <img src="./images/app.png" width=500 alt="App Screenshot (Light Mode)"> | <img src="./images/app-dark-mode.png" width=500 alt="App Screenshot (Dark Mode)"> |
 
+## Tray
+In the system tray you wil see the number of all open merge requests.
+
+<img src="./images/tray.png" width=100 alt="System Tray">
+
 ## Notification
 You will receive a desktop notification when a new merge request is created.
 
