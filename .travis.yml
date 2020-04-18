@@ -23,12 +23,13 @@ env:
 
 jobs:
   include:
-    - stage: Lint
+    - stage: Quality
       script:
         - yarn lint
-    - stage: Prettier
-      script:
+      name: Lint
+    - script:
         - yarn prettier:check
+      name: Prettier
     - stage: Build
       if: branch != master
       script:
