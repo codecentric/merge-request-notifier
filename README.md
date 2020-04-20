@@ -38,12 +38,13 @@ available you will be notified with a prominent alert above the merge requests. 
 The tray icon color currently does not depend on your internal dark mode settings, but on the OS theme as detected via the Chromium engine. If the detection does not work, you may force dark mode on startup via `merge-request-notifier --force-dark-mode`.
 
 ## Installation
-### From release page
+### macOS
+#### From release page
 The macOS and windows installer is uploaded at the [releases page](https://github.com/codecentric/merge-request-notifier/releases). Please download and double click it to install.
 
 **Merge.Request.Notifier-x.y.z.dmg**
 
-### With homebrew-cask
+#### With homebrew-cask
 If you're using homebrew-cask, this app can be installed via it. Please tap the repository URL and install this app via brew cask as follows.
 
 ```
@@ -51,6 +52,20 @@ brew tap codecentric/merge-request-notifier https://github.com/codecentric/merge
 brew cask install merge-request-notifier
 ```
 It's the easiest way to install and manage this app on macOS.
+
+### Linux
+
+#### Arch Linux
+
+merge-request-notifier is available from the [AUR](https://aur.archlinux.org/packages/merge-request-notifier/). Install it using yay (or any other AUR helper):
+
+```
+$ yay -S merge-request-notifier
+```
+
+#### Other
+
+Check the [releases](https://github.com/codecentric/merge-request-notifier/releases) page for packages for your distribution.
 
 ## Development
 ### Install all dependencies 
