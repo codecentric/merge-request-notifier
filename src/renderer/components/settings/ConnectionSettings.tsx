@@ -34,6 +34,10 @@ const splitStringByComma = (groups: string) => {
         .filter(group => !!group)
 }
 
+const URL_REQUIRED_ERROR_MESSAGE = 'Please enter your GitLab URL.'
+const TOKEN_REQUIRED_ERROR_MESSAGE = 'Please enter your Personal Access Token.'
+const GROUP_NAMES_REQUIRED_ERROR_MESSAGE = 'Please enter at least one Group Name'
+
 const projectsFromConfig = (projectsConfig?: ProjectsConfig): ProjectsFormData => {
     return projectsConfig
         ? Object.keys(projectsConfig).reduce((previousValue, current) => {
@@ -71,12 +75,21 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         setErrors({ ...errors, [name]: errorMessage })
     }
 
-    const splitGroupNames = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleGroupsBlur = () => {
         setSplittedGroups(splitStringByComma(values.groups))
+        validateRequiredError('url', 'url', GROUP_NAMES_REQUIRED_ERROR_MESSAGE)()
     }
 
     const handleProjectsChange = (group: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, projects: { ...values.projects, [group]: event.target.value } })
+    }
+
+    const validateRequiredError = (valuesKey: keyof FormData, errorKey: keyof FormErrorData, errorMessage: string) => () => {
+        if (!values[valuesKey]) {
+            setError(errorKey, errorMessage)
+        } else {
+            setError(errorKey, '')
+        }
     }
 
     const handleChange = (name: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,13 +119,13 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         setErrors({ url: '', token: '', groups: '', invalidSettings: false })
 
         if (!values.url) {
-            setError('url', 'Please enter your GitLab URL.')
+            setError('url', URL_REQUIRED_ERROR_MESSAGE)
         }
         if (!values.token) {
-            setError('token', 'Please enter your Personal Access Token.')
+            setError('token', TOKEN_REQUIRED_ERROR_MESSAGE)
         }
         if (!values.groups) {
-            setError('groups', 'Please enter at least one Group Name')
+            setError('groups', GROUP_NAMES_REQUIRED_ERROR_MESSAGE)
         }
 
         if (values.url && values.token && values.groups) {
@@ -152,9 +165,10 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         id='url'
                         name='url'
                         type='url'
-                        placeholder='https://gitlab.com'
+                        placeholder='e.g. https://gitlab.com'
                         value={values.url}
                         onChange={handleChange('url')}
+                        onBlur={validateRequiredError('url', 'url', URL_REQUIRED_ERROR_MESSAGE)}
                         disabled={submitting}
                         required
                     />
@@ -166,6 +180,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         type='text'
                         value={values.token}
                         onChange={handleChange('token')}
+                        onBlur={validateRequiredError('token', 'token', TOKEN_REQUIRED_ERROR_MESSAGE)}
                         disabled={submitting}
                         required
                         error={errors.token}
@@ -177,10 +192,10 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         id='group'
                         name='group'
                         type='text'
-                        placeholder='my-first-group, another-group'
+                        placeholder='e.g. my-first-group, another-group'
                         value={values.groups}
                         onChange={handleChange('groups')}
-                        onBlur={splitGroupNames}
+                        onBlur={handleGroupsBlur}
                         disabled={submitting}
                         error={errors.groups}
                         info={
@@ -220,7 +235,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                                 name={key}
                                 indented={3}
                                 type='text'
-                                placeholder='my-awesome-project, another-project'
+                                placeholder='e.g. my-awesome-project, another-project'
                                 value={values.projects[splittedGroup] || ''}
                                 onChange={handleProjectsChange(splittedGroup)}
                                 disabled={submitting}
