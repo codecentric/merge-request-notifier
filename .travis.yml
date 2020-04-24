@@ -34,13 +34,19 @@ jobs:
       if: branch != master
       script:
         - yarn build
+      name: Build
     - stage: Build & Package
       if: branch = master
       os: osx
       osx_image: xcode10.1
       script:
         - yarn clean
-        - yarn build
-        - yarn package-and-publish
+      name: Clean
       before_cache:
         - rm -rf $HOME/.cache/electron-builder/wine
+    - script:
+        - yarn build
+      name: Build
+    - script:
+        - yarn package-and-publish
+      name: Package & Publish
