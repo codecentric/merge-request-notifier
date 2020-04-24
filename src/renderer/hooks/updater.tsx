@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { UpdateCheckResult } from 'electron-updater'
 import { ipcRenderer } from 'electron'
+import * as log from 'electron-log'
 import * as moment from 'moment'
 
 export type UpdateInfo = undefined | UpdateCheckResult
@@ -15,7 +16,7 @@ const Context = React.createContext<UpdaterContext | null>(null)
 const url = new URL(document.location.href)
 const SHOW_FAKE_UPDATE = url.searchParams.has('fake-update')
 if (SHOW_FAKE_UPDATE) {
-    console.info('Application show a "Fake Update"')
+    log.info('Application shows a "Fake Update"')
 }
 
 const FAKE_UPDATE: UpdateCheckResult = {
@@ -63,10 +64,10 @@ export const UpdaterProvider = ({ ...props }) => {
         ipcRenderer
             .invoke('check-for-updates')
             .then(result => {
-                setUpdateInfo(result as UpdateCheckResult)
+                setUpdateInfo(result as UpdateCheckResult | undefined)
             })
             .catch(error => {
-                console.error('could not check for updates', error)
+                log.error('Could not check for updates', error)
             })
     }
 

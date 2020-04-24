@@ -6,7 +6,7 @@ import ArrowIcon from '@material-ui/icons/ArrowBackSharp'
 
 const BackLink = () => (
     <Box sx={{ position: 'absolute', left: 0, top: 0 }}>
-        <Link to='/' title='Back'>
+        <Link to='' title='Back'>
             <Box px={1} fontSize={1} color='gray' sx={{ width: 28, height: 24, ':hover': { color: 'textColor' } }}>
                 <ArrowIcon fontSize='small' />
             </Box>

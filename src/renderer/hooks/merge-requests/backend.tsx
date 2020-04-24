@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { ipcRenderer } from 'electron'
+import * as log from 'electron-log'
 
 import { useConfig } from '../config'
 import { loadData, loadGroups } from './loadData'
@@ -44,7 +45,7 @@ export const BackendProvider = ({ ...props }) => {
                 ipcRenderer.send('update-open-merge-requests', numberOfOpenMergeRequest)
             }
         } catch (error) {
-            console.error(error)
+            log.error('Could not load the merge requests', error)
             setLoadErrors(loadErrors + 1)
             if (loadErrors > 2) {
                 setGroupedMergeRequests(undefined)

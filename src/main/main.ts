@@ -16,6 +16,8 @@ import { createMenu } from './menu'
 let tray: Tray | null
 let win: BrowserWindow | null
 
+const IS_DEV = process.env.NODE_ENV !== 'production'
+
 export const WINDOW_WIDTH = 380
 export const WINDOW_HEIGHT = 460
 
@@ -24,7 +26,7 @@ const installExtensions = async () => {
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
     const extensions = ['REACT_DEVELOPER_TOOLS']
 
-    return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(console.log)
+    return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(log.error)
 }
 
 const getTrayImage = (openMergeRequests: number = 0) => {
@@ -61,12 +63,11 @@ const getWindowPosition = (fromTray: boolean) => {
 
 const setup = async () => {
     reportUnhandledRejections()
+    log.transports.console.level = IS_DEV ? 'silly' : 'error'
     log.debug('Starting the app')
 
     try {
-        setupAutoUpdater()
-
-        if (process.env.NODE_ENV !== 'production') {
+        if (IS_DEV) {
             await installExtensions()
         }
 
@@ -80,6 +81,8 @@ const setup = async () => {
 
         if (process.platform === 'darwin') {
             // macOS specific configuration
+            setupAutoUpdater()
+
             systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
                 if (tray) {
                     tray.setImage(getTrayImage())
@@ -94,7 +97,7 @@ const setup = async () => {
 
         log.debug('App started')
     } catch (error) {
-        log.error(`Could not start the app: ${JSON.stringify(error)}`)
+        log.error('Could not start the app', error)
     }
 }
 
@@ -125,10 +128,11 @@ const showWindow = (fromTray: boolean) => {
 }
 
 const getConfig = (): Config => {
-    const savedConfig = electronSettings.get('config.v3') as any
-    log.debug('loading config', savedConfig)
+    const savedConfig: Config = electronSettings.get('config.v3') as any
 
     if (savedConfig) {
+        log.debug('Found config', { ...savedConfig, connectionConfig: { ...savedConfig.connectionConfig, token: 'hidden' } })
+
         return {
             connectionConfig: savedConfig.connectionConfig,
             generalConfig: {
@@ -136,6 +140,8 @@ const getConfig = (): Config => {
                 ...savedConfig.generalConfig,
             },
         }
+    } else {
+        log.debug('No saved config found')
     }
 
     return DEFAULT_CONFIG
@@ -156,7 +162,7 @@ const createWindow = () => {
         },
     })
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (IS_DEV) {
         process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'
         browserWindow.loadURL(`http://localhost:2003`)
     } else {
@@ -197,6 +203,8 @@ const updateGlobalShortcut = (shortcut: string) => {
 }
 
 app.dock?.hide()
+
+app.allowRendererProcessReuse = true
 
 app.on('ready', () => {
     setup().then(() => {
@@ -240,7 +248,7 @@ ipcMain.on('get-config', (event: Electron.IpcMainEvent) => {
 })
 
 ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
-    log.debug('saving the config', data)
+    log.debug('Saving the config', { ...data, connectionConfig: { ...data.connectionConfig, token: 'hidden' } })
 
     updateGlobalShortcut(data.generalConfig.openShortcut)
     updateStartOnLoginConfiguration(data.generalConfig.startOnLogin)
