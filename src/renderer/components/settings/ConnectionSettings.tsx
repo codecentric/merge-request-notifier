@@ -254,7 +254,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                     </Flex>
                 </form>
             </Box>
-            {!!config && !submitting && (
+            {!!config.connectionConfig && !submitting && (
                 <Box bg='lightred' px={2} pb={2} mt={3} sx={{ borderTop: '1px dashed', borderColor: 'red' }}>
                     <Heading my={3} fontSize={2} color='red'>
                         Danger zone
