@@ -20,6 +20,9 @@ export const setupAutoUpdater = () => {
     })
 
     ipcMain.handle('check-for-updates', async () => {
-        return autoUpdater.checkForUpdates().catch(error => log.error('error while checking for updates', error))
+        if (process.platform === 'darwin') {
+            return autoUpdater.checkForUpdates().catch(error => log.error('Error while checking for updates', error))
+        }
+        return undefined
     })
 }

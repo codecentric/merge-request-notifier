@@ -1,4 +1,5 @@
 import * as request from 'superagent'
+import * as log from 'electron-log'
 
 import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, Note, PipelineStatus, Project, UserNotesStatus } from './types'
 import sleep from '../../util/sleep'
@@ -10,7 +11,7 @@ const url = new URL(document.location.href)
 const SHOW_TEST_DATA = url.searchParams.has('test-data')
 
 if (SHOW_TEST_DATA) {
-    console.info('Application is running in the "TEST MODE"')
+    log.info('Application is running in the "TEST MODE"')
 }
 
 export const loadGroups = async (connectionConfig: ConnectionConfig): Promise<Group[]> => {

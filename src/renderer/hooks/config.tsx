@@ -51,8 +51,10 @@ const loadConfig = (): Config => {
     return ipcRenderer.sendSync('get-config') as Config
 }
 
+const SAVED_CONFIG = loadConfig()
+
 export const ConfigProvider = ({ ...props }) => {
-    const [config, setConfig] = React.useState<Config>(loadConfig())
+    const [config, setConfig] = React.useState<Config>(SAVED_CONFIG)
 
     const removeConfig = () => {
         const defaultConfig = ipcRenderer.sendSync('remove-config')

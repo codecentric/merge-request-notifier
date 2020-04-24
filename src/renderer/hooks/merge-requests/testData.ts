@@ -9,19 +9,19 @@ const users: User[] = [
         id: 1,
         name: 'Matthias',
         username: 'ruettenm',
-        avatar_url: require('../../images/matthias.jpg').default,
+        avatar_url: `/${require('../../images/matthias.jpg').default}`,
     },
     {
         id: 2,
         name: 'Julian',
         username: 'jukempff',
-        avatar_url: require('../../images/julian.jpg').default,
+        avatar_url: `/${require('../../images/julian.jpg').default}`,
     },
     {
         id: 3,
         name: 'Polina',
         username: 'polina.tagirova',
-        avatar_url: require('../../images/polina.jpg').default,
+        avatar_url: `/${require('../../images/polina.jpg').default}`,
     },
 ]
 
