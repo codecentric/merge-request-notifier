@@ -1,9 +1,6 @@
 # Merge Request Notifier
 
-[![Build Status](https://travis-ci.org/codecentric/merge-request-notifier.svg?branch=master)](https://travis-ci.org/codecentric/merge-request-notifier) 
-[![Greenkeeper](https://badges.greenkeeper.io/codecentric/merge-request-notifier.svg)](https://greenkeeper.io/)
-
-This app shows your merge quests grouped by projects and WIP status. It is accessible from the system tray.
+This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.
 
 | Light Mode  | Dark Mode |
 | ------------- | ------------- |
