@@ -18,6 +18,7 @@ export interface GeneralConfig {
     useNotifications: boolean
     disableWipNotifications: boolean
     darkMode: boolean
+    trayIconForDarkMode: 'system' | 'darkMode' | 'lightMode'
     startOnLogin: boolean
     openShortcut: string
     showOpenMergeRequestsInTrayIcon: boolean
@@ -27,6 +28,7 @@ export const DEFAULT_CONFIG: Config = {
     generalConfig: {
         useNotifications: true,
         disableWipNotifications: true,
+        trayIconForDarkMode: 'system',
         darkMode: false,
         startOnLogin: true,
         openShortcut: 'CmdOrCtrl+Shift+m',

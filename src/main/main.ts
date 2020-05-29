@@ -30,8 +30,16 @@ const installExtensions = async () => {
 }
 
 const getTrayImage = (openMergeRequests: number = 0) => {
+    const config = getConfig()
     const suffix = openMergeRequests === 0 ? 'default' : openMergeRequests > 9 ? 'more' : openMergeRequests
-    const icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode' : 'icon-light-mode'
+    let icon
+    if (config.generalConfig.trayIconForDarkMode === 'system') {
+        icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode' : 'icon-light-mode'
+    } else if (config.generalConfig.trayIconForDarkMode === 'darkMode') {
+        icon = 'icon-dark-mode'
+    } else {
+        icon = 'icon-light-mode'
+    }
 
     return path.join(__dirname, 'assets', `${icon}-${suffix}.png`)
 }
