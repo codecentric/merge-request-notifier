@@ -1,3 +1,7 @@
+<div align="left">
+        <img src="https://www.electronjs.org/app-img/merge-request-notifier/merge-request-notifier-icon-128.png">
+</div>
+
 # Merge Request Notifier
 
 This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.
