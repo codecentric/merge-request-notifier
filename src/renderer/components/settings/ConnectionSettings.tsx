@@ -77,7 +77,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
 
     const handleGroupsBlur = () => {
         setSplittedGroups(splitStringByComma(values.groups))
-        validateRequiredError('url', 'url', GROUP_NAMES_REQUIRED_ERROR_MESSAGE)()
+        validateRequiredError('groups', 'groups', GROUP_NAMES_REQUIRED_ERROR_MESSAGE)()
     }
 
     const handleProjectsChange = (group: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
