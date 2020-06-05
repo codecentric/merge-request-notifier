@@ -69,7 +69,11 @@ export const BackendProvider = ({ ...props }) => {
         setIsLoading(true)
         return loadGroups(newConnectionConfig)
             .then(() => true)
-            .catch(() => false)
+            .catch(error => {
+                log.error('Error while testing the connection', error)
+
+                return false
+            })
             .then(validConfig => {
                 setIsLoading(false)
                 return validConfig
