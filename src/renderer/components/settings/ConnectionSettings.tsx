@@ -75,6 +75,13 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         setErrors({ ...errors, [name]: errorMessage })
     }
 
+    const handleUrlBlur = () => {
+        validateRequiredError('url', 'url', URL_REQUIRED_ERROR_MESSAGE)()
+        if (values.url && !values.url.startsWith('http://') && !values.url.startsWith('https://')) {
+            setError('url', 'Please start your URL with http(s)://')
+        }
+    }
+
     const handleGroupsBlur = () => {
         setSplittedGroups(splitStringByComma(values.groups))
         validateRequiredError('groups', 'groups', GROUP_NAMES_REQUIRED_ERROR_MESSAGE)()
@@ -161,14 +168,14 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                 <form autoComplete='off'>
                     <FormInput
                         error={errors.url}
-                        label='GitLab Hostname'
+                        label='GitLab Url'
                         id='url'
                         name='url'
                         type='url'
                         placeholder='e.g. https://gitlab.com'
                         value={values.url}
                         onChange={handleChange('url')}
-                        onBlur={validateRequiredError('url', 'url', URL_REQUIRED_ERROR_MESSAGE)}
+                        onBlur={handleUrlBlur}
                         disabled={submitting}
                         required
                     />
