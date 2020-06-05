@@ -88,7 +88,6 @@ You will find the application settings in the following folders
 | macOS | ~/Library/Application\ Support/<Your App> |
 | Windows | %APPDATA%/<Your App> |
 
-
 ### New Releases
 #### Create a new Release and Publish it
 ```bash
