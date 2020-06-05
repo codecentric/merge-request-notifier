@@ -1,6 +1,6 @@
 # Merge Request Notifier
 
-This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.
+This app shows your **GitLab** merge requests grouped by projects and WIP status. It is accessible from the system tray.
 
 | Light Mode  | Dark Mode |
 | ------------- | ------------- |
