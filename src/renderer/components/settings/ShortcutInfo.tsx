@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { isValidHostname } from '../../util/isValidHostname'
 import { shell } from 'electron'
 import { Link } from 'rebass'
 

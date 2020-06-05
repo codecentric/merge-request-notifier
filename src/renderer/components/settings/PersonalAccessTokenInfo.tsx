@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { isValidHostname } from '../../util/isValidHostname'
+import { isValidUrlWithProtocol } from '../../util/isValidUrlWithProtocol'
 import { shell } from 'electron'
 import { Link } from 'rebass'
 
@@ -15,7 +15,7 @@ const openProfileSettingsLink = (hostname: string): React.MouseEventHandler<HTML
 }
 
 export const PersonalAccessTokenInfo: React.FunctionComponent<PersonalAccessTokenInfoProps> = ({ hostname }) => {
-    if (isValidHostname(hostname)) {
+    if (isValidUrlWithProtocol(hostname)) {
         return (
             <span>
                 Create one in your GitLab{' '}
