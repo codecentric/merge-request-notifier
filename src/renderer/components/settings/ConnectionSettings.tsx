@@ -2,6 +2,8 @@ import * as React from 'react'
 import { useHistory } from 'react-router'
 import { Box, Button, Flex, Heading, Text } from 'rebass'
 import { Label } from '@rebass/forms'
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
 import { PersonalAccessTokenInfo } from './PersonalAccessTokenInfo'
 import { useBackend } from '../../hooks/merge-requests/backend'
@@ -54,6 +56,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
     const { testConnectionConfig } = useBackend()
     const { config, updateConnectionConfig, removeConfig } = useConfig()
 
+    const [accessKeyIconVisible, setAccessKeyIconVisible] = React.useState(false)
     const [confirmDelete, setConfirmDelete] = React.useState(false)
     const [splittedGroups, setSplittedGroups] = React.useState<string[]>(config?.connectionConfig?.groups || [])
     const [submitting, setSubmitting] = React.useState(false)
@@ -70,6 +73,11 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         groups: (config.connectionConfig?.groups || []).join(', '),
         projects: projectsFromConfig(config.connectionConfig?.projects),
     })
+
+    const toggleAccessKeyIconVisibility: React.MouseEventHandler<HTMLDivElement> = event => {
+        event.preventDefault()
+        setAccessKeyIconVisible(!accessKeyIconVisible)
+    }
 
     const setError = (name: keyof FormErrorData, errorMessage: string | boolean) => {
         setErrors({ ...errors, [name]: errorMessage })
@@ -180,19 +188,31 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         required
                     />
 
-                    <FormInput
-                        label='Personal Access Token'
-                        id='token'
-                        name='token'
-                        type='text'
-                        value={values.token}
-                        onChange={handleChange('token')}
-                        onBlur={validateRequiredError('token', 'token', TOKEN_REQUIRED_ERROR_MESSAGE)}
-                        disabled={submitting}
-                        required
-                        error={errors.token}
-                        info={<PersonalAccessTokenInfo hostname={values.url} />}
-                    />
+                    <Flex>
+                        <Flex flexGrow={1}>
+                            <FormInput
+                                label='Personal Access Token'
+                                id='token'
+                                name='token'
+                                type={accessKeyIconVisible ? 'text' : 'password'}
+                                value={values.token}
+                                onChange={handleChange('token')}
+                                onBlur={validateRequiredError('token', 'token', TOKEN_REQUIRED_ERROR_MESSAGE)}
+                                disabled={submitting}
+                                required
+                                error={errors.token}
+                                info={<PersonalAccessTokenInfo hostname={values.url} />}
+                            />
+                        </Flex>
+                        <Box
+                            fontSize={1}
+                            color='gray'
+                            sx={{ marginTop: '27px', marginLeft: '7px', width: 20, height: 20, ':hover': { color: 'textColor' } }}
+                            onClick={toggleAccessKeyIconVisibility}
+                        >
+                            {accessKeyIconVisible ? <VisibilityIcon fontSize='small' /> : <VisibilityOffIcon fontSize='small' />}
+                        </Box>
+                    </Flex>
 
                     <FormInput
                         label='GitLab Group Names'
