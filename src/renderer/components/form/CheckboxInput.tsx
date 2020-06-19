@@ -12,7 +12,7 @@ interface FormCheckboxProps {
     [htmlAttribute: string]: any
 }
 
-export const CheckboxInput: React.FunctionComponent<FormCheckboxProps> = ({ id, label, info, error, indented, ...props }) => (
+export const CheckboxInput: React.FunctionComponent<FormCheckboxProps> = ({ id, name, label, info, error, indented, ...props }) => (
     <Box mb={3} ml={indented || 0}>
         <Label fontWeight='bold' fontSize={1} htmlFor={id}>
             <Checkbox id={id} name={name} {...props} />
