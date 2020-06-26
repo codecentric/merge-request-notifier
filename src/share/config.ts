@@ -10,7 +10,7 @@ export interface ProjectsConfig {
 export interface ConnectionConfig {
     url: string
     groups: string[]
-    token?: string
+    token: string
     projects?: ProjectsConfig
 }
 
