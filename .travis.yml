@@ -16,6 +16,16 @@ cache:
     - $HOME/.cache/electron-builder
     - $HOME/.npm/_prebuilds
 
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - xvfb
+      - gnome-keyring
+      - libsecret-1-dev
+      - python-gnomekeyring
+
 env:
   global:
     - ELECTRON_CACHE=$HOME/.cache/electron

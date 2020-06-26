@@ -3,13 +3,14 @@ import * as log from 'electron-log'
 import * as path from 'path'
 import * as url from 'url'
 import * as electronSettings from 'electron-settings'
+import * as keytar from 'keytar'
 
 import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 
 import { macOsWindowPosition } from './positioning/mac-os'
 import { windowsWindowPosition } from './positioning/windows'
 import { linuxWindowPosition } from './positioning/linux'
-import { Config, DEFAULT_CONFIG } from '../share/config'
+import { Config, DEFAULT_CONFIG, GeneralConfig } from '../share/config'
 import { setupAutoUpdater } from './autoUpdates'
 import { createMenu } from './menu'
 
@@ -17,6 +18,9 @@ let tray: Tray | null
 let win: BrowserWindow | null
 
 const IS_DEV = process.env.NODE_ENV !== 'production'
+
+const KEYTAR_SERVICE = 'Merge Request Notifier'
+const KEYTAR_ACCOUNT = 'PersonalAccessToken'
 
 export const WINDOW_WIDTH = 380
 export const WINDOW_HEIGHT = 460
@@ -30,12 +34,12 @@ const installExtensions = async () => {
 }
 
 const getTrayImage = (openMergeRequests: number = 0) => {
-    const config = getConfig()
+    const generalConfig = getGeneralConfig()
     const suffix = openMergeRequests === 0 ? 'default' : openMergeRequests > 9 ? 'more' : openMergeRequests
     let icon
-    if (config.generalConfig.trayIconForDarkMode === 'system') {
+    if (generalConfig.trayIconForDarkMode === 'system') {
         icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode' : 'icon-light-mode'
-    } else if (config.generalConfig.trayIconForDarkMode === 'darkMode') {
+    } else if (generalConfig.trayIconForDarkMode === 'darkMode') {
         icon = 'icon-dark-mode'
     } else {
         icon = 'icon-light-mode'
@@ -83,9 +87,9 @@ const setup = async () => {
         win = createWindow()
         createMenu(win)
 
-        const config = getConfig()
-        updateGlobalShortcut(config.generalConfig.openShortcut)
-        updateStartOnLoginConfiguration(config.generalConfig.startOnLogin)
+        const generalConfig = getGeneralConfig()
+        updateGlobalShortcut(generalConfig.openShortcut)
+        updateStartOnLoginConfiguration(generalConfig.startOnLogin)
 
         if (process.platform === 'darwin') {
             // macOS specific configuration
@@ -135,10 +139,36 @@ const showWindow = (fromTray: boolean) => {
     }
 }
 
-const getConfig = (): Config => {
+const getAccessToken = async (savedConfig: Config): Promise<string> => {
+    const accessToken = await keytar.getPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
+
+    if (accessToken) {
+        log.debug('Found the access token via keytar')
+        return accessToken
+    }
+
+    if (savedConfig.connectionConfig && savedConfig.connectionConfig.token) {
+        log.debug('Found the access token in the connectionConfig')
+        const SavedToken = savedConfig.connectionConfig.token
+        await keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, SavedToken)
+        delete savedConfig.connectionConfig.token
+        electronSettings.set('config.v3', savedConfig as any)
+        log.debug('Migrated the access token from the connectionConfig into keytar')
+
+        return SavedToken
+    }
+
+    return 'accessTokenNotSet'
+}
+
+const getConfig = async (): Promise<Config> => {
     const savedConfig: Config = electronSettings.get('config.v3') as any
 
     if (savedConfig) {
+        if (savedConfig.connectionConfig) {
+            savedConfig.connectionConfig.token = await getAccessToken(savedConfig)
+        }
+
         log.debug('Found config', { ...savedConfig, connectionConfig: { ...savedConfig.connectionConfig, token: 'hidden' } })
 
         return {
@@ -153,6 +183,16 @@ const getConfig = (): Config => {
     }
 
     return DEFAULT_CONFIG
+}
+
+const getGeneralConfig = (): GeneralConfig => {
+    const savedConfig: Config = electronSettings.get('config.v3') as any
+
+    if (savedConfig) {
+        return savedConfig.generalConfig
+    }
+
+    return DEFAULT_CONFIG.generalConfig
 }
 
 const createWindow = () => {
@@ -238,7 +278,7 @@ app.on('activate', async () => {
 
 ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => {
     if (tray) {
-        const { showOpenMergeRequestsInTrayIcon } = getConfig().generalConfig
+        const { showOpenMergeRequestsInTrayIcon } = getGeneralConfig()
         if (showOpenMergeRequestsInTrayIcon) {
             tray.setImage(getTrayImage(openMergeRequests))
         }
@@ -247,12 +287,13 @@ ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => 
 
 ipcMain.on('remove-config', (event: Electron.IpcMainEvent) => {
     electronSettings.delete('config.v3')
+    keytar.deletePassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
 
     event.returnValue = DEFAULT_CONFIG
 })
 
-ipcMain.on('get-config', (event: Electron.IpcMainEvent) => {
-    event.returnValue = getConfig()
+ipcMain.on('get-config', async (event: Electron.IpcMainEvent) => {
+    event.returnValue = await getConfig()
 })
 
 ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
@@ -261,6 +302,10 @@ ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
     updateGlobalShortcut(data.generalConfig.openShortcut)
     updateStartOnLoginConfiguration(data.generalConfig.startOnLogin)
 
+    if (data.connectionConfig && data.connectionConfig.token) {
+        keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, data.connectionConfig.token)
+        delete data.connectionConfig.token
+    }
     electronSettings.set('config.v3', data as any)
 })
 
