@@ -155,6 +155,16 @@ const getConfig = (): Config => {
     return DEFAULT_CONFIG
 }
 
+const getGeneralConfig = (): GeneralConfig => {
+    const savedConfig: Config = electronSettings.get('config.v3') as any
+
+    if (savedConfig) {
+        return savedConfig.generalConfig
+    }
+
+    return DEFAULT_CONFIG.generalConfig
+}
+
 const createWindow = () => {
     const browserWindow = new BrowserWindow({
         width: WINDOW_WIDTH,
