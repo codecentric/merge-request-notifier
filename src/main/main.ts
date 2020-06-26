@@ -3,6 +3,7 @@ import * as log from 'electron-log'
 import * as path from 'path'
 import * as url from 'url'
 import * as electronSettings from 'electron-settings'
+import * as keytar from 'keytar'
 
 import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 
@@ -17,6 +18,9 @@ let tray: Tray | null
 let win: BrowserWindow | null
 
 const IS_DEV = process.env.NODE_ENV !== 'production'
+
+const KEYTAR_SERVICE = 'Merge Request Notifier'
+const KEYTAR_ACCOUNT = 'PersonalAccessToken'
 
 export const WINDOW_WIDTH = 380
 export const WINDOW_HEIGHT = 460
@@ -135,10 +139,36 @@ const showWindow = (fromTray: boolean) => {
     }
 }
 
-const getConfig = (): Config => {
+const getAccessToken = async (savedConfig: Config): Promise<string> => {
+    const accessToken = await keytar.getPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
+
+    if (accessToken) {
+        log.debug('Found the access token via keytar')
+        return accessToken
+    }
+
+    if (savedConfig.connectionConfig && savedConfig.connectionConfig.token) {
+        log.debug('Found the access token in the connectionConfig')
+        const SavedToken = savedConfig.connectionConfig.token
+        await keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, SavedToken)
+        delete savedConfig.connectionConfig.token
+        electronSettings.set('config.v3', savedConfig as any)
+        log.debug('Migrated the access token from the connectionConfig into keytar')
+
+        return SavedToken
+    }
+
+    return 'accessTokenNotSet'
+}
+
+const getConfig = async (): Promise<Config> => {
     const savedConfig: Config = electronSettings.get('config.v3') as any
 
     if (savedConfig) {
+        if (savedConfig.connectionConfig) {
+            savedConfig.connectionConfig.token = await getAccessToken(savedConfig)
+        }
+
         log.debug('Found config', { ...savedConfig, connectionConfig: { ...savedConfig.connectionConfig, token: 'hidden' } })
 
         return {
@@ -257,12 +287,13 @@ ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => 
 
 ipcMain.on('remove-config', (event: Electron.IpcMainEvent) => {
     electronSettings.delete('config.v3')
+    keytar.deletePassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
 
     event.returnValue = DEFAULT_CONFIG
 })
 
-ipcMain.on('get-config', (event: Electron.IpcMainEvent) => {
-    event.returnValue = getConfig()
+ipcMain.on('get-config', async (event: Electron.IpcMainEvent) => {
+    event.returnValue = await getConfig()
 })
 
 ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
@@ -271,6 +302,10 @@ ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
     updateGlobalShortcut(data.generalConfig.openShortcut)
     updateStartOnLoginConfiguration(data.generalConfig.startOnLogin)
 
+    if (data.connectionConfig && data.connectionConfig.token) {
+        keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, data.connectionConfig.token)
+        delete data.connectionConfig.token
+    }
     electronSettings.set('config.v3', data as any)
 })
 
