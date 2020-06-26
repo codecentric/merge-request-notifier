@@ -9,7 +9,7 @@ import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 import { macOsWindowPosition } from './positioning/mac-os'
 import { windowsWindowPosition } from './positioning/windows'
 import { linuxWindowPosition } from './positioning/linux'
-import { Config, DEFAULT_CONFIG } from '../share/config'
+import { Config, DEFAULT_CONFIG, GeneralConfig } from '../share/config'
 import { setupAutoUpdater } from './autoUpdates'
 import { createMenu } from './menu'
 
@@ -30,12 +30,12 @@ const installExtensions = async () => {
 }
 
 const getTrayImage = (openMergeRequests: number = 0) => {
-    const config = getConfig()
+    const generalConfig = getGeneralConfig()
     const suffix = openMergeRequests === 0 ? 'default' : openMergeRequests > 9 ? 'more' : openMergeRequests
     let icon
-    if (config.generalConfig.trayIconForDarkMode === 'system') {
+    if (generalConfig.trayIconForDarkMode === 'system') {
         icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode' : 'icon-light-mode'
-    } else if (config.generalConfig.trayIconForDarkMode === 'darkMode') {
+    } else if (generalConfig.trayIconForDarkMode === 'darkMode') {
         icon = 'icon-dark-mode'
     } else {
         icon = 'icon-light-mode'
@@ -83,9 +83,9 @@ const setup = async () => {
         win = createWindow()
         createMenu(win)
 
-        const config = getConfig()
-        updateGlobalShortcut(config.generalConfig.openShortcut)
-        updateStartOnLoginConfiguration(config.generalConfig.startOnLogin)
+        const generalConfig = getGeneralConfig()
+        updateGlobalShortcut(generalConfig.openShortcut)
+        updateStartOnLoginConfiguration(generalConfig.startOnLogin)
 
         if (process.platform === 'darwin') {
             // macOS specific configuration
@@ -238,7 +238,7 @@ app.on('activate', async () => {
 
 ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => {
     if (tray) {
-        const { showOpenMergeRequestsInTrayIcon } = getConfig().generalConfig
+        const { showOpenMergeRequestsInTrayIcon } = getGeneralConfig()
         if (showOpenMergeRequestsInTrayIcon) {
             tray.setImage(getTrayImage(openMergeRequests))
         }
