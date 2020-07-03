@@ -42,6 +42,14 @@ It's the easiest way to install and manage this app on macOS.
 The Windows installer is uploaded at the [releases page](https://github.com/codecentric/merge-request-notifier/releases). Please download and install.
 
 ### Linux
+#### Dependencies
+This app is using a library that uses `libsecret` to store the personal access token on your device.
+
+Depending on your distribution, you will need to run the following command:
+* Debian/Ubuntu: sudo apt-get install libsecret-1-dev
+* Red Hat-based: sudo yum install libsecret-devel
+* Arch Linux: sudo pacman -S libsecret
+
 #### Arch Linux
 merge-request-notifier is available from the [AUR](https://aur.archlinux.org/packages/merge-request-notifier/). Install it using yay (or any other AUR helper):
 
