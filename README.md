@@ -92,9 +92,9 @@ You will find the application settings in the following folders
 
 | OS  | Folder |
 | ------------- | ------------- |
-| Linux | $XDG_CONFIG_HOME/<Your App> or ~/.config/<Your App> |
-| macOS | ~/Library/Application\ Support/<Your App> |
-| Windows | %APPDATA%/<Your App> |
+| Linux | $XDG_CONFIG_HOME/merge-request-notifier/Settings or ~/.config/merge-request-notifier/Settings |
+| macOS | ~/Library/Application\ Support/merge-request-notifier/Settings |
+| Windows | %APPDATA%/merge-request-notifier/Settings |
 
 ### New Releases
 #### Create a new Release and Publish it

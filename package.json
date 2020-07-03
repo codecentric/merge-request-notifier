@@ -139,7 +139,6 @@
     "css-loader": "^3.2.0",
     "electron": "^7.1.8",
     "electron-builder": "^22.1.0",
-    "electron-devtools-installer": "^2.2.4",
     "electron-notarize": "^0.2.0",
     "emotion-theming": "^10.0.18",
     "file-loader": "^6.0.0",
@@ -177,6 +176,7 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "electron-devtools-installer": "^2.2.4",
     "electron-log": "^4.0.0",
     "electron-settings": "^3.2.0",
     "electron-unhandled": "^3.0.0",
