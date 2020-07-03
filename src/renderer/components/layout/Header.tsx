@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Flex, Text } from 'rebass'
 import { Link, Route, Switch } from 'react-router-dom'
 import ArrowIcon from '@material-ui/icons/ArrowBackSharp'

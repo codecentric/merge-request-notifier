@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { ipcRenderer } from 'electron'
 import { Flex, Box, Link } from 'rebass'
 import { Link as RouterLink } from 'react-router-dom'

@@ -1,7 +1,7 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Button, Flex, Text } from 'rebass'
 import { useHistory } from 'react-router-dom'
-import * as moment from 'moment'
+import moment from 'moment'
 
 import { useUpdater } from '../../hooks/updater'
 

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Heading, Text } from 'rebass'
 
 import DoneAllIcon from '@material-ui/icons/DoneAll'

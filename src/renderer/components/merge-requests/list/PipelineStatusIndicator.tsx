@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import { keyframes, css } from '@emotion/core'
 import { Box } from 'rebass'

@@ -1,9 +1,9 @@
 import { app, BrowserWindow, globalShortcut, ipcMain, nativeTheme, systemPreferences, Tray } from 'electron'
-import * as log from 'electron-log'
-import * as path from 'path'
-import * as url from 'url'
-import * as electronSettings from 'electron-settings'
-import * as keytar from 'keytar'
+import log from 'electron-log'
+import path from 'path'
+import url from 'url'
+import electronSettings from 'electron-settings'
+import keytar from 'keytar'
 
 import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 

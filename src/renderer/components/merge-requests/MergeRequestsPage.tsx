@@ -1,5 +1,5 @@
-import * as React from 'react'
-import * as moment from 'moment'
+import React from 'react'
+import moment from 'moment'
 import { shell } from 'electron'
 
 import { MergeRequestGroup } from './list/MergeRequestGroup'

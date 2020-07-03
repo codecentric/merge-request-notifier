@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Image, Flex, Link, Text } from 'rebass'
 
 import { PipelineStatus } from '../../../hooks/merge-requests/types'

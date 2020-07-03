@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { ipcRenderer } from 'electron'
 import * as log from 'electron-log'
 

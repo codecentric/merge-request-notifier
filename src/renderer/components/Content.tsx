@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom'
 import { Box } from 'rebass'
 

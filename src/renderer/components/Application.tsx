@@ -1,5 +1,5 @@
 import { hot } from 'react-hot-loader/root'
-import * as React from 'react'
+import React from 'react'
 import { ConfigProvider } from '../hooks/config'
 import { BackendProvider } from '../hooks/merge-requests/backend'
 import { UpdaterProvider } from '../hooks/updater'

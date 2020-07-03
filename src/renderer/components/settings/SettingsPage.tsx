@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import '@reach/tabs/styles.css'
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@reach/tabs'
 import { ConnectionSettings } from './ConnectionSettings'

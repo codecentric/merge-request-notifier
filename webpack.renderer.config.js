@@ -55,7 +55,8 @@ module.exports = merge.smart(baseConfig, {
     },
     plugins: [
         new ForkTsCheckerWebpackPlugin({
-            reportFiles: ['src/renderer/**/*']
+            reportFiles: ['src/renderer/**/*'],
+            tsconfig: 'tsconfig-renderer.json'
         }),
         new webpack.NamedModulesPlugin(),
         new HtmlWebpackPlugin(),

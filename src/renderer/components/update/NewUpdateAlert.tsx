@@ -1,7 +1,7 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Flex, Link, Text } from 'rebass'
 import { remote } from 'electron'
-import * as compareVersions from 'compare-versions'
+import compareVersions from 'compare-versions'
 
 import { useUpdater } from '../../hooks/updater'
 import { useHistory } from 'react-router'

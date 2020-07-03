@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import { keyframes } from '@emotion/core'
 import { Box } from 'rebass'
@@ -54,7 +54,7 @@ export const LoadingIndicator: React.FunctionComponent<LoadingIndicatorProps> = 
     React.useEffect(() => {
         // This effect delays `visible` change from true to false by MINIM_VISIBLE_MS
         // and therefore ensures the loaders visiblity for at least the configured milliseconds
-        let timeout: number
+        let timeout: any
         const hide = () => {
             if (!visible) {
                 setUsedVisible(false)

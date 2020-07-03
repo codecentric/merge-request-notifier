@@ -1,6 +1,6 @@
 import { MergeRequest, MergeRequestWithProject, User } from './types'
 import { Data } from './loadData'
-import * as moment from 'moment'
+import moment from 'moment'
 
 let count = 0
 

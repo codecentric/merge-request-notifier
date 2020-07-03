@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box, Flex, Text } from 'rebass'
 
 import ThumbUpIcon from '@material-ui/icons/ThumbUp'

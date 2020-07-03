@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { Box } from 'rebass'
 
 export const Wrapper: React.FunctionComponent = ({ children }) => (

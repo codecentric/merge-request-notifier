@@ -1,8 +1,8 @@
 {
   "name": "merge-request-notifier",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
-  "main": "./dist/main.js",
+  "main": "./dist/main/main.js",
   "homepage": "https://github.com/codecentric/merge-request-notifier",
   "author": {
     "name": "Matthias Rütten",
@@ -13,22 +13,28 @@
     "url": "git@github.com:codecentric/merge-request-notifier.git"
   },
   "scripts": {
-    "build-main": "cross-env NODE_ENV=production webpack --config webpack.main.prod.config.js",
+    "build-main": "cross-env NODE_ENV=production tsc --project tsconfig-main.json && yarn copy-assets",
     "build-renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.prod.config.js",
     "build": "yarn build-main && yarn build-renderer",
     "clean": "run-script-os",
     "clean:win32": "rmdir dist /s /q && rmd release /s /q",
     "clean:default": "rm -rf dist && rm -rf release",
+    "copy-assets": "run-script-os",
+    "copy-assets:win32": "Xcopy /I src\\main\\assets dist\\main\\assets",
+    "copy-assets:default": "cp -r src/main/assets dist/main/assets",
+    "prepare-auto-update": "run-script-os",
+    "prepare-auto-update:darwin": "cp dev-app-update.yml dist/dev-app-update.yml",
+    "prepare-auto-update:default": "echo \"Nothing to do because this is not supported by the used OS.\"",
     "start-renderer": "webpack-dashboard -- webpack-dev-server --config webpack.renderer.dev.config.js",
-    "start-main": "webpack --config webpack.main.config.js && electron ./dist/main.js",
+    "start-main": "tsc --project tsconfig-main.json && yarn copy-assets && yarn prepare-auto-update && electron ./dist/main/main.js",
     "test": "echo \"not yet implemented.\"",
-    "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project ./tsconfig.json",
+    "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project tsconfig-renderer.json",
     "package-and-publish": "electron-builder --publish always --mac --linux",
     "package": "electron-builder --publish never",
     "package:windows": "electron-builder --publish never --windows",
     "package:linux": "electron-builder --publish never --linux",
     "package:mac": "electron-builder --publish never --mac",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps && rm -rf node_modules/@types/react-native",
     "prettier:check": "prettier --check 'src/**/*.ts*'",
     "prettier:write": "prettier --write 'src/**/*.ts*'"
   },
@@ -48,7 +54,7 @@
       "git add"
     ],
     "{src,test,mocks}/**/*.{js,ts,tsx}": [
-      "tslint --project ./tsconfig.json --fix",
+      "tslint --project tsconfig-renderer.json --fix",
       "git add"
     ]
   },
@@ -114,6 +120,7 @@
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/electron-settings": "^3.1.1",
     "@types/keytar": "^4.4.2",
+    "@types/node": "12",
     "@types/reach__tabs": "^0.1.0",
     "@types/react": "^16.9.25",
     "@types/react-dom": "^16.8.4",
@@ -123,6 +130,7 @@
     "@types/rebass": "^4.0.0",
     "@types/superagent": "^4.1.3",
     "@types/webdriverio": "^5.0.0",
+    "@types/webpack": "^4.41.18",
     "@types/webpack-env": "^1.13.3",
     "babel-loader": "^8.0.6",
     "compare-versions": "^3.5.1",
@@ -132,22 +140,16 @@
     "electron": "^7.1.8",
     "electron-builder": "^22.1.0",
     "electron-devtools-installer": "^2.2.4",
-    "electron-log": "^4.0.0",
     "electron-notarize": "^0.2.0",
-    "electron-settings": "^3.2.0",
-    "electron-unhandled": "^3.0.0",
-    "electron-updater": "^4.2.0",
-    "electron-util": "^0.14.0",
     "emotion-theming": "^10.0.18",
     "file-loader": "^6.0.0",
     "fork-ts-checker-webpack-plugin": "^4.0.1",
     "hard-source-webpack-plugin": "^0.13.1",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^4.0.10",
-    "keytar": "^6.0.1",
     "lint-staged": "^10.0.3",
     "moment": "^2.24.0",
-    "node-loader": "^0.6.0",
+    "native-ext-loader": "^2.3.0",
     "node-sass": "^4.12.0",
     "prettier": "^1.17.1",
     "react": "^16.8.6",
@@ -173,6 +175,14 @@
     "webpack-dashboard": "^3.2.0",
     "webpack-dev-server": "^3.4.1",
     "webpack-merge": "^4.2.1"
+  },
+  "dependencies": {
+    "electron-log": "^4.0.0",
+    "electron-settings": "^3.2.0",
+    "electron-unhandled": "^3.0.0",
+    "electron-updater": "^4.2.0",
+    "electron-util": "^0.14.0",
+    "keytar": "^6.0.1"
   },
   "resolutions": {
     "minimist": "1.2.5"

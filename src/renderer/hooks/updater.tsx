@@ -1,8 +1,8 @@
-import * as React from 'react'
+import React from 'react'
 import { UpdateCheckResult } from 'electron-updater'
 import { ipcRenderer } from 'electron'
 import * as log from 'electron-log'
-import * as moment from 'moment'
+import moment from 'moment'
 
 export type UpdateInfo = undefined | UpdateCheckResult
 

@@ -1,4 +1,4 @@
-import * as unhandled from 'electron-unhandled'
+import unhandled from 'electron-unhandled'
 import { debugInfo, openNewGitHubIssue } from 'electron-util'
 
 export function reportUnhandledRejections() {

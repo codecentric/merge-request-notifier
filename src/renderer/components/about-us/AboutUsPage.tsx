@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { remote, shell } from 'electron'
 import { Box, Link, Text } from 'rebass'
 

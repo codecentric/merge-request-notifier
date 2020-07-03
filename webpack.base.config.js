@@ -4,7 +4,7 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 module.exports = {
     mode: 'development',
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist/renderer'),
         filename: '[name].js'
     },
     node: {

@@ -1,5 +1,6 @@
-import * as React from 'react'
+import React from 'react'
 import { Box } from 'rebass'
+// @ts-ignore
 import { Label, Select } from '@rebass/forms'
 
 import { useConfig } from '../../hooks/config'

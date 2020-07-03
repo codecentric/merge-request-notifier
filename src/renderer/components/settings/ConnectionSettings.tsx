@@ -1,6 +1,7 @@
-import * as React from 'react'
+import React from 'react'
 import { useHistory } from 'react-router'
 import { Box, Button, Flex, Heading, Text } from 'rebass'
+// @ts-ignore
 import { Label } from '@rebass/forms'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
