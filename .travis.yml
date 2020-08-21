@@ -52,7 +52,7 @@ jobs:
       script:
         - yarn clean
         - yarn build
-        - yarn package-and-publish
+        - yarn package
       name: Build & Package
       before_cache:
         - rm -rf $HOME/.cache/electron-builder/wine

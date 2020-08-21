@@ -1,5 +1,5 @@
 import React from 'react'
-import { ipcRenderer, remote } from 'electron'
+import { ipcRenderer } from 'electron'
 import * as log from 'electron-log'
 
 import { Config, ConnectionConfig, DEFAULT_CONFIG, GeneralConfig } from '../../share/config'
