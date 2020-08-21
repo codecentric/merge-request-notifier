@@ -28,7 +28,6 @@ export const BackendProvider = ({ ...props }) => {
     const { config } = useConfig()
     const [groupedMergeRequests, setGroupedMergeRequests] = React.useState<GroupedMergeRequest[] | undefined>(undefined)
     const [mergeRequestWithProjects, setMergeRequestWithProjects] = React.useState<MergeRequestWithProject[] | undefined>(undefined)
-    const [loadErrors, setLoadErrors] = React.useState<number>(0)
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
     const updateData = async (newConfig?: Config) => {
@@ -39,18 +38,12 @@ export const BackendProvider = ({ ...props }) => {
                 const data = await loadData(configToUse.connectionConfig)
                 setGroupedMergeRequests(data.groupedMergeRequests)
                 setMergeRequestWithProjects(data.mergeRequestWithProjects)
-                setLoadErrors(0)
 
                 const numberOfOpenMergeRequest = data.mergeRequestWithProjects.reduce((total, entry) => total + (entry.work_in_progress ? 0 : 1), 0)
                 ipcRenderer.send('update-open-merge-requests', numberOfOpenMergeRequest)
             }
         } catch (error) {
             log.error('Could not load the merge requests', error)
-            setLoadErrors(loadErrors + 1)
-            if (loadErrors > 2) {
-                setGroupedMergeRequests(undefined)
-                setMergeRequestWithProjects(undefined)
-            }
         } finally {
             setIsLoading(false)
         }

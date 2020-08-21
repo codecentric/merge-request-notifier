@@ -4,10 +4,10 @@ import { shell } from 'electron'
 
 import { MergeRequestGroup } from './list/MergeRequestGroup'
 import { MergeRequestItem } from './list/MergeRequestItem'
+import { CouldNotLoadMergeRequests, LoadingMergeRequests, NoMergeRequests } from './Alerts'
 
 import { useBackend } from '../../hooks/merge-requests/backend'
 import { MergeRequest } from '../../hooks/merge-requests/types'
-import * as Alerts from './Alerts'
 
 const openMergeRequest = (url: string) => (event: React.MouseEvent) => {
     event.preventDefault()
@@ -38,12 +38,15 @@ const renderMergeRequest = (mergeRequest: MergeRequest) => {
 }
 
 export const MergeRequestsPage: React.FunctionComponent = () => {
-    const { groupedMergeRequests } = useBackend()
+    const { groupedMergeRequests, isLoading } = useBackend()
+    if (isLoading && !groupedMergeRequests) {
+        return <LoadingMergeRequests />
+    }
     if (!groupedMergeRequests) {
-        return <Alerts.CouldNotLoadMergeRequests />
+        return <CouldNotLoadMergeRequests />
     }
     if (groupedMergeRequests.length === 0) {
-        return <Alerts.NoMergeRequests />
+        return <NoMergeRequests />
     }
 
     return (
