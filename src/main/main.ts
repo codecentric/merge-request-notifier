@@ -189,7 +189,10 @@ const getGeneralConfig = (): GeneralConfig => {
     const savedConfig: Config = electronSettings.get('config.v3') as any
 
     if (savedConfig) {
-        return savedConfig.generalConfig
+        return {
+            ...DEFAULT_CONFIG.generalConfig,
+            ...savedConfig.generalConfig,
+        }
     }
 
     return DEFAULT_CONFIG.generalConfig
@@ -278,10 +281,7 @@ app.on('activate', async () => {
 
 ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => {
     if (tray) {
-        const { showOpenMergeRequestsInTrayIcon } = getGeneralConfig()
-        if (showOpenMergeRequestsInTrayIcon) {
-            tray.setImage(getTrayImage(openMergeRequests))
-        }
+        tray.setImage(getTrayImage(openMergeRequests))
     }
 })
 
