@@ -1,4 +1,4 @@
-import { ipcMain } from 'electron'
+import { ipcMain, app } from 'electron'
 import { autoUpdater } from 'electron-updater'
 import * as log from 'electron-log'
 import * as path from 'path'
@@ -6,9 +6,12 @@ import * as path from 'path'
 export const setupAutoUpdater = () => {
     autoUpdater.autoDownload = false
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (!app.isPackaged) {
         // __dirname is the "dist" folder
-        autoUpdater.updateConfigPath = path.join(__dirname, '../dev-app-update.yml')
+        const updateConfigPath = path.join(__dirname, '../dev-app-update.yml')
+
+        log.info(`Updating the auto updater config path to "${updateConfigPath}".`)
+        autoUpdater.updateConfigPath = updateConfigPath
     }
 
     ipcMain.on('download-and-install-update', () => {
