@@ -1549,7 +1549,7 @@
     "@types/prop-types" "*"
     csstype "^3.0.2"
 
-"@types/rebass@^4.0.0":
+"@types/rebass@*", "@types/rebass@^4.0.0":
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/@types/rebass/-/rebass-4.0.6.tgz#c33d133baca8a440b22ca4b3038014d0b0e8ce59"
   integrity sha512-geU6Hh5/YM91c6yoT3/DsVsDRpbqoRFFnNmRQLT/V16aEL5zZ3Oa+2A+T2hvuNz6oSDA9tIj9SoEZVFivRe2Dg==
@@ -1558,6 +1558,15 @@
     "@types/styled-components" "*"
     "@types/styled-system" "*"
     "@types/styled-system__css" "*"
+
+"@types/rebass__forms@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@types/rebass__forms/-/rebass__forms-4.0.2.tgz#69a2c50753583180bbe092dd147de8af2965d209"
+  integrity sha512-cop3eRQOh84O5RfKFo3pTcOdgJa8sFpa314fvFfH/msr43Ao1wW1xJzCUHVDx1D6lZSaqndS7QCJlkNrOpZnXA==
+  dependencies:
+    "@types/react" "*"
+    "@types/rebass" "*"
+    "@types/styled-system" "*"
 
 "@types/request@^2.48.4":
   version "2.48.4"
@@ -4057,6 +4066,11 @@ electron-to-chromium@^1.3.523:
   version "1.3.540"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.540.tgz#4e4c08d8c12bbd32cf090e143c0d546f017f9d43"
   integrity sha512-IoGiZb8SMqTtkDYJtP8EtCdvv3VMtd1QoTlypO2RUBxRq/Wk0rU5IzhzhMckPaC9XxDqUvWsL0XKOBhTiYVN3w==
+
+electron-traywindow-positioner@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/electron-traywindow-positioner/-/electron-traywindow-positioner-1.1.0.tgz#f8f13760db0ece036e5a6749cfc61a6a78f1fa1b"
+  integrity sha512-/i1jh1L8qyUJAZ1KVT67SEK/OZ+3F2Qfe8mCfuXHSVC5tAOuw3U971LuxMvAsJJS/yNW0oSQ9pCbVzqGlNCeJQ==
 
 electron-unhandled@^3.0.0:
   version "3.0.2"
