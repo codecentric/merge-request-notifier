@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box } from 'rebass'
-// @ts-ignore
 import { Label, Select } from '@rebass/forms'
 
 import { useConfig } from '../../hooks/config'
@@ -33,7 +32,7 @@ export const GeneralSettings: React.FunctionComponent = () => {
         updateGeneralConfig(newConfig)
     }
 
-    const updateTextValue = (name: keyof GeneralConfig) => async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const updateTextValue = (name: keyof GeneralConfig) => (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newConfig = { ...values, [name]: event.target.value }
         setValues(newConfig)
         updateGeneralConfig(newConfig)

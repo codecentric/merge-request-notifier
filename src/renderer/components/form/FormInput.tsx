@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Text } from 'rebass'
-// @ts-ignore
 import { Label, Input } from '@rebass/forms'
 
 interface FormInputProps {

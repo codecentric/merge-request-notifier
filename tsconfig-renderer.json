@@ -13,7 +13,11 @@
     "jsx": "react",
     "sourceMap": true,
     "outDir": "./dist/renderer",
-    "strict": true
+    "strict": true,
+    "typeRoots": [
+      "./src/renderer/types",
+      "./node_modules/@types"
+    ]
   },
   "include": [
     "src/renderer/*"
