@@ -55,7 +55,7 @@ const createTray = () => {
     tray.on('click', () => toggleWindow(true))
 }
 
-const getWindowPosition = (fromTray: boolean) => {
+const getWindowPosition = (triggeredFromTray: boolean) => {
     if (!win || !tray) {
         return undefined
     }
@@ -67,7 +67,7 @@ const getWindowPosition = (fromTray: boolean) => {
         return windowsWindowPosition(win, tray)
     }
     if (process.platform === 'linux') {
-        return linuxWindowPosition(win, tray, fromTray)
+        return linuxWindowPosition(win, tray, triggeredFromTray)
     }
 
     return undefined
@@ -113,8 +113,8 @@ const setup = async () => {
     }
 }
 
-const toggleWindow = (fromTray: boolean) => {
-    win?.isVisible() ? hideWindow() : showWindow(fromTray)
+const toggleWindow = (triggeredFromTray: boolean) => {
+    win?.isVisible() ? hideWindow() : showWindow(triggeredFromTray)
 }
 
 const hideWindow = () => {
@@ -124,8 +124,8 @@ const hideWindow = () => {
     }
 }
 
-const showWindow = (fromTray: boolean) => {
-    const position = getWindowPosition(fromTray)
+const showWindow = (triggeredFromTray: boolean) => {
+    const position = getWindowPosition(triggeredFromTray)
 
     if (position && win) {
         app.dock?.show()

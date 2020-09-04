@@ -1,11 +1,11 @@
 import { BrowserWindow, Tray, screen } from 'electron'
 
-export const linuxWindowPosition = (win: BrowserWindow, tray: Tray, fromTray: boolean) => {
+export const linuxWindowPosition = (win: BrowserWindow, tray: Tray, triggeredFromTray: boolean) => {
     const windowBounds = win.getBounds()
     const mousePosition = screen.getCursorScreenPoint()
     const { bounds: displayBounds } = screen.getDisplayNearestPoint(mousePosition)
 
-    if (fromTray) {
+    if (triggeredFromTray) {
         const trayBounds = tray.getBounds()
 
         let x: number

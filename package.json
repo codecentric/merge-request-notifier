@@ -1,6 +1,6 @@
 {
   "name": "merge-request-notifier",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main/main.js",
   "homepage": "https://github.com/codecentric/merge-request-notifier",
@@ -179,6 +179,7 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-log": "^4.0.0",
     "electron-settings": "^3.2.0",
+    "electron-traywindow-positioner": "^1.1.0",
     "electron-unhandled": "^3.0.0",
     "electron-updater": "^4.2.0",
     "electron-util": "^0.14.0",
