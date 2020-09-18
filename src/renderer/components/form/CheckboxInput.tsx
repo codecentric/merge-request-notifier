@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Text } from 'rebass'
-// @ts-ignore
 import { Label, Checkbox } from '@rebass/forms'
 
 interface FormCheckboxProps {
