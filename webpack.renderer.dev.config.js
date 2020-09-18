@@ -1,10 +1,9 @@
-const merge = require('webpack-merge');
-const spawn = require('child_process').spawn;
+const { merge } = require('webpack-merge');
 const DashboardPlugin = require("webpack-dashboard/plugin");
 
 const baseConfig = require('./webpack.renderer.config');
 
-module.exports = merge.smart(baseConfig, {
+module.exports = merge(baseConfig, {
     resolve: {
         alias: {
             'react-dom': '@hot-loader/react-dom'

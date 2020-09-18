@@ -26,6 +26,7 @@
     "prepare-auto-update:darwin": "cp dev-app-update.yml dist/dev-app-update.yml",
     "prepare-auto-update:default": "echo \"Nothing to do because this is not supported by the used OS.\"",
     "start-renderer": "webpack-dashboard -- webpack-dev-server --config webpack.renderer.dev.config.js",
+    "start-debug": "webpack-dev-server --config webpack.renderer.dev.config.js",
     "start-main": "tsc --project tsconfig-main.json && yarn copy-assets && yarn prepare-auto-update && electron ./dist/main/main.js",
     "test": "echo \"not yet implemented.\"",
     "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project tsconfig-renderer.json",
