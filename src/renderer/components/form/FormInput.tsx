@@ -8,12 +8,11 @@ interface FormInputProps {
     info?: string | JSX.Element
     error?: string
     indented?: number
-    boxProps?: BoxProps
     [htmlAttribute: string]: any
 }
 
 export const FormInput: React.FunctionComponent<FormInputProps> = ({ id, label, info, error, indented, boxProps, ...props }) => (
-    <Box mb={3} ml={indented || 0} {...boxProps}>
+    <Box mb={3} ml={indented || 0} flex='1'>
         {label && (
             <Label fontWeight='bold' fontSize={1} htmlFor={id} mb={1}>
                 {label}

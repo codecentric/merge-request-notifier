@@ -201,7 +201,6 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                             required
                             error={errors.token}
                             info={<PersonalAccessTokenInfo hostname={values.url} />}
-                            boxProps={{ flex: '1' }}
                         />
                         <Box
                             fontSize={1}
