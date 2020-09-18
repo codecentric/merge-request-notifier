@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Text } from 'rebass'
+import { Box, BoxProps, Text } from 'rebass'
 import { Label, Input } from '@rebass/forms'
 
 interface FormInputProps {
@@ -8,11 +8,12 @@ interface FormInputProps {
     info?: string | JSX.Element
     error?: string
     indented?: number
+    boxProps?: BoxProps
     [htmlAttribute: string]: any
 }
 
-export const FormInput: React.FunctionComponent<FormInputProps> = ({ id, label, info, error, indented, ...props }) => (
-    <Box mb={3} ml={indented || 0} width='100%'>
+export const FormInput: React.FunctionComponent<FormInputProps> = ({ id, label, info, error, indented, boxProps, ...props }) => (
+    <Box mb={3} ml={indented || 0} {...boxProps}>
         {label && (
             <Label fontWeight='bold' fontSize={1} htmlFor={id} mb={1}>
                 {label}

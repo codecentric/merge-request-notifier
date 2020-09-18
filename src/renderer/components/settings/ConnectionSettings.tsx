@@ -189,21 +189,20 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                     />
 
                     <Flex>
-                        <Flex flexGrow={1}>
-                            <FormInput
-                                label='Personal Access Token'
-                                id='token'
-                                name='token'
-                                type={accessKeyIconVisible ? 'text' : 'password'}
-                                value={values.token}
-                                onChange={handleChange('token')}
-                                onBlur={validateRequiredError('token', 'token', TOKEN_REQUIRED_ERROR_MESSAGE)}
-                                disabled={submitting}
-                                required
-                                error={errors.token}
-                                info={<PersonalAccessTokenInfo hostname={values.url} />}
-                            />
-                        </Flex>
+                        <FormInput
+                            label='Personal Access Token'
+                            id='token'
+                            name='token'
+                            type={accessKeyIconVisible ? 'text' : 'password'}
+                            value={values.token}
+                            onChange={handleChange('token')}
+                            onBlur={validateRequiredError('token', 'token', TOKEN_REQUIRED_ERROR_MESSAGE)}
+                            disabled={submitting}
+                            required
+                            error={errors.token}
+                            info={<PersonalAccessTokenInfo hostname={values.url} />}
+                            boxProps={{ flex: '1' }}
+                        />
                         <Box
                             fontSize={1}
                             color='gray'
