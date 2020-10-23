@@ -246,11 +246,13 @@ const updateStartOnLoginConfiguration = (startOnLogin: boolean) => {
 
 const updateGlobalShortcut = (shortcut: string) => {
     globalShortcut.unregisterAll()
-    globalShortcut.register(shortcut, () => {
-        if (win) {
-            toggleWindow(false)
-        }
-    })
+    if (shortcut !== '') {
+        globalShortcut.register(shortcut, () => {
+            if (win) {
+                toggleWindow(false)
+            }
+        })
+    }
 }
 
 app.dock?.hide()

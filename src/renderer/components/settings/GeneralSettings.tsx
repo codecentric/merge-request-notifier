@@ -22,7 +22,7 @@ export const GeneralSettings: React.FunctionComponent = () => {
             setShowShortcutInput(true)
         } else {
             setShowShortcutInput(false)
-            updateTextValue('openShortcut')({ target: { value: '' } } as any)
+            updateSelectValue('openShortcut')({ target: { value: '' } } as any)
         }
     }
 
@@ -32,9 +32,19 @@ export const GeneralSettings: React.FunctionComponent = () => {
         updateGeneralConfig(newConfig)
     }
 
-    const updateTextValue = (name: keyof GeneralConfig) => (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const updateSelectValue = (name: keyof GeneralConfig) => (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newConfig = { ...values, [name]: event.target.value }
         setValues(newConfig)
+        updateGeneralConfig(newConfig)
+    }
+
+    const updateTextValueOnChange = (name: keyof GeneralConfig) => (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const newConfig = { ...values, [name]: event.target.value }
+        setValues(newConfig)
+    }
+
+    const updateTextValueOnBlur = (name: keyof GeneralConfig) => (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const newConfig = { ...values, [name]: event.target.value }
         updateGeneralConfig(newConfig)
     }
 
@@ -88,7 +98,8 @@ export const GeneralSettings: React.FunctionComponent = () => {
                         indented={4}
                         info={<ShortcutInfo />}
                         value={values.openShortcut}
-                        onChange={updateTextValue('openShortcut')}
+                        onChange={updateTextValueOnChange('openShortcut')}
+                        onBlur={updateTextValueOnBlur('openShortcut')}
                     />
                 )}
 
@@ -101,7 +112,7 @@ export const GeneralSettings: React.FunctionComponent = () => {
                         name='trayIconForDarkMode'
                         defaultValue={values.trayIconForDarkMode}
                         style={{ borderRadius: 0 }}
-                        onChange={updateTextValue('trayIconForDarkMode')}
+                        onChange={updateSelectValue('trayIconForDarkMode')}
                     >
                         <option value='system' key='system'>
                             System Defaults
