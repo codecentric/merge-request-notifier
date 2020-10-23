@@ -12,13 +12,14 @@ In the system tray you wil see the number of all open merge requests.
 <img src="./images/tray.png" width=1000 alt="System Tray">
 
 ## Notification
-You will receive a desktop notification when a new merge request is created.
+You will receive a desktop notification when a new merge request is created. 
+If you are not interested in "work in progress" merge request you can disable notifications for these. In addition you can disable notifications at all. 
 
 <img src="./images/notification.png" width=500 alt="Notification Screenshot">
 
 ## App Updates (macOS only)
-You will be always up to date with our integrated in app updates 🎉 Once there is a new update 
-available you will be notified with a prominent alert above the merge requests. On the details page you find the release notes from github. 
+You will be always up to date with our integrated in app updates 🎉. Once there is a new update available you will be 
+notified with a prominent alert above the merge requests. On the details page you find the release notes from github. 
 
 | New Update Alert  | Release Notes |
 | ------------- | ------------- |
