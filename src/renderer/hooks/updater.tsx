@@ -1,15 +1,23 @@
 import React from 'react'
 import { UpdateCheckResult } from 'electron-updater'
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 import * as log from 'electron-log'
 import moment from 'moment'
+import * as request from 'superagent'
+import showdown from 'showdown'
 
-export type UpdateInfo = undefined | UpdateCheckResult
+export interface UpdateInfo {
+    version: string
+    releaseDate: string
+    releaseNotes?: string
+}
 
 interface UpdaterContext {
-    updateInfo: UpdateInfo
+    updateInfo: UpdateInfo | undefined
     install: () => void
 }
+
+const converter = new showdown.Converter()
 
 const Context = React.createContext<UpdaterContext | null>(null)
 
@@ -19,26 +27,11 @@ if (SHOW_FAKE_UPDATE) {
     log.info('Application shows a "Fake Update"')
 }
 
-const FAKE_UPDATE: UpdateCheckResult = {
-    updateInfo: {
-        version: '13.3.7',
-        files: [],
-        path: 'deprecated',
-        sha512: 'deprecated',
-        releaseName: 'Version 13.3.7',
-        releaseNotes:
-            '<p><g-emoji class="g-emoji" alias="raised_hands" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f64c.png">🙌</g-emoji> <strong>New Features:</strong></p>\n<ul>\n<li>New "about us" page</li>\n<li>showing the current app version</li>\n</ul>\n<p>🧐 <strong>Under the hood:</strong></p>\n<ul>\n<li>Updating some dependencies</li>\n</ul>', // tslint:disable-line:max-line-length
-        releaseDate: moment().toISOString(),
-    },
-    versionInfo: {
-        version: 'deprecated',
-        files: [],
-        path: 'deprecated',
-        sha512: 'deprecated',
-        releaseName: 'deprecated',
-        releaseNotes: 'deprecated',
-        releaseDate: 'deprecated',
-    },
+const FAKE_UPDATE: UpdateInfo = {
+    version: '13.3.7',
+    releaseNotes:
+        '<p><g-emoji class="g-emoji" alias="raised_hands" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f64c.png">🙌</g-emoji> <strong>New Features:</strong></p>\n<ul>\n<li>New "about us" page</li>\n<li>showing the current app version</li>\n</ul>\n<p>🧐 <strong>Under the hood:</strong></p>\n<ul>\n<li>Updating some dependencies</li>\n</ul>', // tslint:disable-line:max-line-length
+    releaseDate: moment().toISOString(),
 }
 
 export function useUpdater() {
@@ -50,7 +43,7 @@ export function useUpdater() {
 }
 
 export const UpdaterProvider = ({ ...props }) => {
-    const [updateInfo, setUpdateInfo] = React.useState<UpdateInfo>(SHOW_FAKE_UPDATE ? FAKE_UPDATE : undefined)
+    const [updateInfo, setUpdateInfo] = React.useState<UpdateInfo | undefined>(SHOW_FAKE_UPDATE ? FAKE_UPDATE : undefined)
 
     const install = () => {
         ipcRenderer.send('download-and-install-update')
@@ -61,14 +54,36 @@ export const UpdaterProvider = ({ ...props }) => {
             return
         }
 
-        ipcRenderer
-            .invoke('check-for-updates')
-            .then(result => {
-                setUpdateInfo(result as UpdateCheckResult | undefined)
+        if (remote.process.platform === 'darwin') {
+            ipcRenderer
+                .invoke('check-for-updates')
+                .then((result: UpdateCheckResult) => {
+                    setUpdateInfo({
+                        version: result.updateInfo.version,
+                        releaseDate: result.updateInfo.releaseDate,
+                        releaseNotes: typeof result.updateInfo.releaseNotes === 'string' ? result.updateInfo.releaseNotes : undefined,
+                    })
+                })
+                .catch(error => {
+                    log.error('Could not check for updates', error)
+                })
+        } else {
+            request.get('https://api.github.com/repos/codecentric/merge-request-notifier/releases/latest').then(result => {
+                const {
+                    body: { tag_name, published_at, body },
+                } = result
+
+                const releaseNotes = converter.makeHtml(body)
+
+                console.log({ tag_name })
+
+                setUpdateInfo({
+                    version: 'v8.0.0',
+                    releaseDate: published_at,
+                    releaseNotes,
+                })
             })
-            .catch(error => {
-                log.error('Could not check for updates', error)
-            })
+        }
     }
 
     React.useEffect(() => {
