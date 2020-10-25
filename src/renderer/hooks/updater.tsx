@@ -75,10 +75,8 @@ export const UpdaterProvider = ({ ...props }) => {
 
                 const releaseNotes = converter.makeHtml(body)
 
-                console.log({ tag_name })
-
                 setUpdateInfo({
-                    version: 'v8.0.0',
+                    version: tag_name,
                     releaseDate: published_at,
                     releaseNotes,
                 })
