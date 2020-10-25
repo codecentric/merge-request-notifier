@@ -14,7 +14,7 @@ export const NewUpdateAlert = () => {
         history.push('/update')
     }
 
-    if (!updateInfo || compareVersions(updateInfo.updateInfo.version, currentVersion) < 1) {
+    if (!updateInfo || compareVersions(updateInfo.version, currentVersion) < 1) {
         return null
     }
 

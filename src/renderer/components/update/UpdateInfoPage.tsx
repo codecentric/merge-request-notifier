@@ -4,12 +4,13 @@ import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 
 import { useUpdater } from '../../hooks/updater'
+import { remote, shell } from 'electron'
 
 export const UpdateInfoPage = () => {
     const history = useHistory()
     const { updateInfo, install } = useUpdater()
     const [installButtonDisabled, setInstallButtonDisabled] = React.useState(false)
-    const [installButtonText, setInstallButtonText] = React.useState('Install & Restart')
+    const [installButtonText, setInstallButtonText] = React.useState(remote.process.platform === 'darwin' ? 'Install & Restart' : 'Download')
 
     if (!updateInfo) {
         return (
@@ -25,18 +26,22 @@ export const UpdateInfoPage = () => {
     }
     const installUpdate: React.MouseEventHandler<HTMLButtonElement> = event => {
         event.preventDefault()
-        setInstallButtonDisabled(true)
-        setInstallButtonText('Installing...')
-        install()
+        if (remote.process.platform === 'darwin') {
+            setInstallButtonDisabled(true)
+            setInstallButtonText('Installing...')
+            install()
+        } else {
+            shell.openExternal(`https://github.com/codecentric/merge-request-notifier/releases/tag/${updateInfo.version}`)
+        }
     }
 
-    const releaseDate = moment(updateInfo.updateInfo.releaseDate).format('DD.MM.YYYY HH:mm')
-    const releaseNotes = typeof updateInfo.updateInfo.releaseNotes === 'string' ? updateInfo.updateInfo.releaseNotes : ''
+    const releaseDate = moment(updateInfo.releaseDate).format('DD.MM.YYYY HH:mm')
+    const releaseNotes = typeof updateInfo.releaseNotes === 'string' ? updateInfo.releaseNotes : ''
 
     return (
         <Box p={2}>
             <Text mb='2' fontSize='14px' lineHeight='1.75'>
-                Version: <strong>{updateInfo.updateInfo.version}</strong>
+                Version: <strong>{updateInfo.version}</strong>
                 <br />
                 Release date: <strong>{releaseDate}</strong>
             </Text>
