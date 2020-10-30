@@ -125,6 +125,7 @@ const loadMergeRequests = async (connectionConfig: ConnectionConfig): Promise<Me
                             ...mergeRequest,
                             pipeline_status: await loadPipelineStatus(connectionConfig, mergeRequest.project_id, mergeRequest.iid),
                             user_notes: await loadUserNotes(connectionConfig, mergeRequest.project_id, mergeRequest.iid),
+                            work_in_progress: mergeRequest.work_in_progress || mergeRequest.title.startsWith('WIP'),
                         }
                     }),
                 )
