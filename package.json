@@ -1,6 +1,6 @@
 {
   "name": "merge-request-notifier",
-  "version": "1.8.6",
+  "version": "1.9.0",
   "description": "This app shows your merge requests grouped by projects and WIP status. It is accessible from the system tray.",
   "main": "./dist/main/main.js",
   "homepage": "https://codecentric.github.io/merge-request-notifier/",

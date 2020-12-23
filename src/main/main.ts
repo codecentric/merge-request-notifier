@@ -1,4 +1,4 @@
-import { app, BrowserWindow, globalShortcut, ipcMain, nativeTheme, systemPreferences, Tray } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain, nativeTheme, systemPreferences, Tray, nativeImage, NativeImage } from 'electron'
 import log from 'electron-log'
 import path from 'path'
 import url from 'url'
@@ -33,11 +33,18 @@ const installExtensions = async () => {
     return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(log.error)
 }
 
-const getTrayImage = (openMergeRequests: number = 0) => {
+const getTrayImage = (openMergeRequests: number = 0): NativeImage => {
     const generalConfig = getGeneralConfig()
     const suffix = openMergeRequests === 0 ? 'default' : openMergeRequests > 9 ? 'more' : openMergeRequests
     let icon
     if (generalConfig.trayIconForDarkMode === 'system') {
+        if (process.platform === 'darwin') {
+            const image = nativeImage.createFromPath(path.join(__dirname, 'assets', `icon-${suffix}Template@2x.png`))
+            image.setTemplateImage(true)
+
+            return image
+        }
+
         icon = nativeTheme.shouldUseDarkColors ? 'icon-dark-mode' : 'icon-light-mode'
     } else if (generalConfig.trayIconForDarkMode === 'darkMode') {
         icon = 'icon-dark-mode'
@@ -45,7 +52,7 @@ const getTrayImage = (openMergeRequests: number = 0) => {
         icon = 'icon-light-mode'
     }
 
-    return path.join(__dirname, 'assets', `${icon}-${suffix}.png`)
+    return nativeImage.createFromPath(path.join(__dirname, 'assets', `${icon}-${suffix}@2x.png`))
 }
 
 const createTray = () => {
