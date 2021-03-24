@@ -24,7 +24,7 @@ export const PersonalAccessTokenInfo: React.FunctionComponent<PersonalAccessToke
                 </Link>
                 .
                 <br />
-                It requires <strong>API scope</strong>.
+                It requires <strong>read_api scope</strong>.
             </span>
         )
     }
@@ -33,7 +33,7 @@ export const PersonalAccessTokenInfo: React.FunctionComponent<PersonalAccessToke
         <span>
             Create one in your GitLab profile settings.
             <br />
-            It requires <strong>API scope</strong>.
+            It requires <strong>read_api scope</strong>.
         </span>
     )
 }
