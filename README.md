@@ -35,7 +35,7 @@ If you're using homebrew-cask, this app can be installed via it. Please tap the 
 
 ```
 brew tap codecentric/merge-request-notifier https://github.com/codecentric/merge-request-notifier
-brew cask install merge-request-notifier
+brew install --cask merge-request-notifier
 ```
 It's the easiest way to install and manage this app on macOS.
 
