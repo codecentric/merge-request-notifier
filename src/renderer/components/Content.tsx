@@ -13,7 +13,7 @@ import { darkTheme } from './themes/theme-dark'
 import { Wrapper } from './layout/Wrapper'
 import { Header } from './layout/Header'
 import { Main } from './layout/Main'
-import { ThemeProvider } from 'emotion-theming'
+import { ThemeProvider } from '@emotion/react'
 import { Footer } from './layout/Footer'
 
 export const Content: React.FunctionComponent = () => {
