@@ -146,23 +146,12 @@ const showWindow = (triggeredFromTray: boolean) => {
     }
 }
 
-const getAccessToken = async (savedConfig: Config): Promise<string> => {
+const getAccessToken = async (): Promise<string> => {
     const accessToken = await keytar.getPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
 
     if (accessToken) {
         log.debug('Found the access token via keytar')
         return accessToken
-    }
-
-    if (savedConfig.connectionConfig && savedConfig.connectionConfig.token) {
-        log.debug('Found the access token in the connectionConfig')
-        const SavedToken = savedConfig.connectionConfig.token
-        await keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, SavedToken)
-        delete savedConfig.connectionConfig.token
-        await electronSettings.set('config.v3', savedConfig as any)
-        log.debug('Migrated the access token from the connectionConfig into keytar')
-
-        return SavedToken
     }
 
     return 'accessTokenNotSet'
@@ -173,7 +162,7 @@ const getConfig = async (): Promise<Config> => {
 
     if (savedConfig) {
         if (savedConfig.connectionConfig) {
-            savedConfig.connectionConfig.token = await getAccessToken(savedConfig)
+            savedConfig.connectionConfig.token = await getAccessToken()
         }
 
         log.debug('Found config', { ...savedConfig, connectionConfig: { ...savedConfig.connectionConfig, token: 'hidden' } })
@@ -312,8 +301,9 @@ ipcMain.on('set-config', async (_: Electron.IpcMainEvent, data: Config) => {
     updateStartOnLoginConfiguration(data.generalConfig.startOnLogin)
 
     if (data.connectionConfig && data.connectionConfig.token) {
+        const connectionConfig = { ...data.connectionConfig }
         await keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, data.connectionConfig.token)
-        delete data.connectionConfig.token
+        data.connectionConfig.token = 'saved within your secure keychain'
     }
     await electronSettings.set('config.v3', data as any)
 })
