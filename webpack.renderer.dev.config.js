@@ -14,6 +14,7 @@ module.exports = merge(baseConfig, {
         compress: true,
         hot: true,
         headers: { 'Access-Control-Allow-Origin': '*' },
+        // disableHostCheck: true,
         historyApiFallback: {
             verbose: true,
             disableDotRule: false

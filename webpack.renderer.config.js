@@ -20,10 +20,6 @@ module.exports = merge(baseConfig, {
                         cacheDirectory: true,
                         babelrc: false,
                         presets: [
-                            [
-                                '@babel/preset-env',
-                                { targets: { browsers: 'last 2 versions ' } }
-                            ],
                             '@babel/preset-typescript',
                             '@babel/preset-react'
                         ],
@@ -45,12 +41,6 @@ module.exports = merge(baseConfig, {
             {
                 test: /\.(ico|jpe?g|png|gif|eot|otf|webp|mp4|svg|ttf|woff|woff2)$/,
                 type: 'asset/resource'
-            },
-            // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            {
-                enforce: 'pre',
-                test: /\.js$/,
-                loader: 'source-map-loader'
             }
         ]
     },
@@ -61,8 +51,7 @@ module.exports = merge(baseConfig, {
         new ForkTsCheckerWebpackPlugin({
             typescript: {
                 enabled: true,
-                configFile: 'tsconfig-renderer.json',
-                // reportFiles: ['src/renderer/**/*'],
+                configFile: 'tsconfig-renderer.json'
             }
         }),
         new HtmlWebpackPlugin()
