@@ -64,11 +64,11 @@ export const UpdaterProvider = ({ ...props }) => {
                         releaseNotes: typeof result.updateInfo.releaseNotes === 'string' ? result.updateInfo.releaseNotes : undefined,
                     })
                 })
-                .catch(error => {
+                .catch((error) => {
                     log.error('Could not check for updates', error)
                 })
         } else {
-            request.get('https://api.github.com/repos/codecentric/merge-request-notifier/releases/latest').then(result => {
+            request.get('https://api.github.com/repos/codecentric/merge-request-notifier/releases/latest').then((result) => {
                 const {
                     body: { tag_name, published_at, body },
                 } = result

@@ -3,7 +3,7 @@ import { debugInfo, openNewGitHubIssue } from 'electron-util'
 
 export function reportUnhandledRejections() {
     unhandled({
-        reportButton: error => {
+        reportButton: (error) => {
             openNewGitHubIssue({
                 user: 'codecentric',
                 repo: 'merge-request-notifier',

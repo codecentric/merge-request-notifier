@@ -30,11 +30,11 @@ const installExtensions = async () => {
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
     const extensions = ['REACT_DEVELOPER_TOOLS']
 
-    return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(log.error)
+    return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(log.error)
 }
 
-const getTrayImage = (openMergeRequests: number = 0): NativeImage => {
-    const generalConfig = getGeneralConfig()
+const getTrayImage = async (openMergeRequests: number = 0): Promise<NativeImage> => {
+    const generalConfig = await getGeneralConfig()
     const suffix = openMergeRequests === 0 ? 'default' : openMergeRequests > 9 ? 'more' : openMergeRequests
     let icon
     if (generalConfig.trayIconForDarkMode === 'system') {
@@ -55,8 +55,8 @@ const getTrayImage = (openMergeRequests: number = 0): NativeImage => {
     return nativeImage.createFromPath(path.join(__dirname, 'assets', `${icon}-${suffix}@2x.png`))
 }
 
-const createTray = () => {
-    tray = new Tray(getTrayImage())
+const createTray = async () => {
+    tray = new Tray(await getTrayImage())
 
     tray.setToolTip('Merge Request Notifier')
     tray.on('click', () => toggleWindow(true))
@@ -90,11 +90,11 @@ const setup = async () => {
             await installExtensions()
         }
 
-        createTray()
+        await createTray()
         win = createWindow()
         createMenu(win)
 
-        const generalConfig = getGeneralConfig()
+        const generalConfig = await getGeneralConfig()
         updateGlobalShortcut(generalConfig.openShortcut)
         updateStartOnLoginConfiguration(generalConfig.startOnLogin)
 
@@ -102,9 +102,9 @@ const setup = async () => {
             // macOS specific configuration
             setupAutoUpdater()
 
-            systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
+            systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', async () => {
                 if (tray) {
-                    tray.setImage(getTrayImage())
+                    tray.setImage(await getTrayImage())
                 }
             })
         }
@@ -159,7 +159,7 @@ const getAccessToken = async (savedConfig: Config): Promise<string> => {
         const SavedToken = savedConfig.connectionConfig.token
         await keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, SavedToken)
         delete savedConfig.connectionConfig.token
-        electronSettings.set('config.v3', savedConfig as any)
+        await electronSettings.set('config.v3', savedConfig as any)
         log.debug('Migrated the access token from the connectionConfig into keytar')
 
         return SavedToken
@@ -169,7 +169,7 @@ const getAccessToken = async (savedConfig: Config): Promise<string> => {
 }
 
 const getConfig = async (): Promise<Config> => {
-    const savedConfig: Config = electronSettings.get('config.v3') as any
+    const savedConfig: Config = (await electronSettings.get('config.v3')) as any
 
     if (savedConfig) {
         if (savedConfig.connectionConfig) {
@@ -192,8 +192,8 @@ const getConfig = async (): Promise<Config> => {
     return DEFAULT_CONFIG
 }
 
-const getGeneralConfig = (): GeneralConfig => {
-    const savedConfig: Config = electronSettings.get('config.v3') as any
+const getGeneralConfig = async (): Promise<GeneralConfig> => {
+    const savedConfig: Config = (await electronSettings.get('config.v3')) as any
 
     if (savedConfig) {
         return {
@@ -288,15 +288,15 @@ app.on('activate', async () => {
     }
 })
 
-ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => {
+ipcMain.on('update-open-merge-requests', async (_: any, openMergeRequests: number) => {
     if (tray) {
-        tray.setImage(getTrayImage(openMergeRequests))
+        tray.setImage(await getTrayImage(openMergeRequests))
     }
 })
 
-ipcMain.on('remove-config', (event: Electron.IpcMainEvent) => {
-    electronSettings.delete('config.v3')
-    keytar.deletePassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
+ipcMain.on('remove-config', async (event: Electron.IpcMainEvent) => {
+    await electronSettings.unset('config.v3')
+    await keytar.deletePassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
 
     event.returnValue = DEFAULT_CONFIG
 })
@@ -305,17 +305,17 @@ ipcMain.on('get-config', async (event: Electron.IpcMainEvent) => {
     event.returnValue = await getConfig()
 })
 
-ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
+ipcMain.on('set-config', async (_: Electron.IpcMainEvent, data: Config) => {
     log.debug('Saving the config', { ...data, connectionConfig: { ...data.connectionConfig, token: 'hidden' } })
 
     updateGlobalShortcut(data.generalConfig.openShortcut)
     updateStartOnLoginConfiguration(data.generalConfig.startOnLogin)
 
     if (data.connectionConfig && data.connectionConfig.token) {
-        keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, data.connectionConfig.token)
+        await keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, data.connectionConfig.token)
         delete data.connectionConfig.token
     }
-    electronSettings.set('config.v3', data as any)
+    await electronSettings.set('config.v3', data as any)
 })
 
 ipcMain.on('close-application', () => {

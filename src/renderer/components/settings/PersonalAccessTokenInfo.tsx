@@ -7,12 +7,14 @@ interface PersonalAccessTokenInfoProps {
     hostname: string
 }
 
-const openProfileSettingsLink = (hostname: string): React.MouseEventHandler<HTMLAnchorElement> => event => {
-    event.preventDefault()
-    const url = `${hostname}${!hostname.endsWith('/') ? '/' : ''}profile/personal_access_tokens`
+const openProfileSettingsLink =
+    (hostname: string): React.MouseEventHandler<HTMLAnchorElement> =>
+    (event) => {
+        event.preventDefault()
+        const url = `${hostname}${!hostname.endsWith('/') ? '/' : ''}profile/personal_access_tokens`
 
-    shell.openExternal(url)
-}
+        shell.openExternal(url)
+    }
 
 export const PersonalAccessTokenInfo: React.FunctionComponent<PersonalAccessTokenInfoProps> = ({ hostname }) => {
     if (isValidUrlWithProtocol(hostname)) {

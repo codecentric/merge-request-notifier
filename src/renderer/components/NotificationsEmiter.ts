@@ -15,7 +15,7 @@ export const NotificationsEmiter = () => {
     useEffect(() => {
         const newMergeRequests = getNewMergeRequests(mergeRequestWithProjects, previousMergeRequests)
         if (newMergeRequests.length > 0 && config.generalConfig.useNotifications) {
-            newMergeRequests.forEach(newMergeRequest => {
+            newMergeRequests.forEach((newMergeRequest) => {
                 if (config.generalConfig.disableWipNotifications && newMergeRequest.work_in_progress) {
                     log.debug(`Ignoring the WIP merge request "${newMergeRequest.title}"`)
                     return
@@ -28,7 +28,7 @@ export const NotificationsEmiter = () => {
 
                 const title = newMergeRequest.work_in_progress ? 'New WIP Merge Request' : 'New Merge Request'
                 const notification = new Notification(title, { body, icon, data })
-                notification.onclick = event => {
+                notification.onclick = (event) => {
                     const url = (event?.currentTarget as any)?.data?.url
                     if (url) {
                         shell.openExternal(url)
@@ -48,5 +48,5 @@ function getNewMergeRequests(current?: MergeRequestWithProject[], previous?: Mer
         return []
     }
 
-    return current.filter(entry => !previous.some(previousEntry => previousEntry.id === entry.id))
+    return current.filter((entry) => !previous.some((previousEntry) => previousEntry.id === entry.id))
 }

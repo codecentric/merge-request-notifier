@@ -51,7 +51,7 @@ export const MergeRequestsPage: React.FunctionComponent = () => {
 
     return (
         <>
-            {groupedMergeRequests.map(entry => (
+            {groupedMergeRequests.map((entry) => (
                 <MergeRequestGroup key={entry.project.id} label={entry.project.name}>
                     {entry.mergeRequests.map(renderMergeRequest)}
                 </MergeRequestGroup>

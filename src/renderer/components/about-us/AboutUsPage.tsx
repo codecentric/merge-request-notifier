@@ -2,10 +2,12 @@ import React from 'react'
 import { remote, shell } from 'electron'
 import { Box, Link, Text } from 'rebass'
 
-const openUrl = (url: string): React.MouseEventHandler<HTMLAnchorElement> => event => {
-    event.preventDefault()
-    shell.openExternal(url)
-}
+const openUrl =
+    (url: string): React.MouseEventHandler<HTMLAnchorElement> =>
+    (event) => {
+        event.preventDefault()
+        shell.openExternal(url)
+    }
 
 export const AboutUsPage = () => {
     const appVersion = remote.app.getVersion()

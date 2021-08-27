@@ -32,8 +32,8 @@ interface FormData {
 const splitStringByComma = (groups: string) => {
     return groups
         .split(',')
-        .map(group => group.trim())
-        .filter(group => !!group)
+        .map((group) => group.trim())
+        .filter((group) => !!group)
 }
 
 const URL_REQUIRED_ERROR_MESSAGE = 'Please enter your GitLab URL.'
@@ -74,7 +74,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         projects: projectsFromConfig(config.connectionConfig?.projects),
     })
 
-    const toggleAccessKeyIconVisibility: React.MouseEventHandler<HTMLDivElement> = event => {
+    const toggleAccessKeyIconVisibility: React.MouseEventHandler<HTMLDivElement> = (event) => {
         event.preventDefault()
         setAccessKeyIconVisible(!accessKeyIconVisible)
     }
@@ -111,24 +111,24 @@ export const ConnectionSettings: React.FunctionComponent = () => {
         setValues({ ...values, [name]: event.target.value })
     }
 
-    const confirmRemove: React.MouseEventHandler<HTMLButtonElement> = event => {
+    const confirmRemove: React.MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault()
         setConfirmDelete(true)
     }
 
-    const remove: React.MouseEventHandler<HTMLButtonElement> = event => {
+    const remove: React.MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault()
         removeConfig()
         setErrors({ url: '', token: '', groups: '', invalidSettings: false })
         setValues({ url: '', token: '', groups: '', projects: {} })
     }
 
-    const cancel: React.MouseEventHandler<HTMLButtonElement> = event => {
+    const cancel: React.MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault()
         history.push('/')
     }
 
-    const save: React.MouseEventHandler<HTMLButtonElement> = async event => {
+    const save: React.MouseEventHandler<HTMLButtonElement> = async (event) => {
         event.preventDefault()
         setSubmitting(true)
         setErrors({ url: '', token: '', groups: '', invalidSettings: false })
@@ -249,7 +249,7 @@ export const ConnectionSettings: React.FunctionComponent = () => {
                         </span>
                     </Text>
 
-                    {splittedGroups.map(splittedGroup => {
+                    {splittedGroups.map((splittedGroup) => {
                         const key = `projects-${splittedGroup}`
 
                         return (

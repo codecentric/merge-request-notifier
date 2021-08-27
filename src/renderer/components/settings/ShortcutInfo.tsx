@@ -2,7 +2,7 @@ import React from 'react'
 import { shell } from 'electron'
 import { Link } from 'rebass'
 
-const openHelpPage = (): React.MouseEventHandler<HTMLAnchorElement> => event => {
+const openHelpPage = (): React.MouseEventHandler<HTMLAnchorElement> => (event) => {
     event.preventDefault()
     const url = `https://www.electronjs.org/docs/api/accelerator`
 

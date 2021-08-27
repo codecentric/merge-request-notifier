@@ -20,11 +20,11 @@ export const UpdateInfoPage = () => {
         )
     }
 
-    const cancel: React.MouseEventHandler<HTMLButtonElement> = event => {
+    const cancel: React.MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault()
         history.push('/')
     }
-    const installUpdate: React.MouseEventHandler<HTMLButtonElement> = event => {
+    const installUpdate: React.MouseEventHandler<HTMLButtonElement> = (event) => {
         event.preventDefault()
         if (remote.process.platform === 'darwin') {
             setInstallButtonDisabled(true)
