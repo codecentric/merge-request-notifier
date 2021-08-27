@@ -1,5 +1,4 @@
 const path = require('path');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -15,7 +14,4 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js', '.json']
     },
     devtool: 'source-map',
-    plugins: [
-        new HardSourceWebpackPlugin()
-    ]
 };

@@ -12,14 +12,14 @@ module.exports = merge(baseConfig, {
     devServer: {
         port: 2003,
         compress: true,
-        noInfo: true,
-        stats: 'errors-only',
-        inline: true,
         hot: true,
         headers: { 'Access-Control-Allow-Origin': '*' },
         historyApiFallback: {
             verbose: true,
             disableDotRule: false
+        },
+        devMiddleware: {
+            stats: 'errors-only',
         }
     },
     plugins: [

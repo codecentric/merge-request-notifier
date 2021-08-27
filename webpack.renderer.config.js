@@ -14,35 +14,37 @@ module.exports = merge(baseConfig, {
             {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader',
-                options: {
-                    cacheDirectory: true,
-                    babelrc: false,
-                    presets: [
-                        [
-                            '@babel/preset-env',
-                            { targets: { browsers: 'last 2 versions ' } }
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+                        babelrc: false,
+                        presets: [
+                            [
+                                '@babel/preset-env',
+                                { targets: { browsers: 'last 2 versions ' } }
+                            ],
+                            '@babel/preset-typescript',
+                            '@babel/preset-react'
                         ],
-                        '@babel/preset-typescript',
-                        '@babel/preset-react'
-                    ],
-                    plugins: [
-                        ['@babel/plugin-proposal-class-properties', { loose: true }],
-                        '@babel/plugin-proposal-optional-chaining'
-                    ]
-                }
+                        plugins: [
+                            ['@babel/plugin-proposal-class-properties', { loose: true }],
+                            '@babel/plugin-proposal-optional-chaining'
+                        ]
+                    }
+                },
             },
             {
                 test: /\.scss$/,
-                loaders: ['style-loader', 'css-loader', 'sass-loader']
+                use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.css$/,
-                loaders: ['style-loader', 'css-loader']
+                use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.(ico|jpe?g|png|gif|eot|otf|webp|mp4|svg|ttf|woff|woff2)$/,
-                loaders: ['file-loader']
+                type: 'asset/resource'
             },
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             {
@@ -53,7 +55,7 @@ module.exports = merge(baseConfig, {
         ]
     },
     optimization: {
-        namedModules: true
+        moduleIds: 'named'
     },
     plugins: [
         new ForkTsCheckerWebpackPlugin({
