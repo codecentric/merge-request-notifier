@@ -164,7 +164,6 @@
     "sass-loader": "^12.1.0",
     "showdown": "^1.9.1",
     "source-map-loader": "^3.0.0",
-    "spectron": "^11.1.0",
     "style-loader": "^3.2.1",
     "superagent": "^6.1.0",
     "tslint": "^6.1.3",
