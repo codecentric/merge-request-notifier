@@ -1,7 +1,7 @@
 const { merge } = require('webpack-merge');
 const DashboardPlugin = require("webpack-dashboard/plugin");
 
-const baseConfig = require('./webpack.renderer.config');
+const baseConfig = require('./webpack.base.config');
 
 module.exports = merge(baseConfig, {
     resolve: {
