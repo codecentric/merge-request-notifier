@@ -206,12 +206,13 @@ const createWindow = () => {
         webPreferences: {
             backgroundThrottling: false,
             nodeIntegration: true,
+            contextIsolation: false,
         },
     })
 
     if (IS_DEV) {
         process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'
-        browserWindow.loadURL(`http://localhost:2003`)
+        browserWindow.loadURL(`http://localhost:8080`)
     } else {
         browserWindow.loadURL(
             url.format({

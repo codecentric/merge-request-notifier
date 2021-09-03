@@ -1,71 +1,48 @@
-const path = require('path');
+const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-
 
 module.exports = {
-    mode: 'development',
-    output: {
-        path: path.resolve(__dirname, 'dist/renderer'),
-        filename: '[name].js'
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js', '.json'] // TODO: remove '.js', '.json' ??
     },
+    context: resolve(__dirname, 'src'),
     node: {
         __dirname: false,
         __filename: false
     },
-    resolve: {
-        extensions: ['.tsx', '.ts', '.js', '.json']
-    },
-    devtool: 'source-map',
     target: 'electron-renderer',
-    entry: {
-        app: ['@babel/polyfill','./src/renderer/app.tsx']
-    },
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
+                use: ['babel-loader'],
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        cacheDirectory: true,
-                        babelrc: false,
-                        presets: [
-                            '@babel/preset-typescript',
-                            '@babel/preset-react'
-                        ],
-                        plugins: [
-                            ['@babel/plugin-proposal-class-properties', { loose: true }],
-                            '@babel/plugin-proposal-optional-chaining'
-                        ]
-                    }
-                },
-            },
-            {
-                test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.(ico|jpe?g|png|gif|eot|otf|webp|mp4|svg|ttf|woff|woff2)$/,
-                type: 'asset/resource'
+                test: /\.(scss|sass)$/,
+                use: ['style-loader', 'css-loader', 'sass-loader'],
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use: [
+                    'file-loader?hash=sha512&digest=hex&name=img/[contenthash].[ext]',
+                    'image-webpack-loader?bypassOnDebug&optipng.optimizationLevel=7&gifsicle.interlaced=false',
+                ],
             }
         ]
     },
-    optimization: {
-        moduleIds: 'named'
-    },
+    // optimization: {
+    //     moduleIds: 'named'
+    // },
     plugins: [
-        new ForkTsCheckerWebpackPlugin({
-            typescript: {
-                enabled: true,
-                configFile: 'tsconfig-renderer.json'
-            }
-        }),
         new HtmlWebpackPlugin()
-    ]
+    ],
+    externals: {
+        'react': 'React',
+        'react-dom': 'ReactDOM',
+    },
 };
