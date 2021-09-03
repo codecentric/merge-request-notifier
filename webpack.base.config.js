@@ -15,7 +15,8 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: ['babel-loader'],
+                loader: 'ts-loader',
+                options: { configFile: 'tsconfig-renderer.json' },
                 exclude: /node_modules/,
             },
             {
