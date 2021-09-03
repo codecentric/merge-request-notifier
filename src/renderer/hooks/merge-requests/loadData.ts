@@ -20,14 +20,14 @@ export const loadGroups = async (connectionConfig: ConnectionConfig): Promise<Gr
     }
 
     return Promise.all(
-        connectionConfig.groups.map(async (group) => {
+        connectionConfig.groups.map(async group => {
             const apiUrl = `${connectionConfig.url}/api/v4/groups/${group}`
 
             return request
                 .get(apiUrl)
                 .set('Private-Token', connectionConfig.token)
                 .timeout(4000)
-                .then((response) => response.body)
+                .then(response => response.body)
         }),
     )
 }
@@ -49,7 +49,7 @@ export const loadData = async (connectionConfig: ConnectionConfig): Promise<Data
     for (const mergeRequest of mergeRequests) {
         const projectId = mergeRequest.work_in_progress ? -1 * mergeRequest.project_id : mergeRequest.project_id
         const mergeRequestId = mergeRequest.work_in_progress ? -1 * mergeRequest.id : mergeRequest.id
-        let entry = groupedMergeRequests.find((group) => group.project.id === projectId)
+        let entry = groupedMergeRequests.find(group => group.project.id === projectId)
         if (!entry) {
             const project = await loadProject(connectionConfig, projectId)
 
@@ -85,7 +85,7 @@ export const loadData = async (connectionConfig: ConnectionConfig): Promise<Data
 async function loadMergeRequestsFromProjects(connectionConfig: ConnectionConfig, group: string, projects: string[]): Promise<MergeRequest[]> {
     return ([] as MergeRequest[]).concat(
         ...(await Promise.all(
-            projects.map((project) => {
+            projects.map(project => {
                 const apiUrl = `${connectionConfig.url}/api/v4/projects/${encodeURIComponent(`${group}/${project}`)}/merge_requests`
 
                 return request
@@ -93,7 +93,7 @@ async function loadMergeRequestsFromProjects(connectionConfig: ConnectionConfig,
                     .set('Private-Token', connectionConfig.token)
                     .query({ state: 'opened' })
                     .timeout(4000)
-                    .then((response) => response.body as MergeRequest[])
+                    .then(response => response.body as MergeRequest[])
             }),
         )),
     )
@@ -107,20 +107,20 @@ async function loadMergeRequestsFromGroup(connectionConfig: ConnectionConfig, gr
         .set('Private-Token', connectionConfig.token)
         .query({ state: 'opened' })
         .timeout(4000)
-        .then((response) => response.body as MergeRequest[])
+        .then(response => response.body as MergeRequest[])
 }
 
 const loadMergeRequests = async (connectionConfig: ConnectionConfig): Promise<MergeRequest[]> => {
     return ([] as MergeRequest[]).concat(
         ...(await Promise.all(
-            connectionConfig.groups.map(async (group) => {
+            connectionConfig.groups.map(async group => {
                 const mergeRequests =
                     connectionConfig.projects && connectionConfig.projects[group]?.length > 0
                         ? await loadMergeRequestsFromProjects(connectionConfig, group, connectionConfig.projects[group])
                         : await loadMergeRequestsFromGroup(connectionConfig, group)
 
                 return Promise.all(
-                    mergeRequests.map(async (mergeRequest) => {
+                    mergeRequests.map(async mergeRequest => {
                         return {
                             ...mergeRequest,
                             pipeline_status: await loadPipelineStatus(connectionConfig, mergeRequest.project_id, mergeRequest.iid),
@@ -141,10 +141,10 @@ const loadUserNotes = async (connectionConfig: ConnectionConfig, projectId: numb
         .get(apiUrl)
         .set('Private-Token', connectionConfig.token)
         .timeout(4000)
-        .then((res) => res.body as Note[])
+        .then(res => res.body as Note[])
 
-    const all = notes.filter((note) => note.resolvable).length
-    const resolved = notes.filter((note) => note.resolved).length
+    const all = notes.filter(note => note.resolvable).length
+    const resolved = notes.filter(note => note.resolved).length
 
     return {
         all,
@@ -160,7 +160,7 @@ const loadPipelineStatus = async (connectionConfig: ConnectionConfig, projectId:
         .set('Private-Token', connectionConfig.token)
         .query({ per_page: 1, page: 1 })
         .timeout(4000)
-        .then((res) => res.body)
+        .then(res => res.body)
 
     if (pipelines.length === 0) {
         return undefined
@@ -181,7 +181,7 @@ const loadProject = async (connectionConfig: ConnectionConfig, projectId: number
         .get(apiUrl)
         .set('Private-Token', connectionConfig.token)
         .timeout(4000)
-        .then((res) => res.body)
+        .then(res => res.body)
 
     projectCache[realProjectId] = project
 

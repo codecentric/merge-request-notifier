@@ -30,7 +30,7 @@ const installExtensions = async () => {
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
     const extensions = ['REACT_DEVELOPER_TOOLS']
 
-    return Promise.all(extensions.map((name) => installer.default(installer[name], forceDownload))).catch(log.error)
+    return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(log.error)
 }
 
 const getTrayImage = async (openMergeRequests: number = 0): Promise<NativeImage> => {

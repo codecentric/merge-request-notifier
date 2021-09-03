@@ -128,8 +128,8 @@ const testData = (): Data => {
     })
 
     const mergeRequestWithProjects: MergeRequestWithProject[] = []
-    groupedMergeRequests.forEach((groupedMergeRequest) => {
-        groupedMergeRequest.mergeRequests.forEach((mergeRequest) => {
+    groupedMergeRequests.forEach(groupedMergeRequest => {
+        groupedMergeRequest.mergeRequests.forEach(mergeRequest => {
             mergeRequestWithProjects.push({
                 ...mergeRequest,
                 project: groupedMergeRequest.project,

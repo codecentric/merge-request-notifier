@@ -1,7 +1,0 @@
-### Get Merge Requests
-
-GET https://git.metrosystems.net/api/v4/projects/customer%2Faccounts-self-service/merge_requests
-Content-Type: application/json
-Private-Token: xxx
-
-###

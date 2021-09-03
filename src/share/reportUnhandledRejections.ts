@@ -4,7 +4,7 @@ import { shell } from 'electron'
 
 export function reportUnhandledRejections() {
     unhandled({
-        reportButton: async (error) => {
+        reportButton: async error => {
             await shell.openExternal(
                 newGithubIssueUrl({
                     user: 'codecentric',
