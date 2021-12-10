@@ -5,14 +5,15 @@ import url from 'url'
 import electronSettings from 'electron-settings'
 import keytar from 'keytar'
 
-import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
-
 import { macOsWindowPosition } from './positioning/mac-os'
 import { windowsWindowPosition } from './positioning/windows'
 import { linuxWindowPosition } from './positioning/linux'
 import { Config, DEFAULT_CONFIG, GeneralConfig } from '../share/config'
 import { setupAutoUpdater } from './autoUpdates'
 import { createMenu } from './menu'
+import { createServer } from 'vite'
+
+require('@electron/remote/main').initialize()
 
 let tray: Tray | null
 let win: BrowserWindow | null
@@ -24,6 +25,7 @@ const KEYTAR_ACCOUNT = 'PersonalAccessToken'
 
 export const WINDOW_WIDTH = 380
 export const WINDOW_HEIGHT = 460
+
 
 const installExtensions = async () => {
     const installer = require('electron-devtools-installer')
@@ -80,8 +82,16 @@ const getWindowPosition = (triggeredFromTray: boolean) => {
     return undefined
 }
 
+const createDevServer = async () => {
+    const devServer = await createServer({
+        root: path.resolve(__dirname, '../..'),
+        configFile: 'vite.config.ts',
+    })
+    await devServer.listen()
+    devServer.printUrls()
+}
+
 const setup = async () => {
-    reportUnhandledRejections()
     log.transports.console.level = IS_DEV ? 'silly' : 'error'
     log.debug('Starting the app')
 
@@ -91,6 +101,11 @@ const setup = async () => {
         }
 
         createTray()
+
+        if (IS_DEV) {
+            await createDevServer()
+        }
+
         win = createWindow()
         createMenu(win)
 
@@ -125,10 +140,12 @@ const toggleWindow = (triggeredFromTray: boolean) => {
 }
 
 const hideWindow = () => {
+    /*
     if (win?.isVisible()) {
         win.hide()
         app.dock?.hide()
     }
+     */
 }
 
 const showWindow = (triggeredFromTray: boolean) => {
@@ -159,7 +176,7 @@ const getAccessToken = async (savedConfig: Config): Promise<string> => {
         const SavedToken = savedConfig.connectionConfig.token
         await keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, SavedToken)
         delete savedConfig.connectionConfig.token
-        electronSettings.set('config.v3', savedConfig as any)
+        await electronSettings.set('config.v3', savedConfig as any)
         log.debug('Migrated the access token from the connectionConfig into keytar')
 
         return SavedToken
@@ -209,16 +226,20 @@ const createWindow = () => {
     const browserWindow = new BrowserWindow({
         width: WINDOW_WIDTH,
         height: WINDOW_HEIGHT,
-        show: false,
+        show: true,
         frame: false,
         fullscreenable: false,
-        resizable: false,
+        resizable: true,
         transparent: false,
         webPreferences: {
             backgroundThrottling: false,
             nodeIntegration: true,
+            contextIsolation: false,
         },
     })
+    require("@electron/remote/main").enable(browserWindow.webContents)
+
+    browserWindow.webContents.openDevTools()
 
     if (IS_DEV) {
         process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1'
@@ -226,7 +247,7 @@ const createWindow = () => {
     } else {
         browserWindow.loadURL(
             url.format({
-                pathname: path.join(__dirname, '../renderer/index.html'),
+                pathname: path.join(__dirname, '../renderer-bundle/index.html'),
                 protocol: 'file:',
                 slashes: true,
             }),
@@ -264,7 +285,7 @@ const updateGlobalShortcut = (shortcut: string) => {
 
 app.dock?.hide()
 
-app.allowRendererProcessReuse = true
+// FIXME app.allowRendererProcessReuse = true
 
 app.on('ready', () => {
     setup().then(() => {
@@ -295,7 +316,7 @@ ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => 
 })
 
 ipcMain.on('remove-config', (event: Electron.IpcMainEvent) => {
-    electronSettings.delete('config.v3')
+    electronSettings.unsetSync('config.v3')
     keytar.deletePassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
 
     event.returnValue = DEFAULT_CONFIG

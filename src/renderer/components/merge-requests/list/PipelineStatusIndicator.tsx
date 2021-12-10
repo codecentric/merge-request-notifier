@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { keyframes, css } from '@emotion/core'
+import { keyframes, css } from '@emotion/react'
 import { Box } from 'rebass'
 import { PipelineStatus } from '../../../hooks/merge-requests/types'
 

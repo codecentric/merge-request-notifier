@@ -7,7 +7,7 @@ const baseConfig = require('./webpack.base.config');
 module.exports = merge(baseConfig, {
     target: 'electron-renderer',
     entry: {
-        app: ['@babel/polyfill','./src/renderer/app.tsx']
+        app: ['@babel/polyfill', '@electron/remote', './src/renderer/app.tsx']
     },
     module: {
         rules: [
@@ -59,7 +59,7 @@ module.exports = merge(baseConfig, {
         new ForkTsCheckerWebpackPlugin({
             typescript: {
                 enabled: true,
-                configFile: 'tsconfig-renderer.json',
+                configFile: 'src/renderer/tsconfig.json',
                 // reportFiles: ['src/renderer/**/*'],
             }
         }),

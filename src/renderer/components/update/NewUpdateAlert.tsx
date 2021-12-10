@@ -1,13 +1,13 @@
 import React from 'react'
 import { Box, Flex, Link, Text } from 'rebass'
-import { remote } from 'electron'
 import compareVersions from 'compare-versions'
+import { app } from '@electron/remote'
 
 import { useUpdater } from '../../hooks/updater'
 import { useHistory } from 'react-router'
 
 export const NewUpdateAlert = () => {
-    const currentVersion = remote.app.getVersion()
+    const currentVersion = app.getVersion()
     const { updateInfo } = useUpdater()
     const history = useHistory()
     const showUpdateDetails = () => {

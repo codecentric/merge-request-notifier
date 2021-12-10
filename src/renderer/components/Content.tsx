@@ -13,8 +13,8 @@ import { darkTheme } from './themes/theme-dark'
 import { Wrapper } from './layout/Wrapper'
 import { Header } from './layout/Header'
 import { Main } from './layout/Main'
-import { ThemeProvider } from 'emotion-theming'
 import { Footer } from './layout/Footer'
+import { ThemeProvider } from '@emotion/react'
 
 export const Content: React.FunctionComponent = () => {
     const { config } = useConfig()

@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "isolatedModules": true,
+    "useDefineForClassFields": true,
+    "lib": [
+      "dom",
+      "es2015",
+      "es2016",
+      "es2017"
+    ],
+    "jsx": "react",
+    "types": ["vite/client"]
+  },
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "../../vite.config.ts"
+  ],
+  "references": [
+    {
+      "path": "../share"
+    }
+  ]
+}
