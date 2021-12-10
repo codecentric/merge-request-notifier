@@ -18,7 +18,7 @@ require('@electron/remote/main').initialize()
 let tray: Tray | null
 let win: BrowserWindow | null
 
-const IS_DEV = !app.isPackaged
+const IS_DEV = process.env.ELECTRON_IS_DEV !== undefined || !app.isPackaged
 
 const KEYTAR_SERVICE = 'Merge Request Notifier'
 const KEYTAR_ACCOUNT = 'PersonalAccessToken'
@@ -98,13 +98,10 @@ const setup = async () => {
     try {
         if (IS_DEV) {
             await installExtensions()
+            await createDevServer()
         }
 
         createTray()
-
-        if (IS_DEV) {
-            await createDevServer()
-        }
 
         win = createWindow()
         createMenu(win)
