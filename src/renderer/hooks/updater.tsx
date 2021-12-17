@@ -1,6 +1,5 @@
 import React from 'react'
-import { UpdateCheckResult } from 'electron-updater'
-import { ipcRenderer, remote } from 'electron'
+import { ipcRenderer } from 'electron'
 import * as log from 'electron-log'
 import moment from 'moment'
 import * as request from 'superagent'
@@ -54,34 +53,47 @@ export const UpdaterProvider = ({ ...props }) => {
             return
         }
 
-        if (remote.process.platform === 'darwin') {
-            ipcRenderer
-                .invoke('check-for-updates')
-                .then((result: UpdateCheckResult) => {
-                    setUpdateInfo({
-                        version: result.updateInfo.version,
-                        releaseDate: result.updateInfo.releaseDate,
-                        releaseNotes: typeof result.updateInfo.releaseNotes === 'string' ? result.updateInfo.releaseNotes : undefined,
-                    })
-                })
-                .catch(error => {
-                    log.error('Could not check for updates', error)
-                })
-        } else {
-            request.get('https://api.github.com/repos/codecentric/merge-request-notifier/releases/latest').then(result => {
-                const {
-                    body: { tag_name, published_at, body },
-                } = result
+        // export interface UpdateInfo {
+        //     /**
+        //      * The version.
+        //      */
+        //     readonly version: string;
+        //     readonly files: Array<UpdateFileInfo>;
+        //     /** @deprecated */
+        //     readonly path: string;
+        //     /** @deprecated */
+        //     readonly sha512: string;
+        //     /**
+        //      * The release name.
+        //      */
+        //     releaseName?: string | null;
+        //     /**
+        //      * The release notes. List if `updater.fullChangelog` is set to `true`, `string` otherwise.
+        //      */
+        //     releaseNotes?: string | Array<ReleaseNoteInfo> | null;
+        //     /**
+        //      * The release date.
+        //      */
+        //     releaseDate: string;
+        //     /**
+        //      * The [staged rollout](/auto-update#staged-rollouts) percentage, 0-100.
+        //      */
+        //     readonly stagingPercentage?: number;
+        // }
 
-                const releaseNotes = converter.makeHtml(body)
+        request.get('https://api.github.com/repos/codecentric/merge-request-notifier/releases/latest').then(result => {
+            const {
+                body: { tag_name, published_at, body },
+            } = result
 
-                setUpdateInfo({
-                    version: tag_name,
-                    releaseDate: published_at,
-                    releaseNotes,
-                })
+            const releaseNotes = converter.makeHtml(body)
+
+            setUpdateInfo({
+                version: tag_name,
+                releaseDate: published_at,
+                releaseNotes,
             })
-        }
+        })
     }
 
     React.useEffect(() => {

@@ -3,7 +3,7 @@ import log from 'electron-log'
 import path from 'path'
 import url from 'url'
 import electronSettings from 'electron-settings'
-import keytar from 'keytar'
+// import keytar from 'keytar'
 
 import { reportUnhandledRejections } from '../share/reportUnhandledRejections'
 
@@ -11,7 +11,6 @@ import { macOsWindowPosition } from './positioning/mac-os'
 import { windowsWindowPosition } from './positioning/windows'
 import { linuxWindowPosition } from './positioning/linux'
 import { Config, DEFAULT_CONFIG, GeneralConfig } from '../share/config'
-import { setupAutoUpdater } from './autoUpdates'
 import { createMenu } from './menu'
 
 let tray: Tray | null
@@ -98,10 +97,8 @@ const setup = async () => {
         updateGlobalShortcut(generalConfig.openShortcut)
         updateStartOnLoginConfiguration(generalConfig.startOnLogin)
 
+        // macOS specific configuration
         if (process.platform === 'darwin') {
-            // macOS specific configuration
-            setupAutoUpdater()
-
             systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', () => {
                 if (tray) {
                     tray.setImage(getTrayImage())
@@ -147,7 +144,8 @@ const showWindow = (triggeredFromTray: boolean) => {
 }
 
 const getAccessToken = async (savedConfig: Config): Promise<string> => {
-    const accessToken = await keytar.getPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
+    const accessToken = 'glpat-T8GfdVmwjoKCytUt5_mS'
+    // const accessToken = await keytar.getPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
 
     if (accessToken) {
         log.debug('Found the access token via keytar')
@@ -157,7 +155,7 @@ const getAccessToken = async (savedConfig: Config): Promise<string> => {
     if (savedConfig.connectionConfig && savedConfig.connectionConfig.token) {
         log.debug('Found the access token in the connectionConfig')
         const SavedToken = savedConfig.connectionConfig.token
-        await keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, SavedToken)
+        // await keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, SavedToken)
         delete savedConfig.connectionConfig.token
         electronSettings.set('config.v3', savedConfig as any)
         log.debug('Migrated the access token from the connectionConfig into keytar')
@@ -296,7 +294,7 @@ ipcMain.on('update-open-merge-requests', (_: any, openMergeRequests: number) => 
 
 ipcMain.on('remove-config', (event: Electron.IpcMainEvent) => {
     electronSettings.delete('config.v3')
-    keytar.deletePassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
+    // keytar.deletePassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT)
 
     event.returnValue = DEFAULT_CONFIG
 })
@@ -312,7 +310,7 @@ ipcMain.on('set-config', (_: Electron.IpcMainEvent, data: Config) => {
     updateStartOnLoginConfiguration(data.generalConfig.startOnLogin)
 
     if (data.connectionConfig && data.connectionConfig.token) {
-        keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, data.connectionConfig.token)
+        // keytar.setPassword(KEYTAR_SERVICE, KEYTAR_ACCOUNT, data.connectionConfig.token)
         delete data.connectionConfig.token
     }
     electronSettings.set('config.v3', data as any)
