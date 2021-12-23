@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import commonjsExternals from 'vite-plugin-commonjs-externals';
-import electron from 'vitejs-plugin-electron'
-import builtinModules from 'builtin-modules';
+import commonjsExternals from 'vite-plugin-commonjs-externals'
+import builtinModules from 'builtin-modules'
+import rollupTypescriptPlugin from '@rollup/plugin-typescript'
 
 const commonjsPackages = [
     'electron',
@@ -14,7 +14,7 @@ const commonjsPackages = [
     '@electron/remote',
     'original-fs',
     ...builtinModules,
-] as const;
+] as const
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -24,11 +24,20 @@ export default defineConfig({
             externals: commonjsPackages,
         }),
     ],
+    build: {
+        rollupOptions: {
+            input: 'index-prod.html',
+            plugins: [
+                rollupTypescriptPlugin({ tsconfig: './tsconfig-rollup.json' }),
+            ],
+        },
+
+    },
     optimizeDeps: {
         entries: [
             'src/renderer/**',
-            'src/share/**'
-        ]
+            'src/share/**',
+        ],
     },
     server: {
         port: 2003,

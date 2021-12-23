@@ -13,20 +13,20 @@
     "url": "git@github.com:codecentric/merge-request-notifier.git"
   },
   "scripts": {
-    "build-main": "cross-env NODE_ENV=production tsc --project src/main/tsconfig.json && yarn copy-assets",
-    "build-renderer": "cross-env NODE_ENV=production webpack --config webpack.renderer.prod.config.js",
+    "build-main": "cross-env NODE_ENV=production tsc -b && yarn copy-assets",
+    "build-renderer": "rollup -c",
     "build": "yarn build-main && yarn build-renderer",
     "clean": "run-script-os",
     "clean:win32": "rmdir dist /s /q && rmd release /s /q",
     "clean:default": "rm -rf dist && rm -rf release",
     "copy-assets": "run-script-os",
     "copy-assets:win32": "Xcopy /I src\\main\\assets dist\\main\\assets",
-    "copy-assets:default": "cp -r src/main/assets dist/main/assets",
+    "copy-assets:default": "mkdir -p dist/main && cp -r src/main/assets dist/main/",
+    "copy-missing-files": "cd src && find . \\( -name '*.d.ts' -or -name '*.png' -or -name '*.gif' -or -name '*.jpg' -or -name '*.svg' -or -name '*.scss' \\)  | cpio -pdm ../dist",
     "prepare-auto-update": "run-script-os",
     "prepare-auto-update:darwin": "cp dev-app-update.yml dist/dev-app-update.yml",
     "prepare-auto-update:default": "echo \"Nothing to do because this is not supported by the used OS.\"",
     "start-renderer": "ELECTRON_IS_DEV=true vite",
-    "start-debug": "webpack-dev-server --config webpack.renderer.dev.config.js",
     "start-main": "tsc -b && yarn copy-assets && yarn prepare-auto-update && ELECTRON_IS_DEV=true electron ./dist/main/main.js",
     "test": "echo \"not yet implemented.\"",
     "lint": "tslint '{src,test,mocks}/**/*.{ts,tsx}' --project src/renderer/tsconfig.json",
@@ -110,6 +110,10 @@
     "@reach/tabs": "^0.16.4",
     "@rebass/forms": "^4.0.5",
     "@rebass/preset": "^4.0.5",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.1.1",
+    "@rollup/plugin-typescript": "^8.3.0",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/electron-settings": "^4.0.0",
     "@types/keytar": "^4.4.2",
@@ -147,6 +151,9 @@
     "react-router-dom": "^5.1.2",
     "react-test-renderer": "^17.0.2",
     "rebass": "^4.0.5",
+    "rollup-plugin-images": "^1.0.0",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-sass": "^1.2.10",
     "run-script-os": "^1.0.7",
     "sass": "^1.44.0",
     "showdown": "^1.9.1",
@@ -174,7 +181,6 @@
   },
   "resolutions": {
     "minimist": "1.2.5",
-    "builder-util-runtime": "8.7.2",
-    "electron-is-dev": "^2.0.0"
+    "builder-util-runtime": "8.7.2"
   }
 }

@@ -1,4 +1,3 @@
-import { hot } from 'react-hot-loader/root'
 import React from 'react'
 import { ConfigProvider } from '../hooks/config'
 import { BackendProvider } from '../hooks/merge-requests/backend'
@@ -19,4 +18,4 @@ const Application: React.FunctionComponent = () => {
     )
 }
 
-export default hot(Application)
+export default Application

@@ -18,7 +18,7 @@ require('@electron/remote/main').initialize()
 let tray: Tray | null
 let win: BrowserWindow | null
 
-const IS_DEV = process.env.ELECTRON_IS_DEV !== undefined || !app.isPackaged
+const IS_DEV = process.env.ELECTRON_IS_DEV !== undefined
 
 const KEYTAR_SERVICE = 'Merge Request Notifier'
 const KEYTAR_ACCOUNT = 'PersonalAccessToken'
@@ -244,7 +244,7 @@ const createWindow = () => {
     } else {
         browserWindow.loadURL(
             url.format({
-                pathname: path.join(__dirname, '../renderer-bundle/index.html'),
+                pathname: path.join(__dirname, '../../index-prod.html'),
                 protocol: 'file:',
                 slashes: true,
             }),
