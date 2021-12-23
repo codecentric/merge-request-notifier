@@ -4,13 +4,14 @@ import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 
 import { useUpdater } from '../../hooks/updater'
-import { remote, shell } from 'electron'
+import { shell } from 'electron'
+import { process } from '@electron/remote'
 
 export const UpdateInfoPage = () => {
     const history = useHistory()
     const { updateInfo, install } = useUpdater()
     const [installButtonDisabled, setInstallButtonDisabled] = React.useState(false)
-    const [installButtonText, setInstallButtonText] = React.useState(remote.process.platform === 'darwin' ? 'Install & Restart' : 'Download')
+    const [installButtonText, setInstallButtonText] = React.useState(process.platform === 'darwin' ? 'Install & Restart' : 'Download')
 
     if (!updateInfo) {
         return (
@@ -26,7 +27,7 @@ export const UpdateInfoPage = () => {
     }
     const installUpdate: React.MouseEventHandler<HTMLButtonElement> = event => {
         event.preventDefault()
-        if (remote.process.platform === 'darwin') {
+        if (process.platform === 'darwin') {
             setInstallButtonDisabled(true)
             setInstallButtonText('Installing...')
             install()

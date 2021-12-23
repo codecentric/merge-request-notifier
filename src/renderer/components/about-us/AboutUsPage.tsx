@@ -1,5 +1,6 @@
 import React from 'react'
-import { remote, shell } from 'electron'
+import { shell } from 'electron'
+import { app } from '@electron/remote'
 import { Box, Link, Text } from 'rebass'
 
 const openUrl = (url: string): React.MouseEventHandler<HTMLAnchorElement> => event => {
@@ -8,7 +9,7 @@ const openUrl = (url: string): React.MouseEventHandler<HTMLAnchorElement> => eve
 }
 
 export const AboutUsPage = () => {
-    const appVersion = remote.app.getVersion()
+    const appVersion = app.getVersion()
 
     return (
         <Box p={2}>

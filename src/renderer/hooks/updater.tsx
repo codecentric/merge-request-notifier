@@ -1,10 +1,11 @@
 import React from 'react'
 import { UpdateCheckResult } from 'electron-updater'
-import { ipcRenderer, remote } from 'electron'
+import { ipcRenderer } from 'electron'
 import * as log from 'electron-log'
 import moment from 'moment'
 import * as request from 'superagent'
 import showdown from 'showdown'
+import { process } from '@electron/remote'
 
 export interface UpdateInfo {
     version: string
@@ -54,7 +55,7 @@ export const UpdaterProvider = ({ ...props }) => {
             return
         }
 
-        if (remote.process.platform === 'darwin') {
+        if (process.platform === 'darwin') {
             ipcRenderer
                 .invoke('check-for-updates')
                 .then((result: UpdateCheckResult) => {

@@ -1,9 +1,9 @@
-import * as request from 'superagent'
 import * as log from 'electron-log'
 
 import { Group, GroupedMergeRequest, MergeRequest, MergeRequestWithProject, Note, PipelineStatus, Project, UserNotesStatus } from './types'
 import sleep from '../../util/sleep'
 import { ConnectionConfig } from '../../../share/config'
+import * as request from 'superagent'
 
 const projectCache: { [id: number]: Project } = {}
 
@@ -25,7 +25,7 @@ export const loadGroups = async (connectionConfig: ConnectionConfig): Promise<Gr
 
             return request
                 .get(apiUrl)
-                .set('Private-Token', connectionConfig.token)
+                .set('Private-Token', connectionConfig.token!)
                 .timeout(4000)
                 .then(response => response.body)
         }),
@@ -90,7 +90,7 @@ async function loadMergeRequestsFromProjects(connectionConfig: ConnectionConfig,
 
                 return request
                     .get(apiUrl)
-                    .set('Private-Token', connectionConfig.token)
+                    .set('Private-Token', connectionConfig.token!)
                     .query({ state: 'opened' })
                     .timeout(4000)
                     .then(response => response.body as MergeRequest[])
@@ -104,7 +104,7 @@ async function loadMergeRequestsFromGroup(connectionConfig: ConnectionConfig, gr
 
     return request
         .get(apiUrl)
-        .set('Private-Token', connectionConfig.token)
+        .set('Private-Token', connectionConfig.token!)
         .query({ state: 'opened' })
         .timeout(4000)
         .then(response => response.body as MergeRequest[])
@@ -139,7 +139,7 @@ const loadUserNotes = async (connectionConfig: ConnectionConfig, projectId: numb
 
     const notes = await request
         .get(apiUrl)
-        .set('Private-Token', connectionConfig.token)
+        .set('Private-Token', connectionConfig.token!)
         .timeout(4000)
         .then(res => res.body as Note[])
 
@@ -157,7 +157,7 @@ const loadPipelineStatus = async (connectionConfig: ConnectionConfig, projectId:
 
     const pipelines = await request
         .get(apiUrl)
-        .set('Private-Token', connectionConfig.token)
+        .set('Private-Token', connectionConfig.token!)
         .query({ per_page: 1, page: 1 })
         .timeout(4000)
         .then(res => res.body)
@@ -179,7 +179,7 @@ const loadProject = async (connectionConfig: ConnectionConfig, projectId: number
 
     const project = await request
         .get(apiUrl)
-        .set('Private-Token', connectionConfig.token)
+        .set('Private-Token', connectionConfig.token!)
         .timeout(4000)
         .then(res => res.body)
 

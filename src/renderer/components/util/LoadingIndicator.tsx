@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { keyframes } from '@emotion/core'
 import { Box } from 'rebass'
+import { keyframes } from '@emotion/react'
 
 const MINIMUM_VISIBLE_MS = 600
 const WIDTH = 38
